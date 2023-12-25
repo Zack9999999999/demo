@@ -1,7 +1,8 @@
 package com.example.comment.model;
 
 import com.example.commentreport.model.CommentReport;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "activity_comment")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +29,8 @@ public class Comment {
     @Column(name = "com_status")
     private Integer comStatus;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<CommentReport> commentReport;
 
     public Integer getComId() {

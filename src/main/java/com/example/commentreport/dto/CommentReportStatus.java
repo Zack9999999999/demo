@@ -1,7 +1,9 @@
 package com.example.commentreport.dto;
 
-public class CommentReportStatus {
+import javax.validation.constraints.NotNull;
 
+public class CommentReportStatus {
+    @NotNull
     private byte repStatus;
 
     public byte getRepStatus() {

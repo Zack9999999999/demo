@@ -1,11 +1,9 @@
 package com.example.commentreport.model;
 
 import com.example.comment.model.Comment;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.commentreport.constant.CommentReportRepTitle;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Date;
 
 @Entity
@@ -16,24 +14,24 @@ public class CommentReport {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "rep_id")
 	private Integer repId;
-	@JsonBackReference
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "com_id", referencedColumnName = "com_id")
 	private Comment comment;
-//	private Integer com_id;
 
 	@Column(name = "mem_id") //有table後再改成ManyToOne
 	private Integer memId;
 	@Column(name = "emp_id")
 	private Integer empId;
+
 	@Column(name = "rep_title")
-	private String repTitle;
+	@Enumerated(EnumType.STRING)
+	private CommentReportRepTitle repTitle;
 	@Column(name = "rep_content")
 	private String repContent;
-	@Column(name = "rep_pic", columnDefinition = "longblob")
-	private byte[] repPic;
+
 	@Column(name = "rep_status")
-	private byte repStatus;
+	private Byte repStatus;
 	@Column(name = "rep_time")
 	private Date repTime;
 
@@ -69,11 +67,11 @@ public class CommentReport {
 		this.empId = empId;
 	}
 
-	public String getRepTitle() {
+	public CommentReportRepTitle getRepTitle() {
 		return repTitle;
 	}
 
-	public void setRepTitle(String repTitle) {
+	public void setRepTitle(CommentReportRepTitle repTitle) {
 		this.repTitle = repTitle;
 	}
 
@@ -85,19 +83,11 @@ public class CommentReport {
 		this.repContent = repContent;
 	}
 
-	public byte[] getRepPic() {
-		return repPic;
-	}
-
-	public void setRepPic(byte[] repPic) {
-		this.repPic = repPic;
-	}
-
-	public byte getRepStatus() {
+	public Byte getRepStatus() {
 		return repStatus;
 	}
 
-	public void setRepStatus(byte repStatus) {
+	public void setRepStatus(Byte repStatus) {
 		this.repStatus = repStatus;
 	}
 

@@ -1,15 +1,15 @@
 package com.example.comment.rowmapper;
 
-import com.example.comment.model.Comment;
+import com.example.comment.model.CommentVO;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CommentRowMapper implements RowMapper<Comment> {
+public class CommentRowMapper implements RowMapper<CommentVO> {
     @Override
-    public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Comment comment = new Comment();
+    public CommentVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+        CommentVO comment = new CommentVO();
 
         comment.setComId(rs.getInt("com_id"));
         comment.setActId(rs.getInt("act_id"));

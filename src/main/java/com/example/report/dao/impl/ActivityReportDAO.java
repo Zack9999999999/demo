@@ -1,7 +1,7 @@
 package com.example.report.dao.impl;
 
-import com.example.report.dao.ActivityReportDao;
-import com.example.report.model.ActivityReport;
+import com.example.report.dao.IActivityReport;
+import com.example.report.model.ActivityReportVO;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActivityReportDaoImpl implements ActivityReportDao {
+public class ActivityReportDAO implements IActivityReport {
 
 	private static DataSource ds = null;
 	static {
@@ -37,7 +37,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 	private static final String UPDATE = "UPDATE activity_report set rep_status=? WHERE rep_id = ?";
 
 	@Override
-	public void insert(ActivityReport activityReportVO) {
+	public void insert(ActivityReportVO activityReportVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
@@ -70,7 +70,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 	}
 
 	@Override
-	public void update(ActivityReport activityReportVO) {
+	public void update(ActivityReportVO activityReportVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
@@ -127,9 +127,9 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 	}
 
 	@Override
-	public ActivityReport findByPrimaryKey(Integer repId) {
+	public ActivityReportVO findByPrimaryKey(Integer repId) {
 
-		ActivityReport activityReportVO = null;
+		ActivityReportVO activityReportVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -143,7 +143,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				activityReportVO = new ActivityReport();
+				activityReportVO = new ActivityReportVO();
 				activityReportVO.setRepId(rs.getInt("rep_id"));
 				activityReportVO.setActId(rs.getInt("act_id"));
 				activityReportVO.setMemId(rs.getInt("mem_id"));
@@ -171,13 +171,13 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 	}
 
 	@Override
-	public List<ActivityReport> getAll() {
+	public List<ActivityReportVO> getAll() {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		List<ActivityReport> list = new ArrayList<ActivityReport>();
+		List<ActivityReportVO> list = new ArrayList<ActivityReportVO>();
 
 		try {
 
@@ -186,7 +186,7 @@ public class ActivityReportDaoImpl implements ActivityReportDao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				ActivityReport activityReportVO = new ActivityReport();
+				ActivityReportVO activityReportVO = new ActivityReportVO();
 				activityReportVO.setRepId(rs.getInt("rep_id"));
 				activityReportVO.setActId(rs.getInt("act_id"));
 				activityReportVO.setMemId(rs.getInt("mem_id"));

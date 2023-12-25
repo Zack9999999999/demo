@@ -1,7 +1,7 @@
 package com.example.report.controller;
 
-import com.example.report.model.ActivityReport;
-import com.example.report.service.impl.ActivityReportServiceImpl;
+import com.example.report.model.ActivityReportVO;
+import com.example.report.service.impl.ActivityReportService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,8 +65,8 @@ public class ActivityReportController extends HttpServlet {
 			}
 
 			/*************************** 2.開始查詢資料 *****************************************/
-			ActivityReportServiceImpl arSvc = new ActivityReportServiceImpl();
-			ActivityReport activityReportVO = arSvc.findByPrimaryKey(repId);
+			ActivityReportService arSvc = new ActivityReportService();
+			ActivityReportVO activityReportVO = arSvc.findByPrimaryKey(repId);
 			if (activityReportVO == null) {
 				errorMsgs.add("查無資料");
 			}
@@ -96,8 +96,8 @@ public class ActivityReportController extends HttpServlet {
 			Integer repId = Integer.valueOf(req.getParameter("repId"));
 
 			/*************************** 2.開始查詢資料 *****************************************/
-			ActivityReportServiceImpl arSvc = new ActivityReportServiceImpl();
-			ActivityReport activityReportVO = arSvc.findByPrimaryKey(repId);
+			ActivityReportService arSvc = new ActivityReportService();
+			ActivityReportVO activityReportVO = arSvc.findByPrimaryKey(repId);
 
 			/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 			req.setAttribute("activityReportVO", activityReportVO); // 資料庫取出的activityReportVO物件,存入req
@@ -125,7 +125,7 @@ public class ActivityReportController extends HttpServlet {
 			Timestamp repTime = Timestamp.valueOf(req.getParameter("repTime"));
 			Byte repStatus = Byte.valueOf(req.getParameter("repStatus").trim());
 
-			ActivityReport activityReportVO = new ActivityReport();
+			ActivityReportVO activityReportVO = new ActivityReportVO();
 			activityReportVO.setRepId(repId);
 			activityReportVO.setActId(actId);
 			activityReportVO.setMemId(memId);
@@ -145,7 +145,7 @@ public class ActivityReportController extends HttpServlet {
 //			}
 
 			/*************************** 2.開始查詢資料 *****************************************/
-			ActivityReportServiceImpl arSvc = new ActivityReportServiceImpl();
+			ActivityReportService arSvc = new ActivityReportService();
 			arSvc.update(activityReportVO);
 
 			/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
@@ -204,7 +204,7 @@ public class ActivityReportController extends HttpServlet {
 				System.out.println("filePart is null");
 			}
 
-			ActivityReport activityReportVO = new ActivityReport();
+			ActivityReportVO activityReportVO = new ActivityReportVO();
 			activityReportVO.setActId(actId);
 			activityReportVO.setMemId(memId);
 			activityReportVO.setEmpId(empId);
@@ -222,7 +222,7 @@ public class ActivityReportController extends HttpServlet {
 			}
 
 			/*************************** 2.開始新增資料 *****************************************/
-			ActivityReportServiceImpl arSvc = new ActivityReportServiceImpl();
+			ActivityReportService arSvc = new ActivityReportService();
 			arSvc.insert(activityReportVO);
 
 			/*************************** 3.新增完成,準備轉交(Send the Success view) *************/
@@ -242,7 +242,7 @@ public class ActivityReportController extends HttpServlet {
 			Integer repId = Integer.valueOf(req.getParameter("repId"));
 
 			/*************************** 2.開始刪除資料 ***************************************/
-			ActivityReportServiceImpl arSvc = new ActivityReportServiceImpl();
+			ActivityReportService arSvc = new ActivityReportService();
 			arSvc.delete(repId);
 
 			/*************************** 3.刪除完成,準備轉交(Send the Success view) ***********/

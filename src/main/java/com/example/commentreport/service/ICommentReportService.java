@@ -3,20 +3,18 @@ package com.example.commentreport.service;
 import com.example.commentreport.dto.CommentReportQueryParams;
 import com.example.commentreport.dto.CommentReportRequest;
 import com.example.commentreport.dto.CommentReportStatus;
-import com.example.commentreport.model.CommentReport;
+import com.example.commentreport.model.CommentReportVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+public interface ICommentReportService {
 
-public interface CommentReportService {
+    Page<CommentReportVO> getCommentReports(CommentReportQueryParams commentReportQueryParams, Pageable pageable);
 
-    Page<CommentReport> getCommentReports(CommentReportQueryParams commentReportQueryParams, Pageable pageable);
-
-    CommentReport getCommentReportById(Integer repId);
+    CommentReportVO getCommentReportById(Integer repId);
 
     Integer createCommentReport(CommentReportRequest commentReportRequest);
 
-    CommentReport updateCommentReport(Integer repId, CommentReportStatus commentReportStatus);
+    CommentReportVO updateCommentReport(Integer repId, CommentReportStatus commentReportStatus);
 
 }

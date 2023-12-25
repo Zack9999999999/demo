@@ -1,8 +1,8 @@
 package com.example.comment.dao.impl;
 
-import com.example.comment.dao.CommentDAO;
+import com.example.comment.dao.ICommentDAO;
 import com.example.comment.dto.CommentRequest;
-import com.example.comment.model.Comment;
+import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,32 +17,32 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class CommentDAOimpl implements CommentDAO {
+public class CommentDAO implements ICommentDAO {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Comment> getComments() {
+    public List<CommentVO> getComments() {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
                 "FROM activity_comment";
 
         Map<String, Object> map = new HashMap<>();
 
-        List<Comment> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
+        List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
         return commentList;
     }
 
     @Override
-    public Comment getCommentById(Integer comId) {
+    public CommentVO getCommentById(Integer comId) {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
                 "FROM activity_comment WHERE com_id = :comId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("comId", comId);
 
-        List<Comment> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
+        List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
         if (commentList.size() > 0) {
             return commentList.get(0);

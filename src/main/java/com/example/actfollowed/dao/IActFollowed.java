@@ -1,4 +1,4 @@
 package com.example.actfollowed.dao;
 
-public interface ActFollowedDao {
+public interface IActFollowed {
 }

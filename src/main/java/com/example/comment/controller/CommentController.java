@@ -1,8 +1,8 @@
 package com.example.comment.controller;
 
 import com.example.comment.dto.CommentRequest;
-import com.example.comment.service.CommentService;
-import com.example.comment.model.Comment;
+import com.example.comment.service.ICommentService;
+import com.example.comment.model.CommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    private CommentService commentService;
+    private ICommentService commentService;
 
     @GetMapping("/comments/{comId}")
-    public ResponseEntity<Comment> getComment(@PathVariable Integer comId) {
+    public ResponseEntity<CommentVO> getComment(@PathVariable Integer comId) {
 
-        Comment comment = commentService.getCommentById(comId);
+        CommentVO comment = commentService.getCommentById(comId);
 
         if (comment != null) {
             return ResponseEntity.status(HttpStatus.OK).body(comment);
@@ -30,35 +30,35 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<Comment>> getComments() {
+    public ResponseEntity<List<CommentVO>> getComments() {
 
-        List<Comment> comments = commentService.getComments();
+        List<CommentVO> comments = commentService.getComments();
 
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<CommentVO> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
 
         Integer comId = commentService.insertComment(commentRequest);
 
-        Comment comment = commentService.getCommentById(comId);
+        CommentVO comment = commentService.getCommentById(comId);
 
         return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
 
     @PutMapping("/comments/{comId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Integer comId,
-                                                 @RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<CommentVO> updateComment(@PathVariable Integer comId,
+                                                   @RequestBody @Valid CommentRequest commentRequest) {
         //檢查 comment 是否存在
-        Comment comment = commentService.getCommentById(comId);
+        CommentVO comment = commentService.getCommentById(comId);
         if (comment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         //修改留言的數據
         commentService.updateComment(comId, commentRequest);
-        Comment updatecomment = commentService.getCommentById(comId);
+        CommentVO updatecomment = commentService.getCommentById(comId);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatecomment);
     }

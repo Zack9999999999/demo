@@ -1,27 +1,27 @@
 package com.example.comment.service.impl;
 
-import com.example.comment.dao.CommentDAO;
+import com.example.comment.dao.ICommentDAO;
 import com.example.comment.dto.CommentRequest;
-import com.example.comment.service.CommentService;
-import com.example.comment.model.Comment;
+import com.example.comment.service.ICommentService;
+import com.example.comment.model.CommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class CommentServiceimpl implements CommentService {
+public class CommentService implements ICommentService {
 
     @Autowired
-    private CommentDAO commentDAO;
+    private ICommentDAO commentDAO;
 
     @Override
-    public List<Comment> getComments() {
+    public List<CommentVO> getComments() {
         return commentDAO.getComments();
     }
 
     @Override
-    public Comment getCommentById(Integer comId) {
+    public CommentVO getCommentById(Integer comId) {
         return commentDAO.getCommentById(comId);
     }
 

@@ -1,14 +1,14 @@
 package com.example.comment.dao;
 
 import com.example.comment.dto.CommentRequest;
-import com.example.comment.model.Comment;
+import com.example.comment.model.CommentVO;
 
 import java.util.List;
 
-public interface CommentDAO {
+public interface ICommentDAO {
 
-    List<Comment> getComments();
-    Comment getCommentById(Integer comId);
+    List<CommentVO> getComments();
+    CommentVO getCommentById(Integer comId);
     Integer insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId);

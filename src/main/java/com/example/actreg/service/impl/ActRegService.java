@@ -6,9 +6,6 @@ import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +19,8 @@ public class ActRegService implements IActRegService {
     @Autowired
     private ActRegRepository actRegRepository;
 
-//    @Autowired
-//    private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public List<ActRegVO> getActRegs() {
@@ -60,20 +57,22 @@ public class ActRegService implements IActRegService {
         }
         ActRegVO updateActReg = actReg.get();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String user = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse(null);
+        modelMapper.map(actRegRequest, updateActReg);
 
-        switch (user) { //操作者是誰
-            case "staff":
-
-                break;
-            case "User":
-
-                break;
-        }
         return actRegRepository.save(updateActReg);
+
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String user = authentication.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .findFirst()
+//                .orElse(null);
+//
+//        switch (user) { //操作者是誰
+//            case "staff":
+//
+//                break;
+//            case "User":
+//
+//                break;
     }
 }

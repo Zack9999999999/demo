@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "activity_registration")
@@ -21,11 +22,11 @@ public class ActRegVO {
 	@Column(name = "reg_total")
 	private Integer regTotal;
 	@Column(name = "reg_time")
-	private Timestamp regTime;
+	private Date regTime;
 	@Column(name = "reg_status")
-	private byte regStatus;
+	private Byte regStatus;
 	@Column(name = "is_act_part")
-	private byte isActPart;
+	private Byte isActPart;
 	@Column(name = "act_rating")
 	private Double actRating;
 

@@ -17,7 +17,7 @@ public class CommentRowMapper implements RowMapper<CommentVO> {
         comment.setComReplyId(rs.getInt("com_reply_id"));
         comment.setComContent(rs.getString("com_content"));
         comment.setComTime(rs.getTimestamp("com_time"));
-        comment.setComStatus(rs.getInt("com_status"));
+        comment.setComStatus(rs.getByte("com_status"));
 
         return comment;
     }

@@ -32,7 +32,7 @@ public class CommentVO {
     @Column(name = "com_time")
     private Timestamp comTime;
     @Column(name = "com_status")
-    private Integer comStatus;
+    private Byte comStatus;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     @JsonIgnore

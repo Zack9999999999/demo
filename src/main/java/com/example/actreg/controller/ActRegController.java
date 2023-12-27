@@ -41,7 +41,6 @@ public class ActRegController {
 
         ActRegVO actReg = actRegService.createActReg(actRegRequest);
 
-
         return ResponseEntity.status(HttpStatus.CREATED).body(actReg);
     }
 

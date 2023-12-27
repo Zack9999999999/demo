@@ -16,8 +16,8 @@ public class CommentService implements ICommentService {
     private ICommentDAO commentDAO;
 
     @Override
-    public List<CommentVO> getComments() {
-        return commentDAO.getComments();
+    public List<CommentVO> getComments(String actId) {
+        return commentDAO.getComments(actId);
     }
 
     @Override

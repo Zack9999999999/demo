@@ -30,9 +30,10 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments() {
+    public ResponseEntity<List<CommentVO>> getComments(
+            @RequestParam(required = false) String actId) {
 
-        List<CommentVO> comments = commentService.getComments();
+        List<CommentVO> comments = commentService.getComments(actId);
 
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
@@ -55,12 +56,11 @@ public class CommentController {
         if (comment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
         //修改留言的數據
         commentService.updateComment(comId, commentRequest);
-        CommentVO updatecomment = commentService.getCommentById(comId);
+        CommentVO updateComment = commentService.getCommentById(comId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(updatecomment);
+        return ResponseEntity.status(HttpStatus.OK).body(updateComment);
     }
 
     @DeleteMapping("/comments/{comId}")

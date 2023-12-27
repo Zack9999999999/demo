@@ -6,7 +6,7 @@ import com.example.comment.model.CommentVO;
 import java.util.List;
 
 public interface ICommentService {
-    List<CommentVO> getComments();
+    List<CommentVO> getComments(String actId);
     CommentVO getCommentById(Integer comId);
     Integer insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);

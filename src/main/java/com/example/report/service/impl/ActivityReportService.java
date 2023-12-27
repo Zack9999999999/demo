@@ -1,6 +1,6 @@
 package com.example.report.service.impl;
 
-import com.example.report.dao.IActivityReport;
+import com.example.report.dao.IActivityReportDAO;
 import com.example.report.dao.impl.ActivityReportDAO;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.service.IActivityReportService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ActivityReportService implements IActivityReportService {
 
-	private IActivityReport activityReportDAO;
+	private IActivityReportDAO activityReportDAO;
 
 	public ActivityReportService() {
 		activityReportDAO = new ActivityReportDAO();

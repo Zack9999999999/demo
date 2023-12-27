@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActivityReportDAO implements IActivityReportDAO {
+public class OldActivityReportDAO implements IActivityReportDAO {
 
 	private static DataSource ds = null;
 	static {

@@ -4,7 +4,9 @@ import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class ActRegService implements IActRegService {
 
@@ -38,16 +41,15 @@ public class ActRegService implements IActRegService {
     public ActRegVO createActReg(ActRegRequest actRegRequest) {
 
         ActRegVO actReg = new ActRegVO();
-        actReg.setMemId(actRegRequest.getMemId());
-        actReg.setActId(actRegRequest.getActId());
-        actReg.setRegTotal(actRegRequest.getRegTotal());
+        BeanUtils.copyProperties(actRegRequest, actReg);
+
+//        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //PK有問題 會跟repId一樣
         actReg.setRegTime(new Date());
-
-        //        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //不會報錯也有回傳但是DB不會新增資料
-
+//        log.info(actReg.toString());
         return actRegRepository.save(actReg);
     }
 
+    @Override
     public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
 
         Optional<ActRegVO> actReg = actRegRepository.findById(actRegId);
@@ -60,19 +62,5 @@ public class ActRegService implements IActRegService {
         modelMapper.map(actRegRequest, updateActReg);
 
         return actRegRepository.save(updateActReg);
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String user = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .findFirst()
-//                .orElse(null);
-//
-//        switch (user) { //操作者是誰
-//            case "staff":
-//
-//                break;
-//            case "User":
-//
-//                break;
     }
 }

@@ -10,8 +10,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +25,16 @@ public class CommentDAO implements ICommentDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<CommentVO> getComments() {
+    public List<CommentVO> getComments(String actId) {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
-                "FROM activity_comment";
+                "FROM activity_comment WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
+
+        if(actId != null){
+            sql = sql + " AND act_id = :actId";
+            map.put("actId", actId);
+        }
 
         List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
@@ -52,6 +59,7 @@ public class CommentDAO implements ICommentDAO {
     }
 
     @Override
+    @Transactional
     public Integer insertComment(CommentRequest commentRequest) {
 
         String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time) " +
@@ -63,8 +71,8 @@ public class CommentDAO implements ICommentDAO {
         map.put("comReplyId", commentRequest.getComReplyId());
         map.put("comContent", commentRequest.getComContent());
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        map.put("comTime", timestamp);
+
+        map.put("comTime", new Date());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 

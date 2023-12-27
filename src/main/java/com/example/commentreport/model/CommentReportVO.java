@@ -23,17 +23,20 @@ public class CommentReportVO {
 
 	@Column(name = "mem_id") //有table後再改成ManyToOne
 	private Integer memId;
+
 	@Column(name = "emp_id")
 	private Integer empId;
 
 	@Column(name = "rep_title")
 	@Enumerated(EnumType.STRING)
 	private CommentReportRepTitle repTitle;
+
 	@Column(name = "rep_content")
 	private String repContent;
 
 	@Column(name = "rep_status")
 	private Byte repStatus;
+
 	@Column(name = "rep_time")
 	private Date repTime;
 

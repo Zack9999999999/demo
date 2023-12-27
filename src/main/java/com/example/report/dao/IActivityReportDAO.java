@@ -5,7 +5,7 @@ import com.example.report.model.ActivityReportVO;
 
 import java.util.List;
 
-public interface IActivityReport {
+public interface IActivityReportDAO {
 	public void insert(ActivityReportVO activityReportVO);
 
 	public void update(ActivityReportVO activityReportVO);

@@ -4,11 +4,9 @@ import com.example.commentreport.model.CommentReportVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -30,7 +28,7 @@ public class CommentVO {
     @Column(name = "com_content")
     private String comContent;
     @Column(name = "com_time")
-    private Timestamp comTime;
+    private Date comTime;
     @Column(name = "com_status")
     private Byte comStatus;
 

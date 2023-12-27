@@ -4,13 +4,13 @@ import javax.validation.constraints.NotNull;
 
 public class CommentReportStatus {
     @NotNull
-    private byte repStatus;
+    private Byte repStatus;
 
-    public byte getRepStatus() {
+    public Byte getRepStatus() {
         return repStatus;
     }
 
-    public void setRepStatus(byte repStatus) {
+    public void setRepStatus(Byte repStatus) {
         this.repStatus = repStatus;
     }
 }

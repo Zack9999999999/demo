@@ -91,7 +91,7 @@
     <main class="my-4">
         <div class="row">
             <div class="col-md-8">
-                <img src="./images/dog.jpg" class="img-thumbnail" alt="...">
+                <img src="" class="img-thumbnail" alt="...">
                 <section>
                     <h2>活動詳情</h2>
                     <p>活動描述和詳細資訊</p>
@@ -118,7 +118,7 @@
                 <div class="card w-100" id="scroll">
                     <div id="comments" class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group"><img src="./images/5.png" style="width: 35px; height: auto;"
+                            <li class="list-group"><img src="." style="width: 35px; height: auto;"
                                                         alt="小白">
                             </li>
                             <li class="list-group-item">留言一</li>
@@ -148,25 +148,25 @@
                 </div>
                 <div class="col-md-2 mb-3">
                     <div class="shadow p-3">
-                        <img src="./images/4.png" class="img-fluid d-block mx-auto"
+                        <img src="" class="img-fluid d-block mx-auto"
                              style="width: 60px; height: auto">
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
                     <div class="shadow p-3">
-                        <img src="./images/4.png" class="img-fluid d-block mx-auto"
+                        <img src="" class="img-fluid d-block mx-auto"
                              style="width: 60px; height: auto">
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
                     <div class="shadow p-3">
-                        <img src="./images/4.png" class="img-fluid d-block mx-auto"
+                        <img src="" class="img-fluid d-block mx-auto"
                              style="width: 60px; height: auto">
                     </div>
                 </div>
                 <div class="col-md-2 mb-3">
                     <div class="shadow p-3">
-                        <img src="./images/4.png" class="img-fluid d-block mx-auto"
+                        <img src="" class="img-fluid d-block mx-auto"
                              style="width: 60px; height: auto">
                     </div>
                 </div>
@@ -176,7 +176,7 @@
         <div class="p-3 join">
             <div class="text-bark">
                 <div class="shadow p-4 bg-body rounded">
-                    <button type="button" class="btn btn-danger btn-lg mx-3">報名活動</button>
+                    <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
                     <button type="button" class="btn btn-outline-success btn-lg">分享活動</button>
                 </div>
             </div>
@@ -232,10 +232,17 @@
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js
+"></script>
+<link href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
+" rel="stylesheet">
 
 <script src="googlemap.js"></script>
 
 <script>
+
     $(function () {
         //進畫面後顯示所有留言
         $.ajax({
@@ -270,8 +277,8 @@
             // actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
 
             var commentData = {
-                actId: 1,
-                memId: 1,
+                actId: 1, //改動態抓
+                memId: 1, //改動態抓
                 // comReplyId:null,
                 comContent: $("#comment").val()
             };
@@ -306,8 +313,50 @@
                 }
             });
         });
-    })
-    ;
+    });
+
+    //報名活動按鈕
+    function signup() {
+        Swal.fire({
+            title: '人數',
+            input: 'text',
+            inputPlaceholder: '報名人數',
+            inputValidator: (value) => {
+                if (!value) {
+                    return '請輸入人數!!'
+                }
+                if (value > 10) {
+                    return '不準報名這麼多人!!';
+                }
+                if (isNaN(value)) {
+                    return '叫你輸入數字!!';
+                }
+            },
+            showCancelButton: true,
+            confirmButtonText: '送出',
+            cancelButtonText: '取消',
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                var numberOfPeople = {
+                    memId: 1, //改動態抓
+                    actId: 1, //改動態抓
+                    regTotal: result.value
+                };
+                $.ajax({
+                    url: '/a',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(numberOfPeople),
+                    success: function (response) {
+                        Swal.fire('報名成功!，您報名的人數：' + result.value);
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire("報名失敗，請再多試試");
+                    }
+                });
+            }
+        });
+    }
 
 </script>
 

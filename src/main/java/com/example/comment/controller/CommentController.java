@@ -30,22 +30,19 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments(
-            @RequestParam(required = false) String actId) {
+    public ResponseEntity<List<CommentVO>> getComments() {
 
-        List<CommentVO> comments = commentService.getComments(actId);
+        List<CommentVO> comments = commentService.getComments();
 
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<CommentVO> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
 
-        Integer comId = commentService.insertComment(commentRequest);
+        List<CommentVO> commentVO = commentService.insertComment(commentRequest);
 
-        CommentVO comment = commentService.getCommentById(comId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(commentVO);
     }
 
     @PutMapping("/comments/{comId}")

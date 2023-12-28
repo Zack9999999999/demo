@@ -4,7 +4,10 @@ import com.example.comment.dao.ICommentDAO;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class CommentDAO implements ICommentDAO {
 
@@ -25,16 +29,12 @@ public class CommentDAO implements ICommentDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<CommentVO> getComments(String actId) {
+    @Cacheable(value = "commentsCache", key = "'comments'")
+    public List<CommentVO> getComments() {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
-                "FROM activity_comment WHERE 1=1";
+                "FROM activity_comment";
 
         Map<String, Object> map = new HashMap<>();
-
-        if(actId != null){
-            sql = sql + " AND act_id = :actId";
-            map.put("actId", actId);
-        }
 
         List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
@@ -60,7 +60,8 @@ public class CommentDAO implements ICommentDAO {
 
     @Override
     @Transactional
-    public Integer insertComment(CommentRequest commentRequest) {
+    @CachePut(value = "commentsCache", key = "'comments'")
+    public List<CommentVO> insertComment(CommentRequest commentRequest) {
 
         String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time) " +
                 "VALUES(:actId, :memId, :comReplyId, :comContent, :comTime)";
@@ -71,16 +72,12 @@ public class CommentDAO implements ICommentDAO {
         map.put("comReplyId", commentRequest.getComReplyId());
         map.put("comContent", commentRequest.getComContent());
 
-
         map.put("comTime", new Date());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
 
-        int comId = keyHolder.getKey().intValue();
-
-        return comId;
+        return getComments();
     }
 
     @Override
@@ -91,7 +88,7 @@ public class CommentDAO implements ICommentDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("comContent", commentRequest.getComContent());
         map.put("comId", comId);
-
+//還要增加修改後的時間 並且畫面顯示"編輯後"
         namedParameterJdbcTemplate.update(sql, map);
     }
 

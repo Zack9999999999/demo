@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ICommentDAO {
 
-    List<CommentVO> getComments(String actId);
+    List<CommentVO> getComments();
     CommentVO getCommentById(Integer comId);
-    Integer insertComment(CommentRequest commentRequest);
+    List<CommentVO> insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId);
 

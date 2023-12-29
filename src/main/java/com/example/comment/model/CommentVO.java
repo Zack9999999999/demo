@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,7 +14,8 @@ import java.util.Set;
 @Table(name = "activity_comment")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
-public class CommentVO {
+public class CommentVO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

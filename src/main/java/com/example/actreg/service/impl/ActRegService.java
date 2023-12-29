@@ -1,5 +1,6 @@
 package com.example.actreg.service.impl;
 
+import com.example.act.model.ActVO;
 import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;
@@ -42,17 +43,23 @@ public class ActRegService implements IActRegService {
 
         ActRegVO actReg = new ActRegVO();
         BeanUtils.copyProperties(actRegRequest, actReg);
-
-//        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //PK有問題 會跟repId一樣
         actReg.setRegTime(new Date());
-//        log.info(actReg.toString());
-        return actRegRepository.save(actReg);
+
+        //做判斷 如果報名人數超過 則不能報名
+//        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //PK有問題 會跟repId一樣
+
+//        if (actReg.getAct().getActUpper() - actReg.getRegTotal() > 0) {
+            return actRegRepository.save(actReg);
+//        }
+//        return null;
     }
 
     @Override
     public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
 
         Optional<ActRegVO> actReg = actRegRepository.findById(actRegId);
+
+        //1.審核狀態 2.參加狀態 3.活動評分
 
         if (!actReg.isPresent()) {
             return null;

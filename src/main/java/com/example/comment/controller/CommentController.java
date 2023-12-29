@@ -1,17 +1,22 @@
 package com.example.comment.controller;
 
+import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.service.ICommentService;
 import com.example.comment.model.CommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
+@Validated
 public class CommentController {
 
     @Autowired
@@ -30,17 +35,22 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments() {
+    public ResponseEntity<List<CommentVO>> getComments(
+            @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit) {
 
-        List<CommentVO> comments = commentService.getComments();
+        CommentQueryParams commentQueryParams = new CommentQueryParams();
+        commentQueryParams.setLimit(limit);
+
+        List<CommentVO> comments = commentService.getComments(commentQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest,
+                                                   CommentQueryParams commentQueryParams) {
 
-        List<CommentVO> commentVO = commentService.insertComment(commentRequest);
+        List<CommentVO> commentVO = commentService.insertComment(commentRequest, commentQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(commentVO);
     }

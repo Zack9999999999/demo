@@ -3,7 +3,6 @@ package com.example.actreg.controller;
 import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.service.IActRegService;
-import com.example.actreg.service.impl.ActRegService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

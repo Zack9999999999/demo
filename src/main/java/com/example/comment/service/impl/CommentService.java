@@ -1,6 +1,7 @@
 package com.example.comment.service.impl;
 
 import com.example.comment.dao.ICommentDAO;
+import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.service.ICommentService;
 import com.example.comment.model.CommentVO;
@@ -16,8 +17,8 @@ public class CommentService implements ICommentService {
     private ICommentDAO commentDAO;
 
     @Override
-    public List<CommentVO> getComments() {
-        return commentDAO.getComments();
+    public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
+        return commentDAO.getComments(commentQueryParams);
     }
 
     @Override
@@ -26,8 +27,8 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<CommentVO> insertComment(CommentRequest commentRequest) {
-        return commentDAO.insertComment(commentRequest);
+    public List<CommentVO> insertComment(CommentRequest commentRequest, CommentQueryParams commentQueryParams) {
+        return commentDAO.insertComment(commentRequest, commentQueryParams);
     }
 
     @Override

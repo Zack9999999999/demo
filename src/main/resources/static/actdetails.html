@@ -58,13 +58,13 @@
     <header
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
-            <a href="index.html" class="d-inline-flex link-body-emphasis text-decoration-none">
+            <a href="activity.html" class="d-inline-flex link-body-emphasis text-decoration-none">
                 <span class="fs-4">做伙</span>
             </a>
         </div>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="index.html" class="nav-link px-2 link-secondary">首頁</a></li>
+            <li><a href="activity.html" class="nav-link px-2 link-secondary">首頁</a></li>
             <li><a href="join.html" class="nav-link px-2 link-secondary">瀏覽活動</a></li>
             <li><a href="create.html" class="nav-link px-2 link-secondary">舉辦活動</a></li>
             <li><a href="rent.html" class="nav-link px-2 link-secondary">場地租借</a></li>
@@ -114,22 +114,24 @@
 
         <div class="mt-5 w-50">
             <div class="mt-3">
-                <p>評論區</p>
+                <p>留言區</p>
                 <div class="card w-100" id="scroll">
                     <div id="comments" class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group"><img src="." style="width: 35px; height: auto;"
-                                                        alt="小白">
+                            <li class="list-group">
+                                <img src="." style="width: 35px; height: auto;" alt="小白">
                             </li>
                             <li class="list-group-item">留言一</li>
                             <div class="d-flex">
                                 <li class="list-group">4天前</li>
-                                <li class="list-group ms-auto"><img src="">檢舉</li>
+                                <li class="list-group ms-auto"><img src=""><a href="#" id="report">檢舉</a></li>
                             </div>
                         </ul>
-
                     </div>
                 </div>
+            </div>
+            <div>
+                <button id="pagination" type="button">查看更多</button>
             </div>
             <form id="commentsform" class="row g-3">
                 <label for="comment" class="visually-hidden">留言</label>
@@ -188,7 +190,7 @@
 <div class="container">
     <footer class="py-3 my-4">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="index.html" class="nav-link px-2 text-muted">首頁</a></li>
+            <li class="nav-item"><a href="activity.html" class="nav-link px-2 text-muted">首頁</a></li>
             <li class="nav-item"><a href="customer.html" class="nav-link px-2 text-muted">客服中心</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link px-2 text-muted">關於我們</a></li>
         </ul>
@@ -258,7 +260,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
                         '<li class="list-group-item">' + comment.comContent + '</li>' +
                         '<div class="d-flex">' +
                         '<li class="list-group">' + comment.comTime + '</li>' +
-                        '<li class="list-group ms-auto"><img src="">檢舉</li>' +
+                        '<li class="list-group ms-auto"><img src=""><a href="#">檢舉</a></li>' +
                         '</div>' +
                         '</ul>';
                     $("#comments").html(commentsHTML);
@@ -272,13 +274,22 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
         });
         //新增留言
         $("#commentsform").on("submit", function (e) {
-            e.preventDefault()
+            e.preventDefault();
 
             // actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
 
+            // 假設從伺服器獲取memId值並儲存到localStorage
+            // localStorage.setItem('memId', '從伺服器獲取的值');
+
+            // var userMemId = localStorage.getItem('memId');
+            // if (!userMemId) {
+            //     console.error("未登入");
+            //     return;
+            // }
+
             var commentData = {
                 actId: 1, //改動態抓
-                memId: 1, //改動態抓
+                memId: 1, //改動態抓 userMemId
                 // comReplyId:null,
                 comContent: $("#comment").val()
             };
@@ -300,7 +311,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
                             '<li class="list-group-item">' + comment.comContent + '</li>' +
                             '<div class="d-flex">' +
                             '<li class="list-group">' + comment.comTime + '</li>' +
-                            '<li class="list-group ms-auto"><img src="">檢舉</li>' +
+                            '<li class="list-group ms-auto"><img src=""><a href="#">檢舉</a></li>' +
                             '</div>' +
                             '</ul>';
                         $("#comments").html(commentsHTML);
@@ -312,6 +323,31 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
                     console.error("Error:" + status + " " + error);
                 }
             });
+        });
+    });
+
+    //檢舉
+    $("#report").on("click", function (e) {
+        e.preventDefault();
+
+        var commentReportData = {
+            comId: 1, //改動態抓
+            memId: 1, //改動態抓 userMemId
+            repTitle:標題用選單的方式給使用者選,
+            repContent:內容從輸入框抓,
+            // comContent: $("#comment").val()
+        };
+
+        $.ajax({
+           url:"/c",
+           type:"POST",
+           data:JSON.stringify(commentReportData),
+           success:function(response){
+                alert("檢舉成功!");
+           },
+            error:function(xhr, status, error){
+                alert("檢舉失敗");
+            }
         });
     });
 
@@ -337,9 +373,21 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
             cancelButtonText: '取消',
         }).then((result) => {
             if (result.isConfirmed && result.value) {
+
+                // 假設從伺服器獲取memId值並儲存到localStorage
+                // localStorage.setItem('memId', '從伺服器獲取的值');
+
+                // var userMemId = localStorage.getItem('memId');
+                // if (!userMemId) {
+                //     console.error("未登入");
+                //     return;
+                // }
+
+                // actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
+
                 var numberOfPeople = {
                     memId: 1, //改動態抓
-                    actId: 1, //改動態抓
+                    actId: 1, //改動態抓 userMemId
                     regTotal: result.value
                 };
                 $.ajax({
@@ -347,8 +395,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(numberOfPeople),
-                    success: function (response) {
-                        Swal.fire('報名成功!，您報名的人數：' + result.value);
+                    success: function (actReg) {
+                        Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
                     },
                     error: function (xhr, status, error) {
                         Swal.fire("報名失敗，請再多試試");

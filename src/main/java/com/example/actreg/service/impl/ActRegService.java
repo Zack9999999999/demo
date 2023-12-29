@@ -1,6 +1,5 @@
 package com.example.actreg.service.impl;
 
-import com.example.act.model.ActVO;
 import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;

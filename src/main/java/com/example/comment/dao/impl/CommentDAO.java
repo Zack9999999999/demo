@@ -38,15 +38,15 @@ public class CommentDAO implements ICommentDAO {
 
     @Override
 //    @Cacheable(value = "commentsCache", key = "'comments'")
-    public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
+    public List<CommentVO> getComments() {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
                 "FROM activity_comment WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
         //分頁(看更多)
-        sql = sql + " LIMIT :limit";
-        map.put("limit", commentQueryParams.getLimit());
+//        sql = sql + " LIMIT :limit";
+//        map.put("limit", commentQueryParams.getLimit());
 
         List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
@@ -73,7 +73,7 @@ public class CommentDAO implements ICommentDAO {
     @Override
     @Transactional
 //    @CachePut(value = "commentsCache", key = "'comments'")
-    public List<CommentVO> insertComment(CommentRequest commentRequest, CommentQueryParams commentQueryParams) {
+    public List<CommentVO> insertComment(CommentRequest commentRequest) {
 
         String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time) " +
                 "VALUES(:actId, :memId, :comReplyId, :comContent, :comTime)";
@@ -88,7 +88,7 @@ public class CommentDAO implements ICommentDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
 
-        return getComments(commentQueryParams);
+        return getComments();
     }
 
     @Override

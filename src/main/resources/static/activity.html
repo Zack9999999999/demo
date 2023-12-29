@@ -54,11 +54,55 @@
 
 
     .announcement-bar {
-            background-color: #f8f9fa;
-            text-align: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* 彈窗的基本樣式 */
+    .popup {
+      display: none;
+      /* 初始不顯示 */
+      position: fixed;
+      z-index: 1;
+      /* 在其他內容之上 */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      /* 背景色 */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* 黑色背景，略透明 */
+    }
+
+    /* 彈窗內容 */
+    .popup-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      /* 15% 從上方開始 */
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      /* 寬度 */
+    }
+
+    /* 關閉按鈕 */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -82,14 +126,13 @@
       </ul>
 
       <div class="col-md-3 text-end">
-        
+
         <i class="icon bi bi-messenger" style="font-size: 25px; margin: 20px;"></i>
         <i class="icon bi bi-bell-fill" style="font-size: 25px;"></i>
         <i class="icon bi bi-person-circle" style="font-size: 40px; margin: 20px;"></i>
         <!-- 這邊放會員登入後的選項 -->
         <button type="button" class="btn btn-outline-primary me-2">
-          <a class="nav-link" href="#" data-bs-toggle="modal"
-            data-bs-target="#loginModal">登入</a>
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">登入</a>
         </button>
         <button type="button" class="btn btn-primary">
           <a class="nav-link" href="register.html">註冊</a>
@@ -100,13 +143,22 @@
 
   <main class="container mt-4">
 
-    <div class="container mt-3">
-      <div class="announcement-bar">
-          <p>最新公告：Some placeholder content for the announcement bar.</p>
+    <!-- 觸發彈窗的按鈕 -->
+    <button type="button" class="btn btn-outline-warning" onclick="openPopup()">顯示公告</button>
+
+    <!-- 彈窗內容 -->
+    <div id="popupBox" class="popup">
+      <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <p>這裡是公告內容...</p>
+        <p>這裡是公告內容...</p>
+        <p>這裡是公告內容...</p>
+        <p>這裡是公告內容...</p>
+        <p>這裡是公告內容...</p>
+        <p>這裡是公告內容...</p>
       </div>
-      <!-- 其他網站內容 -->
-  </div>
-    
+    </div>
+
     <section id="slogan" class="text-center mt-3">
       <h2 class="shadow-lg p-3 mb-5 bg-body rounded">
         <marquee behavior="alternate">發現、參與、共享，做伙舉辦精彩活動！</marquee>
@@ -422,6 +474,25 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // 打開彈窗
+    function openPopup() {
+      document.getElementById("popupBox").style.display = "block";
+    }
+
+    // 關閉彈窗
+    function closePopup() {
+      document.getElementById("popupBox").style.display = "none";
+    }
+    //按背景關閉彈窗
+    window.onclick = function (event) {
+      var modal = document.getElementById("popupBox");
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
 
 </html>

@@ -35,22 +35,20 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments(
-            @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit) {
+    public ResponseEntity<List<CommentVO>> getComments() {
 
-        CommentQueryParams commentQueryParams = new CommentQueryParams();
-        commentQueryParams.setLimit(limit);
+//        CommentQueryParams commentQueryParams = new CommentQueryParams();
+//        commentQueryParams.setLimit(limit);
 
-        List<CommentVO> comments = commentService.getComments(commentQueryParams);
+        List<CommentVO> comments = commentService.getComments();
 
         return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest,
-                                                   CommentQueryParams commentQueryParams) {
+    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
 
-        List<CommentVO> commentVO = commentService.insertComment(commentRequest, commentQueryParams);
+        List<CommentVO> commentVO = commentService.insertComment(commentRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(commentVO);
     }

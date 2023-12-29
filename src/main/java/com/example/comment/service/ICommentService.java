@@ -7,9 +7,9 @@ import com.example.comment.model.CommentVO;
 import java.util.List;
 
 public interface ICommentService {
-    List<CommentVO> getComments(CommentQueryParams commentQueryParams);
+    List<CommentVO> getComments( );
     CommentVO getCommentById(Integer comId);
-    List<CommentVO> insertComment(CommentRequest commentRequest, CommentQueryParams commentQueryParams);
+    List<CommentVO> insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId);
 }

@@ -1,5 +1,6 @@
 package com.example.actreg.model;
 
+import com.example.act.model.ActVO;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,8 +19,9 @@ public class ActRegVO {
 	@Column(name = "mem_id")
 	private Integer memId;
 
-	@Column(name = "act_id")
-	private Integer actId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "act_id", referencedColumnName = "act_id")
+	private ActVO act;
 
 	@Column(name = "reg_total")
 	private Integer regTotal;

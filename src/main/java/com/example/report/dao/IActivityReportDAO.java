@@ -6,13 +6,13 @@ import com.example.report.model.ActivityReportVO;
 import java.util.List;
 
 public interface IActivityReportDAO {
-	public void insert(ActivityReportVO activityReportVO);
+	void insert(ActivityReportVO activityReportVO);
 
-	public void update(ActivityReportVO activityReportVO);
+	void update(ActivityReportVO activityReportVO);
 
-	public void delete(Integer repId);
+	void delete(Integer repId);
 
-	public ActivityReportVO findByPrimaryKey(Integer repId);
+	ActivityReportVO findByPrimaryKey(Integer repId);
 
-	public List<ActivityReportVO> getAll();
+	List<ActivityReportVO> getAll();
 }

@@ -23,7 +23,7 @@ public class CommentReportController {
     @Autowired
     private ICommentReportService commentReportService;
 
-    @GetMapping("/c")
+    @GetMapping("/commentreport")
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             //查詢條件
             @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
@@ -40,7 +40,7 @@ public class CommentReportController {
         return ResponseEntity.status(HttpStatus.OK).body(commentReportList);
     }
 
-    @GetMapping("/c/{repId}")
+    @GetMapping("/commentreport/{repId}")
     public ResponseEntity<CommentReportVO> getCommentReport(@PathVariable Integer repId) {
 
         CommentReportVO commentReport = commentReportService.getCommentReportById(repId);
@@ -52,19 +52,15 @@ public class CommentReportController {
         }
     }
 
-    @PostMapping("/c")
-    public ResponseEntity<String> createCommentReport(@RequestBody @Valid CommentReportRequest commentReportRequest) {
-        try {
-            Integer commentReportId = commentReportService.createCommentReport(commentReportRequest);
+    @PostMapping("/commentreport")
+    public ResponseEntity<CommentReportVO> createCommentReport(@RequestBody @Valid CommentReportRequest commentReportRequest) {
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body("檢舉得好！這是本網站第 " + commentReportId + "筆檢舉紀錄！");
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+            CommentReportVO commentReport = commentReportService.createCommentReport(commentReportRequest);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentReport);
     }
 
-    @PutMapping("/c/{repId}")
+    @PutMapping("/commentreport/{repId}")
     public ResponseEntity<CommentReportVO> updateCommentReport(@PathVariable Integer repId,
                                                                @RequestBody CommentReportStatus commentReportStatus) {
         CommentReportVO updateCommentReport = commentReportService.updateCommentReport(repId, commentReportStatus);

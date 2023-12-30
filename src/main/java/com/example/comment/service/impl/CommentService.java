@@ -27,7 +27,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<CommentVO> insertComment(CommentRequest commentRequest) {
+    public Integer insertComment(CommentRequest commentRequest) {
         return commentDAO.insertComment(commentRequest);
     }
 

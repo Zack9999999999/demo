@@ -1,16 +1,12 @@
 package com.example.comment.dao.impl;
 
 import com.example.comment.dao.ICommentDAO;
-import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentRowMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -23,7 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -73,7 +68,7 @@ public class CommentDAO implements ICommentDAO {
     @Override
     @Transactional
 //    @CachePut(value = "commentsCache", key = "'comments'")
-    public List<CommentVO> insertComment(CommentRequest commentRequest) {
+    public Integer insertComment(CommentRequest commentRequest) {
 
         String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time) " +
                 "VALUES(:actId, :memId, :comReplyId, :comContent, :comTime)";
@@ -87,8 +82,9 @@ public class CommentDAO implements ICommentDAO {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
+        Integer commentId = keyHolder.getKey().intValue();
 
-        return getComments();
+        return commentId;
     }
 
     @Override

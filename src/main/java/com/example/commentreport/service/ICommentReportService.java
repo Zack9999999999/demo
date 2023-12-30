@@ -13,7 +13,7 @@ public interface ICommentReportService {
 
     CommentReportVO getCommentReportById(Integer repId);
 
-    Integer createCommentReport(CommentReportRequest commentReportRequest);
+    CommentReportVO createCommentReport(CommentReportRequest commentReportRequest);
 
     CommentReportVO updateCommentReport(Integer repId, CommentReportStatus commentReportStatus);
 

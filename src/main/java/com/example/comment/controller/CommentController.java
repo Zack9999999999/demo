@@ -46,11 +46,13 @@ public class CommentController {
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<List<CommentVO>> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<CommentVO> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
 
-        List<CommentVO> commentVO = commentService.insertComment(commentRequest);
+        Integer commentId = commentService.insertComment(commentRequest);
 
-        return ResponseEntity.status(HttpStatus.OK).body(commentVO);
+        CommentVO comment = commentService.getCommentById(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
 
     @PutMapping("/comments/{comId}")

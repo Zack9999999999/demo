@@ -8,6 +8,7 @@ import com.example.commentreport.dto.CommentReportStatus;
 import com.example.commentreport.model.CommentReportVO;
 import com.example.commentreport.repository.CommentReportRepository;
 import com.example.commentreport.service.ICommentReportService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,12 +30,12 @@ public class CommentReportService implements ICommentReportService {
     @Override
     public Page<CommentReportVO> getCommentReports(
             CommentReportQueryParams commentReportQueryParams, Pageable pageable) {
-        //依照檢舉標題查詢
+        //檢舉標題查詢
         if (commentReportQueryParams.getCommentReportRepTitle() != null) {
             return commentReportRepository.findByRepTitle(
                     commentReportQueryParams.getCommentReportRepTitle(), pageable);
         }
-        //依照狀態查詢
+        //狀態查詢
         if (commentReportQueryParams.getRepStatus() != null) {
             return commentReportRepository.findByRepStatus(commentReportQueryParams.getRepStatus(), pageable);
         }
@@ -58,22 +59,20 @@ public class CommentReportService implements ICommentReportService {
 
     @Override
     @Transactional
-    public Integer createCommentReport(CommentReportRequest commentReportRequest) {
+    public CommentReportVO createCommentReport(CommentReportRequest commentReportRequest) {
 
         CommentVO comment = commentRepository.findById(commentReportRequest.getComId())
                 .orElseThrow(() -> new NoSuchElementException("別胡搞瞎搞"));
 
         CommentReportVO commentReport = new CommentReportVO();
-
+        BeanUtils.copyProperties(commentReportRequest,commentReport);
         commentReport.setComment(comment);
-        commentReport.setMemId(commentReportRequest.getMemId());
-        commentReport.setRepTitle(commentReportRequest.getRepTitle());
-        commentReport.setRepContent(commentReportRequest.getRepContent());
+        commentReport.setRepTime(new Date());
+//        commentReport.setMemId(commentReportRequest.getMemId());
+//        commentReport.setRepTitle(commentReportRequest.getRepTitle());
+//        commentReport.setRepContent(commentReportRequest.getRepContent());
 
-        Date now = new Date();
-        commentReport.setRepTime(now);
-
-        return commentReportRepository.save(commentReport).getRepId();
+        return commentReportRepository.save(commentReport);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 public interface ICommentService {
     List<CommentVO> getComments( );
     CommentVO getCommentById(Integer comId);
-    List<CommentVO> insertComment(CommentRequest commentRequest);
+    Integer insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId);
 }

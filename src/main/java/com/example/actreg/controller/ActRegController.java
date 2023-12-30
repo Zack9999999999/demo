@@ -17,7 +17,7 @@ public class ActRegController {
     @Autowired
     private IActRegService actRegService;
 
-    @GetMapping("/a")
+    @GetMapping("/actreg")
     public ResponseEntity<List<ActRegVO>> getActRegs() {
 
         List<ActRegVO> actRegVOList = actRegService.getActRegs();
@@ -25,7 +25,7 @@ public class ActRegController {
         return ResponseEntity.status(HttpStatus.OK).body(actRegVOList);
     }
 
-    @GetMapping("/a/{actRegId}")
+    @GetMapping("/actreg/{actRegId}")
     public ResponseEntity<ActRegVO> getActReg(@PathVariable Integer actRegId) {
         ActRegVO actReg = actRegService.getActReg(actRegId);
         if (actReg != null) {
@@ -35,7 +35,7 @@ public class ActRegController {
         }
     }
 
-    @PostMapping("/a")
+    @PostMapping("/actreg")
     public ResponseEntity<ActRegVO> createActReg(@RequestBody @Valid ActRegRequest actRegRequest) {
 
         ActRegVO actReg = actRegService.createActReg(actRegRequest);
@@ -43,7 +43,7 @@ public class ActRegController {
         return ResponseEntity.status(HttpStatus.CREATED).body(actReg);
     }
 
-    @PutMapping("/a/{actRegId}")
+    @PutMapping("/actreg/{actRegId}")
     public ResponseEntity<ActRegVO> updateActReg(@PathVariable Integer actRegId,
                                                  @RequestBody @Valid ActRegRequest actRegRequest) {
         ActRegVO actReg = actRegService.updateActReg(actRegId, actRegRequest);

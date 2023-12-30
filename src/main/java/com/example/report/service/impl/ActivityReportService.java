@@ -1,38 +1,42 @@
 package com.example.report.service.impl;
 
-import com.example.report.dao.IActivityReportDAO;
-import com.example.report.dao.impl.ActivityReportDAO;
 import com.example.report.model.ActivityReportVO;
+import com.example.report.repository.ActivityReportReopsitory;
 import com.example.report.service.IActivityReportService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ActivityReportService implements IActivityReportService {
 
-	private IActivityReportDAO activityReportDAO;
+    @Autowired
+    ActivityReportReopsitory activityReportReopsitory;
 
-	public ActivityReportService() {
-		activityReportDAO = new ActivityReportDAO();
-	}
+    @Override
+    public List<ActivityReportVO> getAll() {
+        List<ActivityReportVO> reportVOList = activityReportReopsitory.findAll();
+        return reportVOList;
+    }
 
-	public List<ActivityReportVO> getAll() {
-		return activityReportDAO.getAll();
-	}
+    @Override
+    public ActivityReportVO findByPrimaryKey(Integer repId) {
+        return null;
+    }
 
-	public ActivityReportVO findByPrimaryKey(Integer repId) {
-		return activityReportDAO.findByPrimaryKey(repId);
-	}
+    @Override
+    public void insert(ActivityReportVO activityReportVO) {
 
-	public void insert(ActivityReportVO activityReportVO) {
-		activityReportDAO.insert(activityReportVO);
-	}
+    }
 
-	public void update(ActivityReportVO activityReportVO) {
-		activityReportDAO.update(activityReportVO);
-	}
+    @Override
+    public void update(Integer repId, ActivityReportVO activityReportVO) {
 
-	public void delete(Integer repId) {
-		activityReportDAO.delete(repId);
-	}
+    }
 
+    @Override
+    public void delete(Integer repId) {
+
+    }
 }

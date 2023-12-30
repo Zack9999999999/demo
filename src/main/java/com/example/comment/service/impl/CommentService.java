@@ -17,8 +17,8 @@ public class CommentService implements ICommentService {
     private ICommentDAO commentDAO;
 
     @Override
-    public List<CommentVO> getComments() {
-        return commentDAO.getComments();
+    public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
+        return commentDAO.getComments(commentQueryParams);
     }
 
     @Override

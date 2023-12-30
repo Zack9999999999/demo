@@ -1,6 +1,7 @@
 package com.example.comment.dao.impl;
 
 import com.example.comment.dao.ICommentDAO;
+import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentRowMapper;
@@ -33,15 +34,15 @@ public class CommentDAO implements ICommentDAO {
 
     @Override
 //    @Cacheable(value = "commentsCache", key = "'comments'")
-    public List<CommentVO> getComments() {
+    public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
                 "FROM activity_comment WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
         //分頁(看更多)
-//        sql = sql + " LIMIT :limit";
-//        map.put("limit", commentQueryParams.getLimit());
+        sql = sql + " LIMIT :limit";
+        map.put("limit", commentQueryParams.getLimit());
 
         List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 

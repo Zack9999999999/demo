@@ -40,7 +40,7 @@ public class CommentDAO implements ICommentDAO {
 
         Map<String, Object> map = new HashMap<>();
 
-        //分頁(看更多)
+        //簡易分頁(查看更多)
         sql = sql + " LIMIT :limit";
         map.put("limit", commentQueryParams.getLimit());
 
@@ -67,7 +67,6 @@ public class CommentDAO implements ICommentDAO {
     }
 
     @Override
-    @Transactional
 //    @CachePut(value = "commentsCache", key = "'comments'")
     public Integer insertComment(CommentRequest commentRequest) {
 

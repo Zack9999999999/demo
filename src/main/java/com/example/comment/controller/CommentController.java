@@ -22,6 +22,17 @@ public class CommentController {
     @Autowired
     private ICommentService commentService;
 
+    @GetMapping("/comments")
+    public ResponseEntity<List<CommentVO>> getComments(@RequestParam(defaultValue = "5") Integer limit) {
+
+        CommentQueryParams commentQueryParams = new CommentQueryParams();
+        commentQueryParams.setLimit(limit);
+
+        List<CommentVO> comments = commentService.getComments(commentQueryParams);
+
+        return ResponseEntity.status(HttpStatus.OK).body(comments);
+    }
+
     @GetMapping("/comments/{comId}")
     public ResponseEntity<CommentVO> getComment(@PathVariable Integer comId) {
 
@@ -32,17 +43,6 @@ public class CommentController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
-
-    @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments(@RequestParam(defaultValue = "5") Integer limit) {
-
-        CommentQueryParams commentQueryParams = new CommentQueryParams();
-        commentQueryParams.setLimit(limit);
-
-        List<CommentVO> comments = commentService.getComments(commentQueryParams);
-
-        return ResponseEntity.status(HttpStatus.OK).body(comments);
     }
 
     @PostMapping("/comments")

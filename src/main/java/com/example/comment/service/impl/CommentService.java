@@ -7,6 +7,7 @@ import com.example.comment.service.ICommentService;
 import com.example.comment.model.CommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional
     public Integer insertComment(CommentRequest commentRequest) {
         return commentDAO.insertComment(commentRequest);
     }

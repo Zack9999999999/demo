@@ -40,6 +40,9 @@ public class CommentDAO implements ICommentDAO {
 
         Map<String, Object> map = new HashMap<>();
 
+        //最新留言在由上至下
+        sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();
+
         //簡易分頁(查看更多)
         sql = sql + " LIMIT :limit";
         map.put("limit", commentQueryParams.getLimit());
@@ -95,7 +98,7 @@ public class CommentDAO implements ICommentDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("comContent", commentRequest.getComContent());
         map.put("comId", comId);
-//還要增加修改後的時間 並且畫面顯示"編輯後"
+        //還要增加修改後的時間 並且畫面顯示"編輯後"
         namedParameterJdbcTemplate.update(sql, map);
     }
 

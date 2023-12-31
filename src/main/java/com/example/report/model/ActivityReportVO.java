@@ -1,13 +1,18 @@
 package com.example.report.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "activity_report")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActivityReportVO {
 
 	@Id
@@ -29,6 +34,6 @@ public class ActivityReportVO {
 	@Column(name = "rep_status")
 	private byte repStatus;
 	@Column(name = "rep_time")
-	private Timestamp repTime;
+	private Date repTime;
 
 }

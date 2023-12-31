@@ -36,7 +36,7 @@ public class ActRegService implements IActRegService {
     }
 
     @Override
-    public ActRegVO getActReg(Integer actRegId)  {
+    public ActRegVO getActReg(Integer actRegId) {
         return actRegRepository.findById(actRegId).orElse(null);
     }
 
@@ -48,33 +48,39 @@ public class ActRegService implements IActRegService {
         BeanUtils.copyProperties(actRegRequest, actReg);
         actReg.setRegTime(new Date());
 
-        if(actRegRequest.getActId() != null){
+        if (actRegRequest.getActId() != null) {
             ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
             actReg.setAct(act);
         }
         //做判斷 如果報名人數超過 則不能報名
 //        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //PK有問題 會跟repId一樣
 
-//        if (actReg.getAct().getActUpper() - actReg.getRegTotal() > 0) {
-            return actRegRepository.save(actReg);
-//        }
-//        return null;
+        return actRegRepository.save(actReg);
+
     }
 
     @Override
     public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
 
-        Optional<ActRegVO> actReg = actRegRepository.findById(actRegId);
+//        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
 
-        //1.審核狀態 2.參加狀態 3.活動評分
+        //ActRegVO內如果是@ManyToOne(fetch = FetchType.LAZY)延遲加載會錯誤
+        ActRegVO actReg = actRegRepository.findById(actRegId).orElse(null);
+//        actReg.setAct(act);
 
-        if (!actReg.isPresent()) {
-            return null;
-        }
-        ActRegVO updateActReg = actReg.get();
+        actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
-        modelMapper.map(actRegRequest, updateActReg);
+        modelMapper.map(actRegRequest, actReg);
 
-        return actRegRepository.save(updateActReg);
+//        if (actRegRequest.getRegStatus() != null) {
+//            updateActReg.setRegStatus(actRegRequest.getRegStatus());
+//        } else if (actRegRequest.getIsActPart() != null) {
+//            updateActReg.setIsActPart(actRegRequest.getIsActPart());
+//        } else
+//            updateActReg.setActRating(actRegRequest.getActRating());
+
+        return actRegRepository.save(actReg);
+
+        //1.活動主審核狀態regStatus 2.參加者修改參加狀態isActPart 3.參加者活動評分actRating 4.參加者報名人數也要可以改regTotal
     }
 }

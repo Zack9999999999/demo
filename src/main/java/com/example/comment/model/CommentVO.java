@@ -3,7 +3,9 @@ package com.example.comment.model;
 import com.example.commentreport.model.CommentReportVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.util.Set;
 @Table(name = "activity_comment")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentVO implements Serializable {
     private static final long serialVersionUID = 1L;
 

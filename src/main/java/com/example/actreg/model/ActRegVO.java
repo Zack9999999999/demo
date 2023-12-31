@@ -1,7 +1,9 @@
 package com.example.actreg.model;
 
 import com.example.act.model.ActVO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,6 +11,8 @@ import java.util.Date;
 @Entity
 @Table(name = "activity_registration")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActRegVO {
 
 	@Id
@@ -19,7 +23,7 @@ public class ActRegVO {
 	@Column(name = "mem_id")
 	private Integer memId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "act_id", referencedColumnName = "act_id")
 	private ActVO act;
 

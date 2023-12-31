@@ -23,10 +23,15 @@ public class CommentController {
     private ICommentService commentService;
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments(@RequestParam(defaultValue = "5") Integer limit) {
+    public ResponseEntity<List<CommentVO>> getComments(
+            @RequestParam(defaultValue = "5") Integer limit,
+            @RequestParam(defaultValue = "com_time") String orderBy,
+            @RequestParam(defaultValue = "desc") String sort) {
 
         CommentQueryParams commentQueryParams = new CommentQueryParams();
         commentQueryParams.setLimit(limit);
+        commentQueryParams.setOrderBy(orderBy);
+        commentQueryParams.setSort(sort);
 
         List<CommentVO> comments = commentService.getComments(commentQueryParams);
 

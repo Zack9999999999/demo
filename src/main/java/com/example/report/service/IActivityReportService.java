@@ -1,5 +1,6 @@
 package com.example.report.service;
 
+import com.example.report.dto.ActivityReportRequest;
 import com.example.report.model.ActivityReportVO;
 
 import java.util.List;
@@ -10,9 +11,8 @@ public interface IActivityReportService {
 
 	ActivityReportVO findByPrimaryKey(Integer repId);
 
-	void insert(ActivityReportVO activityReportVO);
+	ActivityReportVO insert(ActivityReportRequest activityReportRequest);
 
-	void update(Integer repId, ActivityReportVO activityReportVO);
+	ActivityReportVO update(Integer repId, ActivityReportRequest activityReportRequest);
 
-	void delete(Integer repId);
 }

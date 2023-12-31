@@ -2,7 +2,9 @@ package com.example.commentreport.model;
 
 import com.example.comment.model.CommentVO;
 import com.example.commentreport.constant.CommentReportRepTitle;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.Date;
 @Entity
 @Table(name = "activity_comment_report")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentReportVO {
 
 	@Id

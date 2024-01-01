@@ -43,20 +43,19 @@ public class ActRegService implements IActRegService {
     @Override
     @Transactional
     public ActRegVO createActReg(ActRegRequest actRegRequest) {
-
         ActRegVO actReg = new ActRegVO();
+
         BeanUtils.copyProperties(actRegRequest, actReg);
         actReg.setRegTime(new Date());
+//        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+        actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
-        if (actRegRequest.getActId() != null) {
-            ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
-            actReg.setAct(act);
-        }
         //做判斷 如果報名人數超過 則不能報名
-//        ActRegVO actReg = modelMapper.map(actRegRequest, ActRegVO.class); //PK有問題 會跟repId一樣
+        if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() < 0) {
+            return null;
+        }
 
         return actRegRepository.save(actReg);
-
     }
 
     @Override

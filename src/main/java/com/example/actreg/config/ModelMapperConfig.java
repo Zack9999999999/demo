@@ -1,6 +1,5 @@
 package com.example.actreg.config;
 
-import org.modelmapper.Condition;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

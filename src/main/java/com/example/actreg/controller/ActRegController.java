@@ -40,7 +40,11 @@ public class ActRegController {
 
         ActRegVO actReg = actRegService.createActReg(actRegRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(actReg);
+        if (actReg != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(actReg);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PutMapping("/actreg/{actRegId}")

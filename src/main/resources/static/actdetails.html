@@ -421,12 +421,12 @@
                 if (!value) {
                     return '請輸入人數'
                 }
-                if (value > 10) { //從後端抓報名人數
-                    return '超過人數上限了';
-                }
                 if (isNaN(value)) {
                     return '請輸入數字';
                 }
+                // if (value > 10) { //從後端抓報名人數
+                //     return '超過人數上限了';
+                // }
             },
             showCancelButton: true,
             confirmButtonText: '送出',

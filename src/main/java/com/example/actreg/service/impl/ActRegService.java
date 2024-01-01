@@ -51,14 +51,14 @@ public class ActRegService implements IActRegService {
         actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
         //做判斷 如果報名人數超過 則不能報名
-        if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() < 0) {
+        if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() <= 0) {
             return null;
         }
-
         return actRegRepository.save(actReg);
     }
 
     @Override
+    @Transactional
     public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
 
 //        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
@@ -67,16 +67,30 @@ public class ActRegService implements IActRegService {
         ActRegVO actReg = actRegRepository.findById(actRegId).orElse(null);
 //        actReg.setAct(act);
 
-        actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
+//多餘的        actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
-        modelMapper.map(actRegRequest, actReg);
+//        modelMapper.map(actRegRequest, actReg);
 
-//        if (actRegRequest.getRegStatus() != null) {
-//            updateActReg.setRegStatus(actRegRequest.getRegStatus());
-//        } else if (actRegRequest.getIsActPart() != null) {
-//            updateActReg.setIsActPart(actRegRequest.getIsActPart());
-//        } else
-//            updateActReg.setActRating(actRegRequest.getActRating());
+        if (actRegRequest.getRegStatus() != null) { //未通過的話要將活動的總人數扣掉報名人數
+            actReg.setRegStatus(actRegRequest.getRegStatus());
+            if (actRegRequest.getRegStatus() == 1) {
+                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+                act.setActCount(act.getActCount() - actReg.getRegTotal());
+
+            } else if (actRegRequest.getRegStatus() == 3) {
+
+            }
+        } else if (actRegRequest.getIsActPart() != null) { //取消參加要將活動的總人數扣掉報名人數
+            actReg.setIsActPart(actRegRequest.getIsActPart());
+            if (actRegRequest.getRegStatus() == 1) {
+                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+                act.setActCount(act.getActCount() - actReg.getRegTotal());
+
+            } else if (actRegRequest.getRegStatus() == 2) {
+
+            }
+        } else
+            actReg.setActRating(actRegRequest.getActRating());
 
         return actRegRepository.save(actReg);
 

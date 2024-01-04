@@ -4,9 +4,7 @@ public class CommentQueryParams {
 
     private Integer limit;
     private Integer offset;
-
     private String orderBy;
-
     private String sort;
 
     public Integer getLimit() {

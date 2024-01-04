@@ -15,7 +15,6 @@
             min-height: calc(100vh - 70px);
         }
 
-
         /* Set the size of the div element that contains the map */
         #map {
             height: 300px;
@@ -120,7 +119,7 @@
 
         <div class="mt-5 w-50">
             <div class="mt-3">
-                <span class="fs-3 fw-bolder">留言區<span id="commentcount">1</span></span>
+                <span class="fs-3 fw-bolder">留言區<span id="commentcount">X</span></span>
                 <div class="card w-100 shadow-none p-3 mb-5 bg-light rounded" style="border: none;" id="scroll">
                     <div id="comments" class="card-body">
                         <ul class="list-group list-group-flush">
@@ -182,8 +181,8 @@
             <div class="text-bark">
                 <div class="shadow p-4 bg-body rounded">
                     <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
-<!--                    <button type="button" class="btn btn-outline-success btn-lg">分享活動</button>-->
-                    <button class="btn btn-outline-warning btn-lg">檢舉活動</button>
+                    <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
+                            data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動</button>
                 </div>
             </div>
         </div>
@@ -224,8 +223,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">請說出您的檢舉原因:</label>
-                        <textarea class="form-control" id="message-text"
-                                  style="width: 100%; height: 150px; resize:none;"></textarea>
+                        <textarea class="form-control" id="message-text" style="width: 100%; height: 150px; resize:none;"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -233,7 +231,40 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
 
+<!--檢舉活動框-->
+<div class="modal fade" id="actReportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actReportModalLabel">檢舉</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="actReportfrom">
+                    <div class="mb-3">
+                        <label for="report-title" class="col-form-label">請選擇檢舉原因:</label>
+                        <select class="form-control" id="act-report-title">
+                            <option value="SPAM">垃圾訊息</option>
+                            <option value="OFFENSIVE">不適當的內容</option>
+                            <option value="HARASSMENT">人身攻擊或霸凌行為</option>
+                            <option value="PRIVACY">侵犯隱私</option>
+                            <option value="SENSITIVE">敏感或爭議性內容</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">請說出您的檢舉原因:</label>
+                        <textarea class="form-control" id="text" style="width: 100%; height: 150px; resize:none;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                        <button type="submit" class="btn btn-primary">送出</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -281,11 +312,18 @@
         $.ajax({
             url: '/comments',
             type: 'GET',
-            data: {limit: countLimit},
+            data: {
+                limit: countLimit
+                // sort: userSort 讓用戶可以從新到舊 或舊到新
+            },
             dataType: 'json',
-            success: function (comments) {
+            success: function (page) {
 
                 var commentsHTML = "";
+                var comments = page.comments;
+                var total = page.total;
+                var limit = page.limit;
+
                 comments.forEach(function (comment) {
                     commentsHTML +=
                         '<ul class="list-group list-group-flush">' +
@@ -299,9 +337,12 @@
                         '</div>' +
                         '</ul>';
                 });
+                //留言總數
+                $("#commentcount").html("(" + total + ")");
+
                 if (comments.length > currentDisplayed) {
                     $("#comments").html(commentsHTML);
-                    $("#commentcount").html("(" + comments.length + ")");
+
                     currentDisplayed = comments.length;
                 } else {
                     $("#morecomments").prop("disabled", true).text("沒有更多留言");
@@ -375,7 +416,7 @@
         $("#reportfrom").data("comId", comId);
     });
 
-    //檢舉  如果有新留言沒重新整理頁面不能檢具 會失敗 不知道為什麼
+    //檢舉  如果有新留言沒重新整理頁面不能檢舉 會失敗 不知道為什麼
     $("#reportfrom").submit(function (e) {
         e.preventDefault();
         //抓自定義的data屬性設的值,去查全部留言ajax那邊看
@@ -464,10 +505,6 @@
                 });
             }
         });
-    }
-
-    function actreport() {
-
     }
 
 </script>

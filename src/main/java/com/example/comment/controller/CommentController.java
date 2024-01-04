@@ -4,9 +4,11 @@ import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.service.ICommentService;
 import com.example.comment.model.CommentVO;
+import com.example.comment.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,8 @@ public class CommentController {
     private ICommentService commentService;
 
     @GetMapping("/comments")
-    public ResponseEntity<List<CommentVO>> getComments(
-            @RequestParam(defaultValue = "5") Integer limit,
+    public ResponseEntity<Page<CommentVO>> getComments(
+            @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit,
             @RequestParam(defaultValue = "com_time") String orderBy,
             @RequestParam(defaultValue = "desc") String sort) {
 
@@ -35,7 +37,14 @@ public class CommentController {
 
         List<CommentVO> comments = commentService.getComments(commentQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(comments);
+        Integer total = commentService.countComments();
+
+        Page<CommentVO> page = new Page<>();
+        page.setComments(comments);
+        page.setTotal(total);
+        page.setLimit(limit);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @GetMapping("/comments/{comId}")

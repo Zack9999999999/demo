@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>留言檢舉頁面</title>
+    <title>活動檢舉頁面</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -76,22 +76,23 @@
 
 <main class="main">
 
-    <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>
-    <table id="comment_report_table" class="table table-hover table-bordered">
+    <h1 class="fw-bold">活動檢舉<span id="countReport"></span>筆</h1>
+    <table id="act_report_table" class="table table-hover table-bordered">
         <thead>
         <tr>
-            <th scope="col">留言檢舉編號</th>
-            <th scope="col">被檢舉留言內容</th>
+            <th scope="col">活動檢舉編號</th>
+            <th scope="col">活動編號</th>
             <th scope="col">會員編號</th>
             <th scope="col">員工編號(誰審核的)</th>
             <th scope="col">檢舉標題</th>
             <th scope="col">檢舉內容</th>
+            <th scope="col">檢舉圖片</th>
             <th scope="col">檢舉狀態</th>
             <th scope="col">檢舉時間</th>
             <th scope="col">審核</th>
         </tr>
         </thead>
-        <tbody id="report">
+        <tbody id="actReport">
         <tr>
             <td>1</td>
             <td>2</td>
@@ -134,22 +135,22 @@
 <script>
 
     $.ajax({
-        url: '/commentreport',
+        url: '/activityreport',
         type: 'GET',
         // data: '',
         dataType: 'json',
-        success: function (pageable) {
-            var commentReportHTML = "";
-            var commentReports = pageable.content;
-            var total = pageable.totalElements; //總數量
+        success: function (response) {
+            var actReportHTML = "";
+            // var commentReports = response.act;
+            // var total = pageable.totalElements; //總數量
 
-            var titleMap = {
-                "SPAM": "垃圾訊息",
-                "OFFENSIVE": "不適當的內容",
-                "HARASSMENT": "人身攻擊或霸凌行為",
-                "PRIVACY": "侵犯隱私",
-                "SENSITIVE": "敏感或爭議性內容"
-            };
+            // var titleMap = {
+            //     "SPAM": "垃圾訊息",
+            //     "OFFENSIVE": "不適當的內容",
+            //     "HARASSMENT": "人身攻擊或霸凌行為",
+            //     "PRIVACY": "侵犯隱私",
+            //     "SENSITIVE": "敏感或爭議性內容"
+            // };
 
             var statusMap = {
                 "1": "審核中",
@@ -157,32 +158,36 @@
                 "3": "未通過"
             };
 
-            commentReports.forEach(function (commetreport) {
-                var titleChinese = titleMap[commetreport.repTitle];
-                var statusChinese = statusMap[commetreport.repStatus];
+            response.forEach(function (actReport) {
+                // var titleChinese = titleMap[commetreport.repTitle];
+                var statusChinese = statusMap[actReport.repStatus];
 
-                commentReportHTML +=
-                    '<tr><td>' + commetreport.repId + '</td>' +
-                    '<td>' + commetreport.comment.comContent + '</td>' +
-                    '<td>' + commetreport.memId + '</td>' +
-                    '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td>' +
-                    '<td>' + titleChinese + '</td>' +
-                    '<td>' + commetreport.repContent + '</td>' +
+                // var blob = new Blob([actReport.repPic], {type: 'image/png'});
+                // var imgSrc = URL.createObjectURL(blob);
+                // var imgSrc = 'data:image/jpeg;base64,' + actReport.repPic;
+
+                actReportHTML +=
+                    '<tr><td>' + actReport.repId + '</td>' +
+                    '<td>' + actReport.act.actId + '</td>' +
+                    '<td>' + actReport.memId + '</td>' +
+                    '<td>' + actReport.empId + '</td>' +
+                    '<td>' + actReport.repTitle + '</td>' +
+                    '<td>' + actReport.repContent + '</td>' +
+                    '<td><img src="' + /* imgSrc */ +'" alt="pic"></td>' +
                     '<td>' + statusChinese + '</td>' +
-                    '<td>' + commetreport.repTime + '</td>' +
+                    '<td>' + actReport.repTime + '</td>' +
                     '<td>' +
                     '<button>審核</button>' +
                     '</td></tr>';
             });
 
-            $("#countReport").prepend(": 共" + total);
-            $("#report").html(commentReportHTML);
+            // $("#countReport").prepend(": 共" + total);
+            $("#actReport").html(actReportHTML);
 
         },
         error: function (xhr, status, error) {
             console.error("Error:" + status + " " + error);
         }
-
     });
 
 </script>

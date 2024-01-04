@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ICommentDAO {
 
+    Integer countComments();
+
     List<CommentVO> getComments(CommentQueryParams commentQueryParams);
     CommentVO getCommentById(Integer comId);
     Integer insertComment(CommentRequest commentRequest);

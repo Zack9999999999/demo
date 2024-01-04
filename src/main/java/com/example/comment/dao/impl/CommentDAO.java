@@ -33,6 +33,17 @@ public class CommentDAO implements ICommentDAO {
     private ObjectMapper objectMapper;
 
     @Override
+    public Integer countComments() {
+        String sql = "SELECT count(*) FROM activity_comment WHERE 1=1";
+
+        Map<String, Object> map = new HashMap<>();
+
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+
+        return total;
+    }
+
+    @Override
 //    @Cacheable(value = "commentsCache", key = "'comments'")
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
@@ -40,7 +51,7 @@ public class CommentDAO implements ICommentDAO {
 
         Map<String, Object> map = new HashMap<>();
 
-        //最新留言在由上至下
+        //排序
         sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();
 
         //簡易分頁(查看更多)

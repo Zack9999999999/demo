@@ -28,7 +28,7 @@ public class CommentReportController {
             //查詢條件
             @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
             @RequestParam(required = false) Byte repStatus,
-            @PageableDefault(size = 5) Pageable pageable
+            @PageableDefault(size = 20) Pageable pageable
     ) {
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();

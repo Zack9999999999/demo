@@ -8,10 +8,14 @@ import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +33,9 @@ public class ActRegService implements IActRegService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    //log紀錄
+    private final static Logger log = LoggerFactory.getLogger(ActRegService.class);
 
     @Override
     public List<ActRegVO> getActRegs() {
@@ -52,7 +59,7 @@ public class ActRegService implements IActRegService {
 
         //做判斷 如果報名人數超過 則不能報名
         if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() <= 0) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return actRegRepository.save(actReg);
     }

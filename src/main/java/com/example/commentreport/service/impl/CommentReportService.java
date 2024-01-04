@@ -40,13 +40,6 @@ public class CommentReportService implements ICommentReportService {
             return commentReportRepository.findByRepStatus(commentReportQueryParams.getRepStatus(), pageable);
         }
 
-        //这段代码通常只有在您需要在返回之前处理或使用这些值时才有用。
-        // 例如，如果您需要日志记录这些值，或者您需要基于这些值进一步处理数据
-//        Page<CommentReport> page = commentReportRepository.findAll(pageable);
-//        int totalPages = page.getTotalPages(); //總頁數
-//        long totalElements = page.getTotalElements(); //總數量
-//        List<CommentReport> content = page.getContent(); //當前頁面數據
-
         return commentReportRepository.findAll(pageable);
     }
 

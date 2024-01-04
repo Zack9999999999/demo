@@ -24,6 +24,7 @@ public class ActivityReportService implements IActivityReportService {
 
     @Override
     public List<ActivityReportVO> getAll() {
+        //VO內@ManyToOne(fetch = FetchType.LAZY)會報錯
         return activityReportReopsitory.findAll();
     }
 

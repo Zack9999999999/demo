@@ -18,6 +18,11 @@ public class CommentService implements ICommentService {
     private ICommentDAO commentDAO;
 
     @Override
+    public Integer countComments() {
+        return commentDAO.countComments();
+    }
+
+    @Override
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
         return commentDAO.getComments(commentQueryParams);
     }

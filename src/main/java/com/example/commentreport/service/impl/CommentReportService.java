@@ -12,11 +12,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
@@ -29,7 +30,9 @@ public class CommentReportService implements ICommentReportService {
 
     @Override
     public Page<CommentReportVO> getCommentReports(
-            CommentReportQueryParams commentReportQueryParams, Pageable pageable) {
+            CommentReportQueryParams commentReportQueryParams,
+            Pageable pageable) {
+
         //檢舉標題查詢
         if (commentReportQueryParams.getCommentReportRepTitle() != null) {
             return commentReportRepository.findByRepTitle(
@@ -55,12 +58,13 @@ public class CommentReportService implements ICommentReportService {
     public CommentReportVO createCommentReport(CommentReportRequest commentReportRequest) {
 
         CommentVO comment = commentRepository.findById(commentReportRequest.getComId())
-                .orElseThrow(() -> new NoSuchElementException("別胡搞瞎搞"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         CommentReportVO commentReport = new CommentReportVO();
-        BeanUtils.copyProperties(commentReportRequest,commentReport);
-        commentReport.setComment(comment);
+        BeanUtils.copyProperties(commentReportRequest, commentReport);
         commentReport.setRepTime(new Date());
+//        commentReport.setComment(comment);
+
 //        commentReport.setMemId(commentReportRequest.getMemId());
 //        commentReport.setRepTitle(commentReportRequest.getRepTitle());
 //        commentReport.setRepContent(commentReportRequest.getRepContent());
@@ -75,6 +79,9 @@ public class CommentReportService implements ICommentReportService {
 
         if (commentReport.isPresent()) {
             commentReport.get().setRepStatus(commentReportStatus.getRepStatus());
+            if (commentReportStatus.getRepStatus() == 2) {
+                commentReport.get().getComment().setComStatus(commentReportStatus.getRepStatus());
+            }
             return commentReportRepository.save(commentReport.get());
         } else {
             return null;

@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Component
 public class ActRegService implements IActRegService {
 
@@ -39,12 +38,14 @@ public class ActRegService implements IActRegService {
 
     @Override
     public List<ActRegVO> getActRegs() {
+        actRepository.findAll();
         return actRegRepository.findAll();
     }
 
     @Override
+    @Transactional
     public ActRegVO getActReg(Integer actRegId) {
-        return actRegRepository.findById(actRegId).orElse(null);
+        return actRegRepository.findByActRegIdAndFetchActEagerly(actRegId).orElse(null);
     }
 
     @Override
@@ -54,10 +55,9 @@ public class ActRegService implements IActRegService {
 
         BeanUtils.copyProperties(actRegRequest, actReg);
         actReg.setRegTime(new Date());
-//        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
         actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
-        //做判斷 如果報名人數超過 則不能報名
+        //如果報名人數超過 則不能報名
         if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -68,36 +68,32 @@ public class ActRegService implements IActRegService {
     @Transactional
     public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
 
-//        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
 
-        //ActRegVO內如果是@ManyToOne(fetch = FetchType.LAZY)延遲加載會錯誤
         ActRegVO actReg = actRegRepository.findById(actRegId).orElse(null);
-//        actReg.setAct(act);
 
-//多餘的        actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
+        modelMapper.map(actRegRequest, actReg);
 
-//        modelMapper.map(actRegRequest, actReg);
-
-        if (actRegRequest.getRegStatus() != null) { //未通過的話要將活動的總人數扣掉報名人數
-            actReg.setRegStatus(actRegRequest.getRegStatus());
-            if (actRegRequest.getRegStatus() == 1) {
-                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
-                act.setActCount(act.getActCount() - actReg.getRegTotal());
-
-            } else if (actRegRequest.getRegStatus() == 3) {
-
-            }
-        } else if (actRegRequest.getIsActPart() != null) { //取消參加要將活動的總人數扣掉報名人數
-            actReg.setIsActPart(actRegRequest.getIsActPart());
-            if (actRegRequest.getRegStatus() == 1) {
-                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
-                act.setActCount(act.getActCount() - actReg.getRegTotal());
-
-            } else if (actRegRequest.getRegStatus() == 2) {
-
-            }
-        } else
-            actReg.setActRating(actRegRequest.getActRating());
+//        if (actRegRequest.getRegStatus() != null) { //未通過的話要將活動的總人數扣掉報名人數
+//            actReg.setRegStatus(actRegRequest.getRegStatus());
+//            if (actRegRequest.getRegStatus() == 1) {
+//                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+//                act.setActCount(act.getActCount() - actReg.getRegTotal());
+//
+//            } else if (actRegRequest.getRegStatus() == 3) {
+//
+//            }
+//        } else if (actRegRequest.getIsActPart() != null) { //取消參加要將活動的總人數扣掉報名人數
+//            actReg.setIsActPart(actRegRequest.getIsActPart());
+//            if (actRegRequest.getRegStatus() == 1) {
+//                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+//                act.setActCount(act.getActCount() - actReg.getRegTotal());
+//
+//            } else if (actRegRequest.getRegStatus() == 2) {
+//
+//            }
+//        } else
+//            actReg.setActRating(actRegRequest.getActRating());
 
         return actRegRepository.save(actReg);
 

@@ -6,6 +6,7 @@ import com.example.commentreport.dto.CommentReportRequest;
 import com.example.commentreport.dto.CommentReportStatus;
 import com.example.commentreport.model.CommentReportVO;
 import com.example.commentreport.service.ICommentReportService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
 @RestController
+@Slf4j
 public class CommentReportController {
 
     @Autowired
@@ -25,10 +27,9 @@ public class CommentReportController {
 
     @GetMapping("/commentreport")
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
-            //查詢條件
             @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
             @RequestParam(required = false) Byte repStatus,
-            @PageableDefault(size = 20) Pageable pageable
+            @PageableDefault(size = 5) Pageable pageable
     ) {
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
@@ -63,6 +64,7 @@ public class CommentReportController {
     @PutMapping("/commentreport/{repId}")
     public ResponseEntity<CommentReportVO> updateCommentReport(@PathVariable Integer repId,
                                                                @RequestBody CommentReportStatus commentReportStatus) {
+
         CommentReportVO updateCommentReport = commentReportService.updateCommentReport(repId, commentReportStatus);
 
         return ResponseEntity.status(HttpStatus.OK).body(updateCommentReport);

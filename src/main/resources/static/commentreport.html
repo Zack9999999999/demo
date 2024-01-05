@@ -76,7 +76,14 @@
 
 <main class="main">
 
-    <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>
+    <div style="display: inline">
+        <h1 class="fw-bold" style="display: inline">活動留言檢舉<span id="countReport"></span>筆</h1>
+        <button class="filterButton btn btn-outline-warning" data-rep-status="1" style="margin-left: 30px">審核中
+        </button>
+        <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
+        <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+    </div>
+
     <table id="comment_report_table" class="table table-hover table-bordered">
         <thead>
         <tr>
@@ -112,12 +119,13 @@
             <li class="page-item disabled">
                 <a class="page-link">上一頁</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="">1</a></li>
             <li class="page-item">
-                <a class="page-link" href="#">下一頁</a>
+                <a class="page-link" href="">下一頁</a>
             </li>
         </ul>
     </nav>
+
 </main>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"
@@ -133,56 +141,110 @@
 
 <script>
 
-    $.ajax({
-        url: '/commentreport',
-        type: 'GET',
-        // data: '',
-        dataType: 'json',
-        success: function (pageable) {
-            var commentReportHTML = "";
-            var commentReports = pageable.content;
-            var total = pageable.totalElements; //總數量
+    //載入頁面要先渲染出所有的留言檢舉
+    $(function () {
+        loadCommentReports();
+    });
 
-            var titleMap = {
-                "SPAM": "垃圾訊息",
-                "OFFENSIVE": "不適當的內容",
-                "HARASSMENT": "人身攻擊或霸凌行為",
-                "PRIVACY": "侵犯隱私",
-                "SENSITIVE": "敏感或爭議性內容"
-            };
-
-            var statusMap = {
-                "1": "審核中",
-                "2": "通過",
-                "3": "未通過"
-            };
-
-            commentReports.forEach(function (commetreport) {
-                var titleChinese = titleMap[commetreport.repTitle];
-                var statusChinese = statusMap[commetreport.repStatus];
-
-                commentReportHTML +=
-                    '<tr><td>' + commetreport.repId + '</td>' +
-                    '<td>' + commetreport.comment.comContent + '</td>' +
-                    '<td>' + commetreport.memId + '</td>' +
-                    '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td>' +
-                    '<td>' + titleChinese + '</td>' +
-                    '<td>' + commetreport.repContent + '</td>' +
-                    '<td>' + statusChinese + '</td>' +
-                    '<td>' + commetreport.repTime + '</td>' +
-                    '<td>' +
-                    '<button>審核</button>' +
-                    '</td></tr>';
-            });
-
-            $("#countReport").prepend(": 共" + total);
-            $("#report").html(commentReportHTML);
-
-        },
-        error: function (xhr, status, error) {
-            console.error("Error:" + status + " " + error);
+    //顯示所有留言檢舉內容
+    function loadCommentReports(repStatus) {
+        var url = '/commentreport';
+        if (repStatus !== undefined && repStatus !== null) {
+            url = url + '?repStatus=' + repStatus;
         }
 
+        $.ajax({
+            url: url,
+            type: 'GET',
+            // data: '',
+            dataType: 'json',
+            success: function (commentReportList) { //再加分頁功能
+                var commentReportHTML = "";
+                var commentReports = commentReportList.content;
+                var total = commentReportList.totalElements; //總數量
+
+                var titleMap = {
+                    "SPAM": "垃圾訊息",
+                    "OFFENSIVE": "不適當的內容",
+                    "HARASSMENT": "人身攻擊或霸凌行為",
+                    "PRIVACY": "侵犯隱私",
+                    "SENSITIVE": "敏感或爭議性內容"
+                };
+
+                var statusMap = {
+                    "1": "審核中",
+                    "2": "通過",
+                    "3": "未通過"
+                };
+
+                commentReports.forEach(function (commetreport) {
+                    var titleChinese = titleMap[commetreport.repTitle];
+                    var statusChinese = statusMap[commetreport.repStatus];
+
+                    commentReportHTML +=
+                        '<tr><td>' + commetreport.repId + '</td>' +
+                        '<td>' + commetreport.comment.comContent + '</td>' +
+                        '<td>' + commetreport.memId + '</td>' +
+                        '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td>' +
+                        '<td>' + titleChinese + '</td>' +
+                        '<td>' + commetreport.repContent + '</td>' +
+                        '<td id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
+                        '<td>' + commetreport.repTime + '</td>' +
+                        '<td><select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +
+                        '<option value="1">審核中</option>' +
+                        '<option value="2">通過</option>' +
+                        '<option value="3">未通過</option>' +
+                        '</select></td></tr>';
+
+                });
+
+                $("#countReport").html(": 共" + total);
+                $("#report").html(commentReportHTML);
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:" + status + " " + error);
+            }
+        });
+    }
+
+    //更新狀態
+    $(document).on("change", ".changeStatus", function () {
+        var statusMap = {
+            "1": "審核中",
+            "2": "通過",
+            "3": "未通過"
+        };
+
+        var repId = $(this).data("repId");
+
+        var newStatus = {
+            repStatus: $(this).val()
+        };
+
+        $.ajax({
+            url: '/commentreport/' + repId,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(newStatus),
+            dataType: 'json',
+            success: function (updateCommentReport) {
+                var statusChinese = statusMap[updateCommentReport.repStatus]; // 从statusMap获取新状态的中文描述
+                $("#status-" + repId).text(statusChinese);
+                alert("更新成功");
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:" + status + " " + error);
+            }
+
+        });
+    });
+
+    //依審核狀態篩選
+    $(".filterButton").on("click", function () {
+        var repStatus = $(this).data("repStatus");
+
+        loadCommentReports(repStatus);
     });
 
 </script>

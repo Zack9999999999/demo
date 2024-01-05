@@ -23,7 +23,7 @@ public class ActRegVO {
 	@Column(name = "mem_id")
 	private Integer memId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "act_id", referencedColumnName = "act_id")
 	private ActVO act;
 

@@ -5,6 +5,7 @@ import com.example.commentreport.model.CommentReportVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,4 +17,5 @@ public interface CommentReportRepository extends JpaRepository<CommentReportVO, 
     Page<CommentReportVO> findByRepStatus(Byte repStatus, Pageable pageable);
 
     Page<CommentReportVO> findAll(Pageable pageable);
+
 }

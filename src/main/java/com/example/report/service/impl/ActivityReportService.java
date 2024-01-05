@@ -1,5 +1,6 @@
 package com.example.report.service.impl;
 
+import com.example.act.repository.ActRepository;
 import com.example.report.dto.ActivityReportRequest;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.repository.ActivityReportReopsitory;
@@ -20,17 +21,21 @@ public class ActivityReportService implements IActivityReportService {
     private ActivityReportReopsitory activityReportReopsitory;
 
     @Autowired
+    private ActRepository actRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
     public List<ActivityReportVO> getAll() {
-        //VO內@ManyToOne(fetch = FetchType.LAZY)會報錯
+        actRepository.findAll();
+
         return activityReportReopsitory.findAll();
     }
 
     @Override
     public ActivityReportVO findByPrimaryKey(Integer repId) {
-        return activityReportReopsitory.findById(repId).orElse(null);
+        return activityReportReopsitory.findByRepIdAndFetchActEagerly(repId).orElse(null);
     }
 
     @Override

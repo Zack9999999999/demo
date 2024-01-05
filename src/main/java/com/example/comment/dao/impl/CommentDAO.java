@@ -14,7 +14,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public class CommentDAO implements ICommentDAO {
 
     @Override
     public Integer countComments() {
-        String sql = "SELECT count(*) FROM activity_comment WHERE 1=1";
+        String sql = "SELECT count(*) FROM activity_comment WHERE com_status = 1";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -49,7 +48,12 @@ public class CommentDAO implements ICommentDAO {
         String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
                 "FROM activity_comment WHERE 1=1";
 
+        //會員id要改成顯示會員名稱 即顯示會員大頭貼
+
         Map<String, Object> map = new HashMap<>();
+
+        //狀態不等於1的話代表被檢舉所以不顯示
+        sql = sql + " AND com_status = 1";
 
         //排序
         sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();

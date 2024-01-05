@@ -13,4 +13,11 @@ public class CommentReportStatus {
     public void setRepStatus(Byte repStatus) {
         this.repStatus = repStatus;
     }
+
+    @Override
+    public String toString() {
+        return "CommentReportStatus{" +
+                "repStatus=" + repStatus +
+                '}';
+    }
 }

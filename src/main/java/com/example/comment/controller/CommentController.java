@@ -2,13 +2,12 @@ package com.example.comment.controller;
 
 import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
-import com.example.comment.service.ICommentService;
 import com.example.comment.model.CommentVO;
+import com.example.comment.service.ICommentService;
 import com.example.comment.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

@@ -20,7 +20,7 @@ public class ActivityReportVO {
 	@Column(name = "rep_id")
 	private Integer repId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "act_id", referencedColumnName = "act_id")
 	private ActVO act;
 

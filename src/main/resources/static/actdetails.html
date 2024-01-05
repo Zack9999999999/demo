@@ -181,8 +181,10 @@
             <div class="text-bark">
                 <div class="shadow p-4 bg-body rounded">
                     <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
+                    <button type="button" class="btn btn-outline-primary btn-lg mx-3" onclick="">關注活動</button>
                     <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動</button>
+                            data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動
+                    </button>
                 </div>
             </div>
         </div>
@@ -223,7 +225,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">請說出您的檢舉原因:</label>
-                        <textarea class="form-control" id="message-text" style="width: 100%; height: 150px; resize:none;"></textarea>
+                        <textarea class="form-control" id="message-text"
+                                  style="width: 100%; height: 150px; resize:none;"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -257,7 +260,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">請說出您的檢舉原因:</label>
-                        <textarea class="form-control" id="text" style="width: 100%; height: 150px; resize:none;"></textarea>
+                        <textarea class="form-control" id="text"
+                                  style="width: 100%; height: 150px; resize:none;"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -312,6 +316,7 @@
         $.ajax({
             url: '/comments',
             type: 'GET',
+            contentType: 'application/json',
             data: {
                 limit: countLimit
                 // sort: userSort 讓用戶可以從新到舊 或舊到新
@@ -325,17 +330,19 @@
                 var limit = page.limit;
 
                 comments.forEach(function (comment) {
-                    commentsHTML +=
-                        '<ul class="list-group list-group-flush">' +
-                        '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comment.memId + '</li>' +
-                        '<li class="list-group-item">' + comment.comContent + '</li>' +
-                        '<div class="d-flex">' +
-                        '<li class="list-group">' + comment.comTime + '</li>' +
-                        '<li class="list-group ms-auto">' +
-                        '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
-                        'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
-                        '</div>' +
-                        '</ul>';
+                    if (comment.comStatus == 1) {
+                        commentsHTML +=
+                            '<ul class="list-group list-group-flush">' +
+                            '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comment.memId + '</li>' +
+                            '<li class="list-group-item">' + comment.comContent + '</li>' +
+                            '<div class="d-flex">' +
+                            '<li class="list-group">' + comment.comTime + '</li>' +
+                            '<li class="list-group ms-auto">' +
+                            '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
+                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
+                            '</div>' +
+                            '</ul>';
+                    }
                 });
                 //留言總數
                 $("#commentcount").html("(" + total + ")");
@@ -397,7 +404,8 @@
                     '<div class="d-flex">' +
                     '<li class="list-group">' + comments.comTime + '</li>' +
                     '<li class="list-group ms-auto">' +
-                    '<img src=""><a href="#" class="report" style="text-decoration:none;" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
+                    '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
+                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
                     '</div>' +
                     '</ul>';
                 $("#comments").prepend(commentsHTML);
@@ -500,7 +508,7 @@
                         Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
                     },
                     error: function (xhr, status, error) {
-                        Swal.fire("報名失敗，請再多試試");
+                        Swal.fire("報名人數超過上限，請重新確認");
                     }
                 });
             }

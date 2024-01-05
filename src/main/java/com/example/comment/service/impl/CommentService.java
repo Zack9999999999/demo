@@ -39,6 +39,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional
     public void updateComment(Integer comId, CommentRequest commentRequest) {
 
         commentDAO.updateComment(comId, commentRequest);

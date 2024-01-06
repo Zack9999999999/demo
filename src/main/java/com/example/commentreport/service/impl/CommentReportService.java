@@ -8,6 +8,7 @@ import com.example.commentreport.dto.CommentReportStatus;
 import com.example.commentreport.model.CommentReportVO;
 import com.example.commentreport.repository.CommentReportRepository;
 import com.example.commentreport.service.ICommentReportService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Date;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class CommentReportService implements ICommentReportService {
 
@@ -62,13 +64,13 @@ public class CommentReportService implements ICommentReportService {
 
         CommentReportVO commentReport = new CommentReportVO();
         BeanUtils.copyProperties(commentReportRequest, commentReport);
+        commentReport.setComment(comment);
         commentReport.setRepTime(new Date());
-//        commentReport.setComment(comment);
+
 
 //        commentReport.setMemId(commentReportRequest.getMemId());
 //        commentReport.setRepTitle(commentReportRequest.getRepTitle());
 //        commentReport.setRepContent(commentReportRequest.getRepContent());
-
         return commentReportRepository.save(commentReport);
     }
 

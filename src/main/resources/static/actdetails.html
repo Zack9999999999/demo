@@ -123,7 +123,7 @@
                 <div class="card w-100 shadow-none p-3 mb-5 bg-light rounded" style="border: none;" id="scroll">
                     <div id="comments" class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group"><img src="." style="width: 35px; height: auto;" alt="小白"></li>
+                            <li class="list-group"><img src="" style="width: 35px; height: auto;" alt="小白"></li>
                             <li class="list-group-item">留言一</li>
                             <div class="d-flex">
                                 <li class="list-group">4天前</li>
@@ -428,14 +428,12 @@
         e.preventDefault();
         //抓自定義的data屬性設的值,去查全部留言ajax那邊看
         var thiscomId = $(this).data("comId");
-
         var commentReportData = {
             comId: thiscomId, //留言編號
             memId: 1, //改動態抓 userMemId
             repTitle: $("#report-title").val(),
             repContent: $("#message-text").val()
         };
-
         $.ajax({
             url: "/commentreport",
             type: "POST",

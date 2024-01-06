@@ -29,7 +29,7 @@ public class CommentReportController {
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
             @RequestParam(required = false) Byte repStatus,
-            Pageable pageable //size再做調整
+            /*@PageableDefault(size = 10)*/ Pageable pageable //size再做調整
     ) {
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
@@ -53,9 +53,9 @@ public class CommentReportController {
         }
     }
 
+
     @PostMapping("/commentreport")
     public ResponseEntity<CommentReportVO> createCommentReport(@RequestBody @Valid CommentReportRequest commentReportRequest) {
-
             CommentReportVO commentReport = commentReportService.createCommentReport(commentReportRequest);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(commentReport);

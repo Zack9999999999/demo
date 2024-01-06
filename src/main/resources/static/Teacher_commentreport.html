@@ -1,0 +1,308 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="utf-8">-->
+<!--    <title>留言檢舉頁面</title>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">-->
+
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" href="後台首頁頁面.css">-->
+<!--    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css"/>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">-->
+
+<!--</head>-->
+
+<!--<body>-->
+<!--<header class="header">-->
+<!--    <h1>【做伙後台管理系統】</h1>-->
+<!--    <p class="welcome">歡迎您 管理員</p>-->
+<!--    <nav>-->
+<!--        <ul>-->
+<!--            <li><a href="後台登入頁面.html">登出</a></li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</header>-->
+
+<!--<aside class="aside">-->
+<!--    <nav class="nav">-->
+<!--        <div class="sidenav">-->
+<!--            <a href="後台首頁頁面.html">首頁</a>-->
+<!--            <hr>-->
+<!--            <button class="dropdown-btn">員工管理-->
+<!--                <i class="fa fa-caret-down"></i>-->
+<!--            </button>-->
+<!--            <div class="dropdown-container">-->
+<!--                <a href="修改密碼頁面.html">修改密碼</a>-->
+<!--                <a href="員工資料管理首頁.html">員工資料管理</a>-->
+<!--            </div>-->
+<!--            <hr>-->
+<!--            <button class="dropdown-btn">一般功能管理-->
+<!--                <i class="fa fa-caret-down"></i>-->
+<!--            </button>-->
+<!--            <div class="dropdown-container">-->
+<!--                <a href="新增公告.html">公告管理</a>-->
+<!--                <a href="新增FAQ.html">FQA管理</a>-->
+<!--            </div>-->
+<!--            <hr>-->
+<!--            <button class="dropdown-btn">會員功能管理-->
+<!--                <i class="fa fa-caret-down"></i>-->
+<!--            </button>-->
+<!--            <div class="dropdown-container">-->
+<!--                <a href="查詢會員.html">查詢會員</a>-->
+<!--                <a href="產生會員通知訊息.html">產生通知訊息</a>-->
+<!--                <a href="#">審核會員檢舉</a>-->
+<!--            </div>-->
+<!--            <hr>-->
+<!--            <button class="dropdown-btn">活動功能管理-->
+<!--                <i class="fa fa-caret-down"></i>-->
+<!--            </button>-->
+<!--            <div class="dropdown-container">-->
+<!--                <a href="#">審核活動管理</a>-->
+<!--                <a href="#">審核留言管理</a>-->
+<!--            </div>-->
+<!--            <hr>-->
+<!--            <button class="dropdown-btn">場地功能管理-->
+<!--                <i class="fa fa-caret-down"></i>-->
+<!--            </button>-->
+<!--            <div class="dropdown-container">-->
+<!--                <a href="新增場地.html">場地管理</a>-->
+<!--                <a href="#">場地訂單管理</a>-->
+<!--                <a href="#">場地狀態管理</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </nav>-->
+<!--</aside>-->
+
+<!--<main class="main">-->
+
+<!--    <div style="display: inline">-->
+<!--        <h1 class="fw-bold" style="display: inline">活動留言檢舉<span id="countReport"></span>筆</h1>-->
+<!--        <button class="filterButton btn btn-outline-secondary" data-rep-status="" style="margin-left: 30px">所有-->
+<!--        </button>-->
+<!--        <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>-->
+<!--        <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>-->
+<!--        <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>-->
+<!--    </div>-->
+
+<!--    <table id="comment_report_table" class="table table-hover table-bordered">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th scope="col">留言檢舉編號</th>-->
+<!--            <th scope="col">被檢舉留言內容</th>-->
+<!--            <th scope="col">會員編號</th>-->
+<!--            <th scope="col">員工編號(誰審核的)</th>-->
+<!--            <th scope="col">檢舉標題</th>-->
+<!--            <th scope="col">檢舉內容</th>-->
+<!--            <th scope="col">檢舉狀態</th>-->
+<!--            <th scope="col">檢舉時間</th>-->
+<!--            <th scope="col">審核</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody id="report">-->
+<!--        <tr>-->
+<!--            <td>1</td>-->
+<!--            <td>2</td>-->
+<!--            <td>3</td>-->
+<!--            <td>OFFENSIVE</td>-->
+<!--            <td>內容不當言論</td>-->
+<!--            <td>1</td>-->
+<!--            <td>2023-12-13 10:00:00</td>-->
+<!--            <td>-->
+<!--                <button>審核</button>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+
+<!--    <nav aria-label="Page navigation example">-->
+<!--        <ul class="pagination justify-content-center" id="pagination-list">-->
+
+<!--            <li class="page-item"><a class="page-link" href="">1</a></li>-->
+<!--            <li class="page-item">-->
+<!--                <a class="page-link" href="">下一頁</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+
+<!--</main>-->
+
+<!--<script src="https://code.jquery.com/jquery-3.7.1.js"-->
+<!--        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>-->
+
+<!--<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"-->
+<!--        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">-->
+<!--</script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>-->
+
+<!--<script src="後台首頁頁面.js"></script>-->
+
+<!--<script>-->
+
+<!--    //載入頁面要先渲染出所有的留言檢舉-->
+<!--    $(function () {-->
+<!--        loadCommentReports({page: 1, size: 10});-->
+<!--    });-->
+
+<!--    // 可以優化 不要重複送-->
+<!--    const nextLoadReport = (pageable) => {-->
+<!--        let url = `/commentreport?page=${pageable.page}&size=${pageable.size}`;-->
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            type: 'GET',-->
+<!--            // data: '',-->
+<!--            dataType: 'json',-->
+<!--            success: (res) => {-->
+<!--                // 因為不知道頁數 所以清空所有Button-->
+<!--                $("#pagination-list").html('');-->
+<!--                // 所有頁面-->
+<!--                const totalPages = res.totalPages-->
+<!--                // 目前的頁面-->
+<!--                const currentPage = res.number-->
+<!--                // 上一頁的DOM-->
+<!--                const previousPage = `<li class="page-item disabled"><a class="page-link">上一頁</a></li>`-->
+<!--                // 下一頁的Dom-->
+<!--                const nextPage = `<li class="page-item"><a class="page-link" href="">下一頁</a></li>`-->
+
+<!--                let pageItems = ''-->
+
+<!--                // 分頁的DOM-->
+<!--                for (i = 0; i < totalPages; i++) {-->
+<!--                    if (currentPage === i + 1){-->
+<!--                        pageItems = pageItems + `-->
+<!--                        <li class="page-item">-->
+<!--                            <a class="pageLinkButton page-link active" href="#" onclick="nextLoadReport({page: ${i + 1}, size: 10})">${i + 1}-->
+<!--                        </a></li>`-->
+<!--                    } else {-->
+<!--                        pageItems = pageItems + `-->
+<!--                        <li class="page-item">-->
+<!--                            <a class="page-link" href="#" onclick="nextLoadReport({page: ${i + 1}, size: 10})">${i + 1}-->
+<!--                        </a></li>`-->
+<!--                    }-->
+
+<!--                }-->
+
+<!--                // 塞回所有HTML內容-->
+<!--                $("#pagination-list").html(previousPage + pageItems + nextPage);-->
+
+<!--                // 不讓它跳頁-->
+<!--                const button = document.querySelector(".pageLinkButton ");-->
+<!--                button.addEventListener("click", function(event) {-->
+<!--                    event.preventDefault();-->
+<!--                });-->
+<!--            }-->
+<!--        })-->
+
+<!--    }-->
+
+<!--    //顯示所有留言檢舉內容-->
+<!--    function loadCommentReports(pageable, repStatus) {-->
+<!--        let url = `/commentreport?page=${pageable.page}&size=${pageable.size}`;-->
+<!--        if (repStatus !== undefined && repStatus !== null) {-->
+<!--            url = url + '&repStatus=' + repStatus;-->
+<!--        }-->
+
+<!--        $.ajax({-->
+<!--            url: url,-->
+<!--            type: 'GET',-->
+<!--            // data: '',-->
+<!--            dataType: 'json',-->
+<!--            success: function (commentReportList) {-->
+<!--                let commentReportHTML = "";-->
+<!--                let commentReports = commentReportList.content;-->
+<!--                const totalPages = commentReportList.totalPages-->
+<!--                let total = commentReportList.totalElements; //總數量-->
+
+<!--                let titleMap = {-->
+<!--                    "SPAM": "垃圾訊息",-->
+<!--                    "OFFENSIVE": "不適當的內容",-->
+<!--                    "HARASSMENT": "人身攻擊或霸凌行為",-->
+<!--                    "PRIVACY": "侵犯隱私",-->
+<!--                    "SENSITIVE": "敏感或爭議性內容"-->
+<!--                };-->
+
+<!--                let statusMap = {-->
+<!--                    "1": "審核中",-->
+<!--                    "2": "通過",-->
+<!--                    "3": "未通過"-->
+<!--                };-->
+
+<!--                nextLoadReport({page: pageable.page, size: pageable.size})-->
+
+<!--                commentReports.forEach(function (commetreport) {-->
+<!--                    let titleChinese = titleMap[commetreport.repTitle];-->
+<!--                    let statusChinese = statusMap[commetreport.repStatus];-->
+
+<!--                    commentReportHTML +=-->
+<!--                        '<tr><td>' + commetreport.repId + '</td>' +-->
+<!--                        '<td>' + commetreport.comment.comContent + '</td>' +-->
+<!--                        '<td>' + commetreport.memId + '</td>' +-->
+<!--                        '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td>' +-->
+<!--                        '<td>' + titleChinese + '</td>' +-->
+<!--                        '<td>' + commetreport.repContent + '</td>' +-->
+<!--                        '<td id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +-->
+<!--                        '<td>' + commetreport.repTime + '</td>' +-->
+<!--                        '<td><select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +-->
+<!--                        '<option value="1">審核中</option>' +-->
+<!--                        '<option value="2">通過</option>' +-->
+<!--                        '<option value="3">未通過</option>' +-->
+<!--                        '</select></td></tr>';-->
+
+<!--                });-->
+<!--                $("#countReport").html(": 共" + total);-->
+<!--                $("#report").html(commentReportHTML);-->
+<!--            },-->
+<!--            error: function (xhr, status, error) {-->
+<!--                console.error("Error:" + status + " " + error);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+
+<!--    //更新狀態-->
+<!--    $(document).on("change", ".changeStatus", function () {-->
+<!--        let statusMap = {-->
+<!--            "1": "審核中",-->
+<!--            "2": "通過",-->
+<!--            "3": "未通過"-->
+<!--        };-->
+
+<!--        let repId = $(this).data("repId");-->
+
+<!--        let newStatus = {-->
+<!--            repStatus: $(this).val()-->
+<!--        };-->
+
+<!--        $.ajax({-->
+<!--            url: '/commentreport/' + repId,-->
+<!--            type: 'PUT',-->
+<!--            contentType: 'application/json',-->
+<!--            data: JSON.stringify(newStatus),-->
+<!--            dataType: 'json',-->
+<!--            success: function (updateCommentReport) {-->
+<!--                let statusChinese = statusMap[updateCommentReport.repStatus]; // 从statusMap获取新状态的中文描述-->
+<!--                $("#status-" + repId).text(statusChinese);-->
+<!--                Swal("更新成功");-->
+<!--                // location.href="commentreport.html";-->
+<!--            },-->
+<!--            error: function (xhr, status, error) {-->
+<!--                console.error("Error:" + status + " " + error);-->
+<!--            }-->
+
+<!--        });-->
+<!--    });-->
+
+<!--    //依審核狀態篩選-->
+<!--    $(".filterButton").on("click", function () {-->
+<!--        let repStatus = $(this).data("repStatus");-->
+
+<!--        loadCommentReports(repStatus);-->
+<!--    });-->
+
+<!--</script>-->
+<!--</body>-->
+
+<!--</html>-->

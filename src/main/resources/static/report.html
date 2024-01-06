@@ -126,7 +126,6 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">圖片</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -161,10 +160,10 @@
         dataType: 'json',
         success: function (response) {
             let actReportHTML = "";
-            // var commentReports = response.act;
-            // var total = pageable.totalElements; //總數量
+            // let commentReports = response.act;
+            // let total = pageable.totalElements; //總數量
 
-            // var titleMap = {
+            // let titleMap = {
             //     "SPAM": "垃圾訊息",
             //     "OFFENSIVE": "不適當的內容",
             //     "HARASSMENT": "人身攻擊或霸凌行為",
@@ -179,7 +178,7 @@
             };
 
             response.forEach(function (actReport) {
-                // var titleChinese = titleMap[commetreport.repTitle];
+                // let titleChinese = titleMap[commetreport.repTitle];
                 let statusChinese = statusMap[actReport.repStatus];
 
                 actReportHTML +=
@@ -218,11 +217,6 @@
         }
     });
 
-    // $(document).on("click", ".buttonReview", function (e) {
-    //     e.preventDefault();
-    //     alert(1);
-    // });
-
     $(document).on("click", ".showPic", function (e) {
         e.preventDefault();
         let repId = $(this).data("repId");
@@ -238,15 +232,15 @@
                 $("#pic").attr("src", imgUrl);
             },
             error: function (xhr, status, error) {
-
-                // if (xhr.status == 404) {
-                //
-                // }
-                // console.error("Error:" + status + " " + error);
+                console.error("Error:" + status + " " + error);
             }
         });
-
     });
+
+    // $(document).on("click", ".buttonReview", function (e) {
+    //     e.preventDefault();
+    //     alert(1);
+    // });
 
 </script>
 </body>

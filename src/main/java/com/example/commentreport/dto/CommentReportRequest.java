@@ -14,7 +14,6 @@ public class CommentReportRequest {
     @NotNull
     private Integer memId;
     @NotNull
-//  @Convert(converter = CommentReportRepTitleConverter.class)
     private CommentReportRepTitle repTitle;
     @NotBlank
     private String repContent;

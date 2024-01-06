@@ -9,6 +9,7 @@
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="後台首頁頁面.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
 
@@ -136,71 +137,23 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>
+
 <script src="後台首頁頁面.js"></script>
 
 <script>
 
     //載入頁面要先渲染出所有的留言檢舉
     $(function () {
-        loadCommentReports({page: 1, size: 10});
+        loadCommentReports();
     });
 
-    // 可以優化 不要重複送
-    const nextLoadReport = (pageable) => {
-        var url = `/commentreport?page=${pageable.page}&size=${pageable.size}`;
-        $.ajax({
-            url: url,
-            type: 'GET',
-            // data: '',
-            dataType: 'json',
-            success: (res) => {
-                // 因為不知道頁數 所以清空所有Button
-                $("#pagination-list").html('');
-                // 所有頁面
-                const totalPages = res.totalPages
-                // 目前的頁面
-                const currentPage = res.number
-                // 上一頁的DOM
-                const previousPage = `<li class="page-item disabled"><a class="page-link">上一頁</a></li>`
-                // 下一頁的Dom
-                const nextPage = `<li class="page-item"><a class="page-link" href="">下一頁</a></li>`
-
-                let pageItems = ''
-
-                // 分頁的DOM
-                for (i = 0; i < totalPages; i++) {
-                    if (currentPage === i + 1){
-                        pageItems = pageItems + `
-                        <li class="page-item">
-                            <a class="pageLinkButton page-link active" href="#" onclick="nextLoadReport({page: ${i + 1}, size: 10})">${i + 1}
-                        </a></li>`
-                    } else {
-                        pageItems = pageItems + `
-                        <li class="page-item">
-                            <a class="page-link" href="#" onclick="nextLoadReport({page: ${i + 1}, size: 10})">${i + 1}
-                        </a></li>`
-                    }
-
-                }
-
-                // 塞回所有HTML內容
-                $("#pagination-list").html(previousPage + pageItems + nextPage);
-
-                // 不讓它跳頁
-                const button = document.querySelector(".pageLinkButton ");
-                button.addEventListener("click", function(event) {
-                    event.preventDefault();
-                });
-            }
-        })
-
-    }
 
     //顯示所有留言檢舉內容
-    function loadCommentReports(pageable, repStatus) {
-        var url = `/commentreport?page=${pageable.page}&size=${pageable.size}`;
+    function loadCommentReports(repStatus) {
+        let url = `/commentreport`;
         if (repStatus !== undefined && repStatus !== null) {
-            url = url + '&repStatus=' + repStatus;
+            url = url + '?repStatus=' + repStatus;
         }
 
         $.ajax({
@@ -208,13 +161,13 @@
             type: 'GET',
             // data: '',
             dataType: 'json',
-            success: function (commentReportList) { //再加分頁功能
-                var commentReportHTML = "";
-                var commentReports = commentReportList.content;
+            success: function (commentReportList) {
+                let commentReportHTML = "";
+                let commentReports = commentReportList.content;
                 const totalPages = commentReportList.totalPages
-                var total = commentReportList.totalElements; //總數量
+                let total = commentReportList.totalElements; //總數量
 
-                var titleMap = {
+                let titleMap = {
                     "SPAM": "垃圾訊息",
                     "OFFENSIVE": "不適當的內容",
                     "HARASSMENT": "人身攻擊或霸凌行為",
@@ -222,17 +175,15 @@
                     "SENSITIVE": "敏感或爭議性內容"
                 };
 
-                var statusMap = {
+                let statusMap = {
                     "1": "審核中",
                     "2": "通過",
                     "3": "未通過"
                 };
 
-                nextLoadReport({page: pageable.page, size: pageable.size})
-
                 commentReports.forEach(function (commetreport) {
-                    var titleChinese = titleMap[commetreport.repTitle];
-                    var statusChinese = statusMap[commetreport.repStatus];
+                    let titleChinese = titleMap[commetreport.repTitle];
+                    let statusChinese = statusMap[commetreport.repStatus];
 
                     commentReportHTML +=
                         '<tr><td>' + commetreport.repId + '</td>' +
@@ -261,15 +212,15 @@
 
     //更新狀態
     $(document).on("change", ".changeStatus", function () {
-        var statusMap = {
+        let statusMap = {
             "1": "審核中",
             "2": "通過",
             "3": "未通過"
         };
 
-        var repId = $(this).data("repId");
+        let repId = $(this).data("repId");
 
-        var newStatus = {
+        let newStatus = {
             repStatus: $(this).val()
         };
 
@@ -280,7 +231,7 @@
             data: JSON.stringify(newStatus),
             dataType: 'json',
             success: function (updateCommentReport) {
-                var statusChinese = statusMap[updateCommentReport.repStatus]; // 从statusMap获取新状态的中文描述
+                let statusChinese = statusMap[updateCommentReport.repStatus]; // 从statusMap获取新状态的中文描述
                 $("#status-" + repId).text(statusChinese);
                 alert("更新成功");
                 // location.href="commentreport.html";
@@ -294,7 +245,7 @@
 
     //依審核狀態篩選
     $(".filterButton").on("click", function () {
-        var repStatus = $(this).data("repStatus");
+        let repStatus = $(this).data("repStatus");
 
         loadCommentReports(repStatus);
     });

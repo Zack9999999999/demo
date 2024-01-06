@@ -59,4 +59,10 @@ public class ActivityReportService implements IActivityReportService {
         return activityReportReopsitory.save(activityReport);
     }
 
+    @Override
+    public byte[] getPic(Integer repId) {
+        return activityReportReopsitory.findRepPicByRepId(repId);
+    }
+
+
 }

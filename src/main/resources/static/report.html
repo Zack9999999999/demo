@@ -83,7 +83,7 @@
             <th scope="col">活動檢舉編號</th>
             <th scope="col">活動編號</th>
             <th scope="col">會員編號</th>
-            <th scope="col">員工編號(誰審核的)</th>
+            <th scope="col">員工編號</th>
             <th scope="col">檢舉標題</th>
             <th scope="col">檢舉內容</th>
             <th scope="col">檢舉圖片</th>
@@ -131,7 +131,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <img src="dog.jpg">
+                    <img id="pic" src="dog.jpg">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -160,7 +160,7 @@
         // data: '',
         dataType: 'json',
         success: function (response) {
-            var actReportHTML = "";
+            let actReportHTML = "";
             // var commentReports = response.act;
             // var total = pageable.totalElements; //總數量
 
@@ -172,7 +172,7 @@
             //     "SENSITIVE": "敏感或爭議性內容"
             // };
 
-            var statusMap = {
+            let statusMap = {
                 "1": "審核中",
                 "2": "通過",
                 "3": "未通過"
@@ -180,12 +180,7 @@
 
             response.forEach(function (actReport) {
                 // var titleChinese = titleMap[commetreport.repTitle];
-                var statusChinese = statusMap[actReport.repStatus];
-                // var blob = new Blob([actReport.repPic], {type: 'image/png'});
-                // var imgSrc = URL.createObjectURL(blob);
-                // var imgSrc = 'data:image/jpeg;base64,' + actReport.repPic;
-
-                console.log(actReport.repPic);// 直接傳回來會變成Base64
+                let statusChinese = statusMap[actReport.repStatus];
 
                 actReportHTML +=
                     '<tr><td>' + actReport.repId + '</td>' +
@@ -194,14 +189,24 @@
                     '<td>' + actReport.empId + '</td>' +
                     '<td>' + actReport.repTitle + '</td>' +
                     '<td>' + actReport.repContent + '</td>' +
-                    '<td><button class="pic btn btn-primary btn-sm" ' +
-                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
-                    'data-rep-id="' + actReport.repId + '">顯示圖片</button></td>' +
+                    '<td>';
+
+                if (actReport.repPic == null) {
+                    actReportHTML += '<button class="showPic btn btn-secondary btn-sm" ' +
+                        'data-rep-id="' + actReport.repId + '" disabled>未提供圖片</button>';
+                } else {
+                    actReportHTML += '<button class="showPic btn btn-primary btn-sm" ' +
+                        'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
+                        'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
+                }
+                actReportHTML +=
+                    '</td>' +
                     '<td>' + statusChinese + '</td>' +
                     '<td>' + actReport.repTime + '</td>' +
                     '<td>' +
-                    '<button class="buttonReview" data-rep-id="' + actReport.repId + '">審核</button>' +
+                    '<button class="buttonReview btn btn-secondary btn-sm" data-rep-id="' + actReport.repId + '">審核</button>' +
                     '</td></tr>';
+
             });
 
             // $("#countReport").prepend(": 共" + total);
@@ -213,14 +218,35 @@
         }
     });
 
-    $(document).on("click", ".buttonReview", function (e) {
-        e.preventDefault();
-        alert(1);
-    });
-
-    // $(document).on("click", ".pic", function (e){
+    // $(document).on("click", ".buttonReview", function (e) {
     //     e.preventDefault();
+    //     alert(1);
     // });
+
+    $(document).on("click", ".showPic", function (e) {
+        e.preventDefault();
+        let repId = $(this).data("repId");
+
+        $.ajax({
+            url: "/activityreport/" + repId + "/pic",
+            type: 'GET',
+            xhrFields: {
+                responseType: "blob"
+            },
+            success: function (pic) {
+                let imgUrl = URL.createObjectURL(pic);
+                $("#pic").attr("src", imgUrl);
+            },
+            error: function (xhr, status, error) {
+
+                // if (xhr.status == 404) {
+                //
+                // }
+                // console.error("Error:" + status + " " + error);
+            }
+        });
+
+    });
 
 </script>
 </body>

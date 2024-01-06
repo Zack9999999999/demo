@@ -4,7 +4,9 @@ import com.example.report.dto.ActivityReportRequest;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.service.IActivityReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,11 +42,23 @@ public class ActivityReportController {
 
     @PutMapping("/activityreport/{repId}")
     public ResponseEntity<ActivityReportVO> update(@PathVariable Integer repId,
-                                    @RequestBody ActivityReportRequest activityReportRequest) {
+                                                   @RequestBody ActivityReportRequest activityReportRequest) {
         ActivityReportVO activityReport = activityReportService.update(repId, activityReportRequest);
         return ResponseEntity.status(HttpStatus.OK).body(activityReport);
     }
 
+    @GetMapping("/activityreport/{repId}/pic")
+    public ResponseEntity<byte[]> getPic(@PathVariable Integer repId) {
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+
+        byte[] pic = activityReportService.getPic(repId);
+        if (pic != null) {
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(pic);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 
 }

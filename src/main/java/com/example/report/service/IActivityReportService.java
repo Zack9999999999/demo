@@ -15,4 +15,6 @@ public interface IActivityReportService {
 
 	ActivityReportVO update(Integer repId, ActivityReportRequest activityReportRequest);
 
+	byte[] getPic(Integer repId);
+
 }

@@ -11,4 +11,7 @@ public interface ActivityReportReopsitory extends JpaRepository<ActivityReportVO
 
     @Query("SELECT a FROM ActivityReportVO a JOIN FETCH a.act WHERE a.repId = :repId")
     Optional<ActivityReportVO> findByRepIdAndFetchActEagerly(@Param("repId") Integer repId);
+
+    @Query("SELECT a.repPic FROM ActivityReportVO  a WHERE a.repId = :repId")
+    byte[] findRepPicByRepId(@Param("repId") Integer repId);
 }

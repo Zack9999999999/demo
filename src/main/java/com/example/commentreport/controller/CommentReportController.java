@@ -29,7 +29,7 @@ public class CommentReportController {
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
             @RequestParam(required = false) Byte repStatus,
-            @PageableDefault(size = 5) Pageable pageable
+            Pageable pageable //size再做調整
     ) {
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();

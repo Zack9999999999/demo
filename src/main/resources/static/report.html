@@ -121,6 +121,26 @@
     </nav>
 </main>
 
+<!--檢舉留言框-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">圖片</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <img src="dog.jpg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
@@ -161,10 +181,11 @@
             response.forEach(function (actReport) {
                 // var titleChinese = titleMap[commetreport.repTitle];
                 var statusChinese = statusMap[actReport.repStatus];
-
                 // var blob = new Blob([actReport.repPic], {type: 'image/png'});
                 // var imgSrc = URL.createObjectURL(blob);
                 // var imgSrc = 'data:image/jpeg;base64,' + actReport.repPic;
+
+                console.log(actReport.repPic);// 直接傳回來會變成Base64
 
                 actReportHTML +=
                     '<tr><td>' + actReport.repId + '</td>' +
@@ -173,11 +194,13 @@
                     '<td>' + actReport.empId + '</td>' +
                     '<td>' + actReport.repTitle + '</td>' +
                     '<td>' + actReport.repContent + '</td>' +
-                    '<td><img src="' + /* imgSrc */ +'" alt="pic"></td>' +
+                    '<td><button class="pic btn btn-primary btn-sm" ' +
+                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
+                    'data-rep-id="' + actReport.repId + '">顯示圖片</button></td>' +
                     '<td>' + statusChinese + '</td>' +
                     '<td>' + actReport.repTime + '</td>' +
                     '<td>' +
-                    '<button>審核</button>' +
+                    '<button class="buttonReview" data-rep-id="' + actReport.repId + '">審核</button>' +
                     '</td></tr>';
             });
 
@@ -189,6 +212,15 @@
             console.error("Error:" + status + " " + error);
         }
     });
+
+    $(document).on("click", ".buttonReview", function (e) {
+        e.preventDefault();
+        alert(1);
+    });
+
+    // $(document).on("click", ".pic", function (e){
+    //     e.preventDefault();
+    // });
 
 </script>
 </body>

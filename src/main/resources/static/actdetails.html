@@ -34,6 +34,22 @@
             max-height: 400px;
         }
 
+        /* 自定义滚动条的整体样式 */
+        #scroll::-webkit-scrollbar {
+            width: 10px; /* 滚动条的宽度 */
+        }
+
+        /* 滚动条轨道的样式 */
+        #scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; /* 轨道的背景颜色 */
+        }
+
+        /* 滚动条滑块的样式 */
+        #scroll::-webkit-scrollbar-thumb {
+            background: #e8bfbc; /* 滑块的背景颜色 */
+            border-radius: 10px; /* 滑块的圆角 */
+        }
+
         /* 留言頭像跟人名inline */
         .list-group {
             display: inline;
@@ -54,6 +70,13 @@
             transform: translateY(-5px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* 關掉bootstarp input點擊邊框變藍色的效果 */
+        #comment:focus {
+            border-color: #ced4da;
+            box-shadow: none;
+        }
+
     </style>
 </head>
 
@@ -89,37 +112,45 @@
 <div class="container">
     <div class="text-bark text-center py-4">
         <div class="shadow p-3 mb-5 bg-body rounded">
-            <h1>活動名稱</h1>
+            <h1 id="activityName">活動名稱</h1>
         </div>
     </div>
 
     <main class="my-4">
         <div class="row">
             <div class="col-md-8">
-                <img src="" class="img-thumbnail" alt="...">
-                <section>
-                    <h2>活動詳情</h2>
-                    <p>活動描述和詳細資訊</p>
-                    <p>開始时间：2023-12-01 10:00 AM</p>
-                    <p>结束时间：2023-12-01 4:00 PM</p>
-                    <h3>活動訊息</h3>
-                    <span>活動內容</span>
+                <section class="shadow-none p-3 mb-5 bg-light rounded">
+                    <img src="dog.jpg" class="img-thumbnail" alt="...">
+                    <h2>活動內容:</h2>
+                    <span id="actDescr">活動內容</span>
                 </section>
             </div>
-            <div class="col-md-4 border" id="right-div">
+            <div class="col-md-4" id="right-div">
                 <aside>
-                    <h2>活動訊息</h2>
-                    <p>地點：活動場地</p>
-                    <p>主辦方：活動主辦方</p>
-                    <p>聯繫信箱：contact@example.com</p>
+                    <div class="shadow-none p-3 mb-5 bg-light rounded">
+                        <span>關注此活動的人數:<span id="actFollowCount">1</span></span>
+                    </div>
+                    <div class="shadow-none p-3 mb-5 bg-light rounded">
+                        <h2>活動訊息:</h2>
+                        <p>主辦人:
+                        <p id="memId">張三</p></p>
+                        <span>活動地點:<span id="actLoc">活動場地</span></span>
+                        <p>活動開始時間：
+                            <time id="startTime">2023-12-01 10:00 AM</time>
+                        </p>
+                        <p>活動結束時間：
+                            <time id="endTime">2023-12-01 4:00 PM</time>
+                        </p>
+                        <div id="map"></div>
+                    </div>
                 </aside>
-                <div id="map"></div>
+
             </div>
         </div>
 
-        <div class="mt-5 w-50">
+        <div class="mt-5 w-100">
             <div class="mt-3">
-                <span class="fs-3 fw-bolder">留言區<span id="commentcount">X</span></span>
+                <span class="fs-3 fw-bolder">留言區<span id="commentcount">1</span></span>
                 <div class="card w-100 shadow-none p-3 mb-5 bg-light rounded" style="border: none;" id="scroll">
                     <div id="comments" class="card-body">
                         <ul class="list-group list-group-flush">
@@ -137,58 +168,43 @@
                     <button id="morecomments" type="button" class="btn btn-light" onclick="more()">查看更多</button>
                 </div>
             </div>
+
+        <form id="commentsform" class="row g-3">
+            <label for="comment" class="visually-hidden">留言</label>
+            <div class="input-group">
+                <input type="text" class="form-control rounded-pill border border-3 border-dark" id="comment" placeholder="輸入您的留言">
+                <button type="submit" class="rounded-pill border border-3 border-dark">留言</button>
+            </div>
+        </form>
+</div>
+
+<div class="container mt-4 border" id="people">
+    <div>
+        <div>
+            <h5>參與者:<span id="actCount">(1)</span></h5>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="shadow-none p-3 mb-5 bg-light rounded border">
+                <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="p-3 join">
+    <div class="text-bark">
+        <div class="d-flex justify-content-between shadow p-4 bg-body rounded">
             <div>
-
+                <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
+                <button type="button" class="btn btn-outline-primary btn-lg mx-3" onclick="">關注活動</button>
             </div>
-            <form id="commentsform" class="row g-3">
-                <label for="comment" class="visually-hidden">留言</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="comment" placeholder="輸入您的留言">
-                    <button type="submit" class="btn btn-outline-primary">留言</button>
-                </div>
-            </form>
+            <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
+                    data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動
+            </button>
         </div>
-
-        <div class="container mt-4 border" id="people">
-            <div class="row">
-                <div>
-                    <h5>參與者(99)</h5>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="shadow p-3">
-                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="shadow p-3">
-                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="shadow p-3">
-                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="shadow p-3">
-                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="p-3 join">
-            <div class="text-bark">
-                <div class="shadow p-4 bg-body rounded">
-                    <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
-                    <button type="button" class="btn btn-outline-primary btn-lg mx-3" onclick="">關注活動</button>
-                    <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
-                            data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動
-                    </button>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
+</div>
+</main>
 </div>
 
 <div class="container">
@@ -304,9 +320,13 @@
     //當前顯示的留言數量
     var currentDisplayed = 0;
 
-    //進入活動詳情頁面後要先跑一遍顯示所有留言
+
     $(function () {
+        //進入活動詳情頁面後要先跑一遍顯示所有留言
         allComments(countLimit);
+
+        //進入活動詳情頁面初始化所有資料
+        activity();
     });
 
     //按下查看更多按鈕將limit加5並且再跑一遍顯示所有留言
@@ -336,16 +356,27 @@
                 comments.forEach(function (comment) {
                     if (comment.comStatus == 1) {
                         commentsHTML +=
-                            '<ul class="list-group list-group-flush">' +
-                            '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comment.memId + '</li>' +
-                            '<li class="list-group-item">' + comment.comContent + '</li>' +
-                            '<div class="d-flex">' +
-                            '<li class="list-group">' + comment.comTime + '</li>' +
-                            '<li class="list-group ms-auto">' +
-                            '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
-                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
-                            '</div>' +
-                            '</ul>';
+                            // '<ul class="list-group list-group-flush">' +
+                            // '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comment.memId + '</li>' +
+                            // '<li class="list-group-item">' + comment.comContent + '</li>' +
+                            // '<div class="d-flex">' +
+                            // '<li class="list-group">' + comment.comTime + '</li>' +
+                            // '<li class="list-group ms-auto">' +
+                            // '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
+                            // 'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
+                            // '</div>' +
+                            // '</ul>';
+                            '<div>' +
+                                '<div class="d-flex mb-3">' +
+                                    '<img src="dog.jpg" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comment.memId +
+                                '</div>' +
+                                '<p style="margin: 0">' + comment.comContent + '</p><hr style="margin: 0">' +
+                                '<div class="d-flex align-items-center">' +
+                                    '<small class="text-muted">' + comment.comTime + '</small>' +
+                                    '<a href="#" class="report ms-auto" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
+                                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
+                                '</div>' +
+                            '</div>';
                     }
                 });
                 //留言總數
@@ -402,16 +433,28 @@
 
                 var commentsHTML = "";
                 commentsHTML +=
-                    '<ul class="list-group list-group-flush">' +
-                    '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comments.memId + '</li>' +
-                    '<li class="list-group-item">' + comments.comContent + '</li>' +
-                    '<div class="d-flex">' +
-                    '<li class="list-group">' + comments.comTime + '</li>' +
-                    '<li class="list-group ms-auto">' +
-                    '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
-                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
-                    '</div>' +
-                    '</ul>';
+                    // '<ul class="list-group list-group-flush">' +
+                    // '<li class="list-group"><img src="" style="width: 35px; height: auto;" alt="">' + comments.memId + '</li>' +
+                    // '<li class="list-group-item">' + comments.comContent + '</li>' +
+                    // '<div class="d-flex">' +
+                    // '<li class="list-group">' + comments.comTime + '</li>' +
+                    // '<li class="list-group ms-auto">' +
+                    // '<img src=""><a href="#" class="report" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
+                    // 'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a></li>' +
+                    // '</div>' +
+                    // '</ul>';
+                    '<div>' +
+                        '<div class="d-flex mb-3">' +
+                            '<img src="dog.jpg" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comments.memId +
+                        '</div>' +
+                        '<p>' + comments.comContent + '<p><hr style="margin: 0">' +
+                        '<div class="d-flex align-items-center">' +
+                            '<small class="text-muted">' + comments.comTime + '</small>' +
+                            '<a href="#" class="report ms-auto" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
+                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
+                        '</div>' +
+                    '</div>'
+
                 $("#comments").prepend(commentsHTML);
 
                 // memid 會員編號 用來顯示會員的大頭照
@@ -559,6 +602,37 @@
         });
     }
 
+    function activity() {
+
+        $.ajax({
+            url: "/activity/" + 1, // actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (activity) {
+                console.log(activity);
+                //活動名稱
+                $("#activityName").text(activity.actName);
+                //開始時間
+                $("#startTime").text(activity.actStartTime);
+                //結束時間
+                $("#endTime").text(activity.actEndTime);
+                //活動內容
+                $("#actDescr").text(activity.actDescr);
+                //活動地點
+                $("#actLoc").text(activity.actLoc);
+                //關注人數
+                $("#actFollowCount").text(activity.actFollowCount);
+                //會員
+                $("#memId").text(activity.memId);
+                //參加人數
+                $("#actCount").text("(" + activity.actCount + ")");
+            },
+            error: function (xhr, status, error) {
+                console.log("無");
+            }
+        });
+    }
 </script>
 
 </body>

@@ -3,10 +3,12 @@ import com.example.actreg.model.ActRegVO;
 import com.example.commentreport.model.CommentReportVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -29,10 +31,10 @@ public class ActVO implements Serializable {
     private String actName;
 
     @Column(name = "act_start_time",nullable = false)
-    private LocalDateTime actStartTime;
+    private Date actStartTime;
 
     @Column(name = "act_end_time",nullable = false)
-    private LocalDateTime actEndTime;
+    private Date actEndTime;
 
     @Column(name = "act_loc",nullable = false)
     private String actLoc;

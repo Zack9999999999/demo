@@ -1,5 +1,6 @@
 package com.example.report.dto;
 
+import com.example.report.constant.ReportTitle;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -13,17 +14,17 @@ public class ActivityReportRequest {
     @NotNull
     private Integer memId;
 
-    private Integer empId;
+    private Integer empId; //不需要
 
     @NotNull
-    private String repTitle;
+    private ReportTitle repTitle;
 
     @NotNull
     private String repContent;
 
     private byte[] repPic;
 
-    private Byte repStatus;
+    private Byte repStatus; //不需要
 
 //    private Date repTime;
 }

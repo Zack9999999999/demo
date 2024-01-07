@@ -1,5 +1,6 @@
 package com.example.report.controller;
 
+import com.example.report.constant.ReportTitle;
 import com.example.report.dto.ActivityReportRequest;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.service.IActivityReportService;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,7 +38,29 @@ public class ActivityReportController {
     }
 
     @PostMapping("/activityreport")
-    public ResponseEntity<ActivityReportVO> insert(@RequestBody ActivityReportRequest activityReportRequest) {
+    public ResponseEntity<ActivityReportVO> insert(
+            @RequestParam("actId") Integer actId,
+            @RequestParam("memId") Integer memId,
+            @RequestParam("repTitle") ReportTitle repTitle,
+            @RequestParam("repContent") String repContent,
+            @RequestParam(required = false) MultipartFile repPic
+    ) {
+        ActivityReportRequest activityReportRequest = new ActivityReportRequest();
+        activityReportRequest.setActId(actId);
+        activityReportRequest.setMemId(memId);
+        activityReportRequest.setRepTitle(repTitle);
+        activityReportRequest.setRepContent(repContent);
+        // 處理文件數據
+        if (repPic != null && !repPic.isEmpty()) {
+            byte[] repPicBytes = new byte[0]; // 或其他所需的文件處理邏輯
+            try {
+                repPicBytes = repPic.getBytes();
+                activityReportRequest.setRepPic(repPicBytes);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         ActivityReportVO activityReport = activityReportService.insert(activityReportRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(activityReport);
     }

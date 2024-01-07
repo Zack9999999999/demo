@@ -188,8 +188,7 @@
                 </div>
             </div>
         </div>
-</div>
-</main>
+    </main>
 </div>
 
 <div class="container">
@@ -243,7 +242,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="actReportModalLabel">檢舉</h5>
+                <h5 class="modal-title" id="actReportModalLabel">檢舉活動</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -251,17 +250,22 @@
                     <div class="mb-3">
                         <label for="report-title" class="col-form-label">請選擇檢舉原因:</label>
                         <select class="form-control" id="act-report-title">
-                            <option value="SPAM">垃圾訊息</option>
-                            <option value="OFFENSIVE">不適當的內容</option>
-                            <option value="HARASSMENT">人身攻擊或霸凌行為</option>
-                            <option value="PRIVACY">侵犯隱私</option>
-                            <option value="SENSITIVE">敏感或爭議性內容</option>
+                            <option value="INAPPROPRIATE">不恰當的内容</option>
+                            <option value="NOSAFETY">不安全的</option>
+                            <option value="MISLEADING">誤導信息,對活動真實性或內容產生誤解</option>
+                            <option value="HARASSMENT">騷擾或欺凌</option>
+                            <option value="OTHER">其他</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">請說出您的檢舉原因:</label>
-                        <textarea class="form-control" id="text"
+                        <textarea class="form-control" id="act-text"
                                   style="width: 100%; height: 150px; resize:none;"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="photo">選擇圖片</label>
+                        <input type="file" id="photo" accept="image/gif, image/jpeg, image/png">
+                        <img id="preview" src="" style="width: 465px; height: auto">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -418,6 +422,7 @@
         });
     });
 
+    //檢舉留言
     //案檢舉後取得comId,並將comid存在檢舉model的form表單的data屬性
     $(document).on("click", ".report", function () {
         var comId = $(this).data("comId");
@@ -427,9 +432,9 @@
     $("#reportfrom").submit(function (e) {
         e.preventDefault();
         //抓自定義的data屬性設的值,去查全部留言ajax那邊看
-        var thiscomId = $(this).data("comId");
+        var thisComId = $(this).data("comId");
         var commentReportData = {
-            comId: thiscomId, //留言編號
+            comId: thisComId, //留言編號
             memId: 1, //改動態抓 userMemId
             repTitle: $("#report-title").val(),
             repContent: $("#message-text").val()
@@ -456,6 +461,48 @@
             }
         });
     });
+
+    //檢舉活動
+    function actReport() {
+        //預覽圖
+        $("#photo").change(function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#preview").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+        $("#actReportfrom").submit(function (e) {
+            e.preventDefault();
+
+            let formData = new FormData();
+            formData.append("actId", 1);// actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
+            formData.append("memId", 1); //改動態取 或在某個地方將memId藏在<input hidden>並取過來
+            formData.append("repTitle", $("#act-report-title").val());
+            formData.append("repContent", $("#act-text").val());
+
+            let fileInput = $("#photo")[0];
+            let file = fileInput.files[0];
+            if (file) {
+                formData.append("repPic", file);
+            }
+            $.ajax({
+                url: "/activityreport",
+                type: "POST",
+                data: formData,
+                processData: false, // 不要處理發送的數據
+                contentType: false, // 不要設置Content-Type
+                success: function (response) {
+                    console.log("成功")
+                },
+                error: function (xhr, ststus, error) {
+                    console.error("失敗")
+                }
+            });
+        });
+    }
 
     //報名活動按鈕
     function signup() {

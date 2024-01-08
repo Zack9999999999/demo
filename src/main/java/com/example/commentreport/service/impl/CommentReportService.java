@@ -9,6 +9,7 @@ import com.example.commentreport.model.CommentReportVO;
 import com.example.commentreport.repository.CommentReportRepository;
 import com.example.commentreport.service.ICommentReportService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -81,9 +82,8 @@ public class CommentReportService implements ICommentReportService {
 
         if (commentReport.isPresent()) {
             commentReport.get().setRepStatus(commentReportStatus.getRepStatus());
-            if (commentReportStatus.getRepStatus() == 2) {
-                commentReport.get().getComment().setComStatus(commentReportStatus.getRepStatus());
-            }
+            commentReport.get().getComment().setComStatus(commentReportStatus.getRepStatus());
+
             return commentReportRepository.save(commentReport.get());
         } else {
             return null;

@@ -2,10 +2,12 @@ package com.example.report.service.impl;
 
 import com.example.act.repository.ActRepository;
 import com.example.report.dto.ActivityReportRequest;
+import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.repository.ActivityReportReopsitory;
 import com.example.report.service.IActivityReportService;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,12 +53,18 @@ public class ActivityReportService implements IActivityReportService {
     }
 
     @Override
-    public ActivityReportVO update(Integer repId, ActivityReportRequest activityReportRequest) {
+    public ActivityReportVO update(Integer repId, ReportStatus reportStatus) {
         ActivityReportVO activityReport = activityReportReopsitory.findById(repId).orElse(null);
+//        modelMapper.map(activityReportRequest, ActivityReportVO.class);
 
-        modelMapper.map(activityReportRequest, ActivityReportVO.class);
+        if(activityReport != null){
+            activityReport.setRepStatus(reportStatus.getRepStatus());
+            activityReport.getAct().setActStatus(reportStatus.getRepStatus());
 
-        return activityReportReopsitory.save(activityReport);
+            return activityReportReopsitory.save(activityReport);
+        }else{
+            return null;
+        }
     }
 
     @Override

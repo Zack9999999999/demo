@@ -2,6 +2,7 @@ package com.example.act.model;
 import com.example.actreg.model.ActRegVO;
 import com.example.commentreport.model.CommentReportVO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,6 +18,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "activity")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ActVO implements Serializable {
 
     @Id

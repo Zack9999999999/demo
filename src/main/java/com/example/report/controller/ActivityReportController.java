@@ -2,6 +2,7 @@ package com.example.report.controller;
 
 import com.example.report.constant.ReportTitle;
 import com.example.report.dto.ActivityReportRequest;
+import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.service.IActivityReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +68,8 @@ public class ActivityReportController {
 
     @PutMapping("/activityreport/{repId}")
     public ResponseEntity<ActivityReportVO> update(@PathVariable Integer repId,
-                                                   @RequestBody ActivityReportRequest activityReportRequest) {
-        ActivityReportVO activityReport = activityReportService.update(repId, activityReportRequest);
+                                                   @RequestBody ReportStatus reportStatus) {
+        ActivityReportVO activityReport = activityReportService.update(repId, reportStatus);
         return ResponseEntity.status(HttpStatus.OK).body(activityReport);
     }
 

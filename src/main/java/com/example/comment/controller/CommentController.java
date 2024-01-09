@@ -5,6 +5,7 @@ import com.example.comment.dto.CommentRequest;
 import com.example.comment.model.CommentVO;
 import com.example.comment.service.ICommentService;
 import com.example.comment.util.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @Validated
+@Slf4j
 public class CommentController {
 
     @Autowired
@@ -25,18 +27,20 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<Page<CommentVO>> getComments(
+            @RequestParam Integer actId,
             @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit,
             @RequestParam(defaultValue = "com_time") String orderBy,
             @RequestParam(defaultValue = "desc") String sort) {
 
         CommentQueryParams commentQueryParams = new CommentQueryParams();
+        commentQueryParams.setActId(actId);
         commentQueryParams.setLimit(limit);
         commentQueryParams.setOrderBy(orderBy);
         commentQueryParams.setSort(sort);
 
         List<CommentVO> comments = commentService.getComments(commentQueryParams);
 
-        Integer total = commentService.countComments();
+        Integer total = commentService.countComments(commentQueryParams);
 
         Page<CommentVO> page = new Page<>();
         page.setComments(comments);

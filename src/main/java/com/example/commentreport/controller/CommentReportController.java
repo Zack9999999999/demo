@@ -19,7 +19,6 @@ import javax.validation.Valid;
 import java.util.NoSuchElementException;
 
 @RestController
-@Slf4j
 public class CommentReportController {
 
     @Autowired
@@ -27,13 +26,11 @@ public class CommentReportController {
 
     @GetMapping("/commentreport")
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
-            @RequestParam(required = false) CommentReportRepTitle commentReportRepTitle, //( )再看要不要加value = "xxx"
             @RequestParam(required = false) Byte repStatus,
-            /*@PageableDefault(size = 10)*/ Pageable pageable //size再做調整
+            @PageableDefault(size = 5) Pageable pageable //size再做調整
     ) {
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
-        commentReportQueryParams.setCommentReportRepTitle(commentReportRepTitle);
         commentReportQueryParams.setRepStatus(repStatus);
 
         Page<CommentReportVO> commentReportList = commentReportService.getCommentReports(commentReportQueryParams, pageable);

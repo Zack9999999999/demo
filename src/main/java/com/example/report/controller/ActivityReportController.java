@@ -5,7 +5,11 @@ import com.example.report.dto.ActivityReportRequest;
 import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
 import com.example.report.service.IActivityReportService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,15 +21,20 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class ActivityReportController {
 
     @Autowired
     private IActivityReportService activityReportService;
 
     @GetMapping("/activityreport")
-    public ResponseEntity<List<ActivityReportVO>> getAll() {
-        List<ActivityReportVO> reportVOList = activityReportService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(reportVOList);
+    public ResponseEntity<Page<ActivityReportVO>> getAll(
+            @RequestParam(required = false) Byte repStatus,
+            @PageableDefault(size = 5) Pageable pageable) {
+
+        Page<ActivityReportVO> reportList = activityReportService.getAll(repStatus, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(reportList);
     }
 
     @GetMapping("/activityreport/{repId}")

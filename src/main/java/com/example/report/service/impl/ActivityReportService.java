@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -29,10 +31,13 @@ public class ActivityReportService implements IActivityReportService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<ActivityReportVO> getAll() {
-        actRepository.findAll();
+    public Page<ActivityReportVO> getAll(Byte repStatus, Pageable pageable) {
 
-        return activityReportReopsitory.findAll();
+        if (repStatus != null) {
+            return activityReportReopsitory.findByRepStatus(repStatus, pageable);
+        }
+
+        return activityReportReopsitory.findAll(pageable);
     }
 
     @Override
@@ -57,12 +62,12 @@ public class ActivityReportService implements IActivityReportService {
         ActivityReportVO activityReport = activityReportReopsitory.findById(repId).orElse(null);
 //        modelMapper.map(activityReportRequest, ActivityReportVO.class);
 
-        if(activityReport != null){
+        if (activityReport != null) {
             activityReport.setRepStatus(reportStatus.getRepStatus());
             activityReport.getAct().setActStatus(reportStatus.getRepStatus());
 
             return activityReportReopsitory.save(activityReport);
-        }else{
+        } else {
             return null;
         }
     }

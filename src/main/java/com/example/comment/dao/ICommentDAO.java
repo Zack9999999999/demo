@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ICommentDAO {
 
-    Integer countComments();
+    Integer countComments(CommentQueryParams commentQueryParams);
 
     List<CommentVO> getComments(CommentQueryParams commentQueryParams);
     CommentVO getCommentById(Integer comId);

@@ -32,10 +32,13 @@ public class CommentDAO implements ICommentDAO {
     private ObjectMapper objectMapper;
 
     @Override
-    public Integer countComments() {
+    public Integer countComments(CommentQueryParams commentQueryParams) {
         String sql = "SELECT count(*) FROM activity_comment WHERE com_status = 1";
 
         Map<String, Object> map = new HashMap<>();
+
+        sql = sql + " AND act_id = :actId";
+        map.put("actId", commentQueryParams.getActId());
 
         Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
 
@@ -52,7 +55,10 @@ public class CommentDAO implements ICommentDAO {
 
         Map<String, Object> map = new HashMap<>();
 
-        //狀態不等於1的話代表被檢舉所以不顯示
+        sql = sql + " AND act_id = :actId";
+        map.put("actId", commentQueryParams.getActId());
+
+        //狀態不等於1的話代表被檢舉成功所以不顯示
         sql = sql + " AND com_status = 1";
 
         //排序

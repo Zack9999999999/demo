@@ -2,10 +2,19 @@ package com.example.comment.dto;
 
 public class CommentQueryParams {
 
+    private Integer actId;
     private Integer limit;
     private Integer offset;
     private String orderBy;
     private String sort;
+
+    public Integer getActId() {
+        return actId;
+    }
+
+    public void setActId(Integer actId) {
+        this.actId = actId;
+    }
 
     public Integer getLimit() {
         return limit;

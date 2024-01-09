@@ -2,6 +2,7 @@ package com.example.report.model;
 
 import com.example.act.model.ActVO;
 import com.example.report.constant.ReportTitle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ActivityReportVO implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class ActivityReportVO implements Serializable {
     private byte[] repPic;
 
     @Column(name = "rep_status")
-    private byte repStatus;
+    private Byte repStatus;
 
     @Column(name = "rep_time")
     private Date repTime;

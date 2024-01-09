@@ -36,11 +36,6 @@ public class CommentReportService implements ICommentReportService {
             CommentReportQueryParams commentReportQueryParams,
             Pageable pageable) {
 
-        //檢舉標題查詢
-        if (commentReportQueryParams.getCommentReportRepTitle() != null) {
-            return commentReportRepository.findByRepTitle(
-                    commentReportQueryParams.getCommentReportRepTitle(), pageable);
-        }
         //狀態查詢
         if (commentReportQueryParams.getRepStatus() != null) {
             return commentReportRepository.findByRepStatus(commentReportQueryParams.getRepStatus(), pageable);

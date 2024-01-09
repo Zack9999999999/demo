@@ -15,7 +15,6 @@ public interface CommentReportRepository extends JpaRepository<CommentReportVO, 
     Page<CommentReportVO> findByRepTitle(CommentReportRepTitle commentReportRepTitle, Pageable pageable);
     //依照狀態查詢
     Page<CommentReportVO> findByRepStatus(Byte repStatus, Pageable pageable);
-
     Page<CommentReportVO> findAll(Pageable pageable);
 
 }

@@ -116,11 +116,15 @@
     </table>
 
     <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center" id="pagination-list">
-
-            <li class="page-item"><a class="page-link" href="">1</a></li>
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">上一頁</a>
+            </li>
             <li class="page-item">
-                <a class="page-link" href="">下一頁</a>
+                <!--                <a class="page-link" href="#">1</a>-->
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">下一頁</a>
             </li>
         </ul>
     </nav>
@@ -146,10 +150,14 @@
         loadCommentReports();
     });
 
+    function loadPage(pageNumber, repStatus) {
+        loadCommentReports(pageNumber, repStatus);
+    }
+
 
     //顯示所有留言檢舉內容
-    function loadCommentReports(repStatus) {
-        let url = `/commentreport`;
+    function loadCommentReports(pageNumber, repStatus) {
+        let url = "/commentreport";
         if (repStatus !== undefined && repStatus !== null) {
             url = url + '?repStatus=' + repStatus;
         }
@@ -157,13 +165,23 @@
         $.ajax({
             url: url,
             type: 'GET',
-            // data: '',
+            data: {
+                page: pageNumber - 1
+            },
             dataType: 'json',
             success: function (commentReportList) {
                 let commentReportHTML = "";
                 let commentReports = commentReportList.content;
-                const totalPages = commentReportList.totalPages
+
+                //做分頁需要的
                 let total = commentReportList.totalElements; //總數量
+                let size = commentReportList.size; //每頁顯示的數據數量
+                let number = commentReportList.number; //第幾頁(0為第一頁)
+                let totalPages = commentReportList.totalPages; //總頁數
+                let first = commentReportList.first; //當前是第一頁為ture
+                let last = commentReportList.last; // 當前是最後一頁為true
+
+                nextPage(totalPages, repStatus, first, last);
 
                 let titleMap = {
                     "SPAM": "垃圾訊息",
@@ -250,8 +268,20 @@
     $(".filterButton").on("click", function () {
         let repStatus = $(this).data("repStatus");
 
-        loadCommentReports(repStatus);
+        loadCommentReports(1, repStatus);
     });
+
+    function nextPage(totalPages, repStatus) {
+        let pageHTML = "";
+        for (let i = 0; i < totalPages; i++) {
+            pageHTML += `<li  class="page-item">` +
+                `<a class="page-link" href="#" onclick="loadPage(${i + 1}, ${repStatus})"; return flase;">${i + 1}</a>` +
+                `</li>`;
+        }
+        $(".pagination").html(pageHTML); //插入頁碼
+        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+    }
 
 </script>
 </body>

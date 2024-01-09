@@ -12,8 +12,8 @@ public class RetailsService implements IRetailsService {
     private RetailsRepository retailsRepository;
 
     @Override
-    public ActVO getRetail(Integer actId) {
-        ActVO act = retailsRepository.findById(actId).orElse(null);
-        return act;
+    public ActVO getDetail(Integer actId) {
+        return retailsRepository.findById(actId).orElse(null);
     }
+
 }

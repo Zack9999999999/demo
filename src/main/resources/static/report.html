@@ -76,7 +76,15 @@
 
 <main class="main">
 
-    <h1 class="fw-bold">活動檢舉<span id="countReport"></span>筆</h1>
+    <div style="display: inline">
+        <h1 class="fw-bold" style="display: inline">活動檢舉<span id="countReport"></span>筆</h1>
+        <button class="filterButton btn btn-outline-secondary" data-rep-status="" style="margin-left: 30px">所有
+        </button>
+        <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>
+        <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
+        <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+    </div>
+
     <table id="act_report_table" class="table table-hover table-bordered">
         <thead>
         <tr>
@@ -113,12 +121,15 @@
             <li class="page-item disabled">
                 <a class="page-link">上一頁</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item">
+                <!--                <a class="page-link" href="#">1</a>-->
+            </li>
             <li class="page-item">
                 <a class="page-link" href="#">下一頁</a>
             </li>
         </ul>
     </nav>
+
 </main>
 
 <!--檢舉留言框-->
@@ -130,7 +141,7 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <img id="pic" src="dog.jpg">
+                    <img id="pic" src="images/dog.jpg">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
@@ -154,76 +165,107 @@
 
 <script>
 
-    $.ajax({
-        url: '/activityreport',
-        type: 'GET',
-        // data: '',
-        dataType: 'json',
-        success: function (response) {
-            let actReportHTML = "";
-            // let commentReports = response.act;
-            // let total = pageable.totalElements; //總數量
-
-            let titleMap = {
-                "INAPPROPRIATE": "不恰當的内容",
-                "NOSAFETY": "不安全的",
-                "MISLEADING": "誤導信息,對活動真實性或內容產生誤解",
-                "HARASSMENT": "騷擾或欺凌",
-                "OTHER": "其他"
-            };
-
-            let statusMap = {
-                "1": "審核中",
-                "2": "通過",
-                "3": "未通過"
-            };
-
-            response.forEach(function (actReport) {
-                let titleChinese = titleMap[actReport.repTitle];
-                let statusChinese = statusMap[actReport.repStatus];
-
-                actReportHTML +=
-                    '<tr><td>' + actReport.repId + '</td>' +
-                    '<td>' + actReport.act.actId + '</td>' +
-                    '<td>' + actReport.memId + '</td>' +
-                    '<td>' + (actReport.empId ? actReport.empId : "無") + '</td>' +
-                    '<td>' + titleChinese + '</td>' +
-                    '<td>' + actReport.repContent + '</td>' +
-                    '<td>';
-
-                if (actReport.repPic == null) {
-                    actReportHTML += '<button class="showPic btn btn-secondary btn-sm" ' +
-                        'data-rep-id="' + actReport.repId + '" disabled>未提供圖片</button>';
-                } else {
-                    actReportHTML += '<button class="showPic btn btn-primary btn-sm" ' +
-                        'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
-                        'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
-                }
-                actReportHTML +=
-                    '</td>' +
-                    '<td  id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
-                    '<td>' + actReport.repTime + '</td>' +
-                    '<td>' +
-                    '<select class="changeStatus" data-rep-id="' + actReport.repId + '">' +
-                    '<option value="1">審核中</option>' +
-                    '<option value="2">通過</option>' +
-                    '<option value="3">未通過</option>' +
-                    '</select></td></tr>';
-
-            });
-
-            // $("#countReport").prepend(": 共" + total);
-            $("#actReport").html(actReportHTML);
-
-        },
-        error: function (xhr, status, error) {
-            Swal.fire(
-                "有問題",
-                "question"
-            )
-        }
+    $(function () {
+        loadReports();
     });
 
+    function loadPage(pageNumber, repStatus) {
+        loadReports(pageNumber, repStatus);
+    }
+
+    //顯示所有活動檢舉
+    function loadReports(pageNumber, repStatus) {
+
+        let url = "/activityreport";
+
+        if (repStatus !== undefined && repStatus != null) {
+            url = url + '?repStatus=' + repStatus;
+        }
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                page: pageNumber - 1
+            },
+            dataType: 'json',
+            success: function (activityReport) {
+                let actReportHTML = "";
+                let report = activityReport.content;
+
+                //做分頁需要的
+                let total = activityReport.totalElements; //總數量
+                let size = activityReport.size; //每頁顯示的數據數量
+                let number = activityReport.number; //第幾頁(0為第一頁)
+                let totalPages = activityReport.totalPages; //總頁數
+                let first = activityReport.first; //當前是第一頁為ture
+                let last = activityReport.last; // 當前是最後一頁為true
+
+                //分頁元件生成
+                nextPage(totalPages, repStatus, first, last);
+
+                let titleMap = {
+                    "INAPPROPRIATE": "不恰當的内容",
+                    "NOSAFETY": "不安全的",
+                    "MISLEADING": "誤導信息,對活動真實性或內容產生誤解",
+                    "HARASSMENT": "騷擾或欺凌",
+                    "OTHER": "其他"
+                };
+
+                let statusMap = {
+                    "1": "審核中",
+                    "2": "通過",
+                    "3": "未通過"
+                };
+
+                report.forEach(function (actReport) {
+                    let titleChinese = titleMap[actReport.repTitle];
+                    let statusChinese = statusMap[actReport.repStatus];
+
+                    actReportHTML +=
+                        '<tr><td>' + actReport.repId + '</td>' +
+                        '<td>' + actReport.act.actId + '</td>' +
+                        '<td>' + actReport.memId + '</td>' +
+                        '<td>' + (actReport.empId ? actReport.empId : "無") + '</td>' +
+                        '<td>' + titleChinese + '</td>' +
+                        '<td>' + actReport.repContent + '</td>' +
+                        '<td>';
+
+                    if (actReport.repPic == null) {
+                        actReportHTML += '<button class="showPic btn btn-secondary btn-sm" ' +
+                            'data-rep-id="' + actReport.repId + '" disabled>未提供圖片</button>';
+                    } else {
+                        actReportHTML += '<button class="showPic btn btn-primary btn-sm" ' +
+                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
+                            'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
+                    }
+                    actReportHTML +=
+                        '</td>' +
+                        '<td  id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
+                        '<td>' + actReport.repTime + '</td>' +
+                        '<td>' +
+                        '<select class="changeStatus" data-rep-id="' + actReport.repId + '">' +
+                        '<option value="1">審核中</option>' +
+                        '<option value="2">通過</option>' +
+                        '<option value="3">未通過</option>' +
+                        '</select></td></tr>';
+
+                });
+
+                $("#countReport").html(": 共" + total);
+                $("#actReport").html(actReportHTML);
+
+            },
+            error: function (xhr, status, error) {
+                Swal.fire(
+                    "有問題",
+                    "question"
+                )
+            }
+        });
+    }
+
+    //圖片
     $(document).on("click", ".showPic", function (e) {
         e.preventDefault();
         let repId = $(this).data("repId");
@@ -275,7 +317,28 @@
         });
     });
 
+    //依審核狀態篩選
+    $(".filterButton").on("click", function () {
+        let repStatus = $(this).data("repStatus");
+
+        loadReports(1, repStatus);
+    });
+
+    //分頁元件生成
+    function nextPage(totalPages, repStatus) {
+        let pageHTML = "";
+        for (let i = 0; i < totalPages; i++) {
+            pageHTML += `<li  class="page-item">` +
+                `<a class="page-link" href="#" onclick="loadPage(${i + 1}, ${repStatus})"; return flase;">${i + 1}</a>` +
+                `</li>`;
+        }
+        $(".pagination").html(pageHTML); //插入頁碼
+        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+    }
+
 </script>
+
 </body>
 
 </html>

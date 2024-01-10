@@ -83,21 +83,25 @@
         <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>
         <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
         <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+        <select id="time">
+            <option value="ASC">舊到新</option>
+            <option value="DESC">新到舊</option>
+        </select>
     </div>
 
-    <table id="act_report_table" class="table table-hover table-bordered">
+    <table id="act_report_table" class="table table-hover table-bordered caption-top">
         <thead>
         <tr>
             <th scope="col">活動檢舉編號</th>
             <th scope="col">活動編號</th>
             <th scope="col">會員編號</th>
-            <th scope="col">員工編號</th>
             <th scope="col">檢舉標題</th>
-            <th scope="col">檢舉內容</th>
+            <th scope="col">檢舉原因</th>
             <th scope="col">檢舉圖片</th>
-            <th scope="col">檢舉狀態</th>
-            <th scope="col">檢舉時間</th>
+            <th scope="col">狀態</th>
+            <th scope="col">時間</th>
             <th scope="col">審核</th>
+            <th scope="col">審核者</th>
         </tr>
         </thead>
         <tbody id="actReport">
@@ -174,7 +178,7 @@
     }
 
     //顯示所有活動檢舉
-    function loadReports(pageNumber, repStatus) {
+    function loadReports(pageNumber, repTime, repStatus) {
 
         let url = "/activityreport";
 
@@ -186,7 +190,8 @@
             url: url,
             type: 'GET',
             data: {
-                page: pageNumber - 1
+                page: pageNumber - 1,
+                sortDirection: repTime
             },
             dataType: 'json',
             success: function (activityReport) {
@@ -226,7 +231,6 @@
                         '<tr><td>' + actReport.repId + '</td>' +
                         '<td>' + actReport.act.actId + '</td>' +
                         '<td>' + actReport.memId + '</td>' +
-                        '<td>' + (actReport.empId ? actReport.empId : "無") + '</td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + actReport.repContent + '</td>' +
                         '<td>';
@@ -248,7 +252,8 @@
                         '<option value="1">審核中</option>' +
                         '<option value="2">通過</option>' +
                         '<option value="3">未通過</option>' +
-                        '</select></td></tr>';
+                        '</select></td>' +
+                        '<td>' + (actReport.empId ? actReport.empId : "無") + '</td></tr>';
 
                 });
 
@@ -321,7 +326,15 @@
     $(".filterButton").on("click", function () {
         let repStatus = $(this).data("repStatus");
 
-        loadReports(1, repStatus);
+        loadReports(1, "ASC", repStatus);
+    });
+
+    //時間排序
+    $("#time").change(function () {
+        let repTime = $("#time").val();
+
+        loadReports(1, repTime);
+
     });
 
     //分頁元件生成

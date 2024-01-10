@@ -2,6 +2,8 @@ package com.example.commentreport.dto;
 
 import com.example.commentreport.constant.CommentReportRepTitle;
 
+import java.util.Date;
+
 public class CommentReportQueryParams {
     private CommentReportRepTitle commentReportRepTitle;
     private Byte repStatus;
@@ -39,4 +41,5 @@ public class CommentReportQueryParams {
     public void setSize(Integer size) {
         this.size = size;
     }
+
 }

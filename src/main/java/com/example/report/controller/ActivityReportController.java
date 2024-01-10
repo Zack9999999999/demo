@@ -8,7 +8,9 @@ import com.example.report.service.IActivityReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,17 @@ public class ActivityReportController {
     @GetMapping("/activityreport")
     public ResponseEntity<Page<ActivityReportVO>> getAll(
             @RequestParam(required = false) Byte repStatus,
-            @PageableDefault(size = 5) Pageable pageable) {
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+
+        if ("DESC".equalsIgnoreCase(sortDirection)) {
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.DESC, "repTime")
+            );
+        }
 
         Page<ActivityReportVO> reportList = activityReportService.getAll(repStatus, pageable);
 

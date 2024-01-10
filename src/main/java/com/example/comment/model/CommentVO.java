@@ -36,7 +36,7 @@ public class CommentVO implements Serializable {
     @Column(name = "com_time")
     private Date comTime;
     @Column(name = "com_status")
-    private Byte comStatus;
+    private Byte comStatus = 1;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     @JsonIgnore

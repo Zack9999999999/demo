@@ -45,7 +45,7 @@ public class ActivityReportVO implements Serializable {
     private byte[] repPic;
 
     @Column(name = "rep_status")
-    private Byte repStatus;
+    private Byte repStatus = 1;
 
     @Column(name = "rep_time")
     private Date repTime;

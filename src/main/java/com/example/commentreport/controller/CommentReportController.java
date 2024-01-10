@@ -9,16 +9,20 @@ import com.example.commentreport.service.ICommentReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 @RestController
+@Slf4j
 public class CommentReportController {
 
     @Autowired
@@ -27,8 +31,19 @@ public class CommentReportController {
     @GetMapping("/commentreport")
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             @RequestParam(required = false) Byte repStatus,
-            @PageableDefault(size = 5) Pageable pageable //size再做調整
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
     ) {
+
+        if ("DESC".equalsIgnoreCase(sortDirection)) {
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.DESC, "repTime")
+            );
+        }
+
+log.info(pageable.toString());
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
         commentReportQueryParams.setRepStatus(repStatus);
@@ -52,10 +67,11 @@ public class CommentReportController {
 
 
     @PostMapping("/commentreport")
-    public ResponseEntity<CommentReportVO> createCommentReport(@RequestBody @Valid CommentReportRequest commentReportRequest) {
-            CommentReportVO commentReport = commentReportService.createCommentReport(commentReportRequest);
+    public ResponseEntity<CommentReportVO> createCommentReport(@RequestBody @Valid CommentReportRequest
+                                                                       commentReportRequest) {
+        CommentReportVO commentReport = commentReportService.createCommentReport(commentReportRequest);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentReport);
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentReport);
     }
 
     @PutMapping("/commentreport/{repId}")

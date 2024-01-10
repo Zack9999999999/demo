@@ -86,13 +86,13 @@
     <header
             class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
-            <a href="../static/index.html" class="d-inline-flex link-body-emphasis text-decoration-none">
+            <a href="index.html" class="d-inline-flex link-body-emphasis text-decoration-none">
                 <span class="fs-4">做伙</span>
             </a>
         </div>
 
         <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="../static/index.html" class="nav-link px-2 link-secondary">首頁</a></li>
+            <li><a href="index.html" class="nav-link px-2 link-secondary">首頁</a></li>
             <li><a href="join.html" class="nav-link px-2 link-secondary">瀏覽活動</a></li>
             <li><a href="create.html" class="nav-link px-2 link-secondary">舉辦活動</a></li>
             <li><a href="rent.html" class="nav-link px-2 link-secondary">場地租借</a></li>
@@ -228,7 +228,9 @@
                 <div class="d-flex justify-content-between shadow p-4 bg-body rounded">
                     <div>
                         <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
-                        <button type="button" class="btn btn-outline-primary btn-lg mx-3" onclick="">關注活動</button>
+                        <button type="button" id="follow" class="btn btn-outline-primary btn-lg mx-3"
+                                onclick="follow()">關注
+                        </button>
                     </div>
                     <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
                             data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動
@@ -242,7 +244,7 @@
 <div class="container">
     <footer class="py-3 my-4">
         <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item"><a href="../static/index.html" class="nav-link px-2 text-muted">首頁</a></li>
+            <li class="nav-item"><a href="index.html" class="nav-link px-2 text-muted">首頁</a></li>
             <li class="nav-item"><a href="customer.html" class="nav-link px-2 text-muted">客服中心</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link px-2 text-muted">關於我們</a></li>
         </ul>
@@ -378,14 +380,14 @@
         // let urlParams = new URLSearchParams(window.location.search);
         // let actId = urlParams.get('actId');
 
-        let actId = window.location.pathname.split('/')[2];
+        // let actId = window.location.pathname.split('/')[2];
 
         $.ajax({
             url: '/comments',
             type: 'GET',
             contentType: 'application/json',
             data: {
-                actId: actId,
+                actId: window.location.pathname.split('/')[2],
                 limit: countLimit
                 // sort: userSort 讓用戶可以從新到舊 或舊到新
             },
@@ -450,10 +452,10 @@
         // let urlParams = new URLSearchParams(window.location.search);
         // let actId = urlParams.get('actId');
 
-        let actId = window.location.pathname.split('/')[2];
+        // let actId = window.location.pathname.split('/')[2];
 
         var commentData = {
-            actId: actId,
+            actId: window.location.pathname.split('/')[2],
             memId: 1, //改動態抓 userMemId
             // comReplyId:null,
             comContent: $("#comment").val()
@@ -487,7 +489,7 @@
                 // memid 會員編號 用來顯示會員的大頭照
             },
             error: function (xhr, status, error) {
-                console.error("Error:" + status + " " + error);
+                Swal.fire("留言要打字呦")
             }
         });
     });
@@ -551,6 +553,12 @@
 
             let actId = window.location.pathname.split('/')[2];
 
+            // 驗證 repContent 是否為空或僅包含空白
+            if (!$("#act-text").val().trim()) {
+                Swal.fire("", "請輸入檢舉原因", "error");
+                return;
+            }
+
             let formData = new FormData();
             formData.append("actId", actId);
             formData.append("memId", 1); //改動態取 或在某個地方將memId藏在<input hidden>並取過來
@@ -592,9 +600,6 @@
                 if (isNaN(value)) {
                     return '請輸入數字';
                 }
-                // if (value > 10) { //從後端抓報名人數
-                //     return '超過人數上限了';
-                // }
             },
             showCancelButton: true,
             confirmButtonText: '送出',
@@ -614,11 +619,9 @@
                 // let urlParams = new URLSearchParams(window.location.search);
                 // let actId = urlParams.get('actId');
 
-                actId = window.location.pathname.split('/')[2];
-
                 let numberOfPeople = {
                     memId: 1, //改動態抓
-                    actId: actId,
+                    actId: window.location.pathname.split('/')[2],
                     regTotal: result.value
                 }
                 $.ajax({
@@ -637,46 +640,85 @@
         });
     }
 
-    // function activity() {
-    //     let actId = window.location.pathname.split('/')[2]; // 假設活動ID在URL的第三个段落中
-    //
-    //     // 提取URL参数中的actId
-    //     // let urlParams = new URLSearchParams(window.location.search);
-    //     // let actId = urlParams.get('actId');
-    //
-    //     $.ajax({
-    //         url: "/activity/" + actId,
-    //         type: 'GET',
-    //         contentType: 'application/json',
-    //         dataType: 'json',
-    //         success: function (activity) {
-    //             //活動名稱
-    //             $("#activityName").text(activity.actName);
-    //             //開始時間
-    //             $("#startTime").text(activity.actStartTime);
-    //             //結束時間
-    //             $("#endTime").text(activity.actEndTime);
-    //             //活動內容
-    //             $("#actDescr").text(activity.actDescr);
-    //             //活動地點
-    //             $("#actLoc").text(activity.actLoc);
-    //             //關注人數
-    //             $("#actFollowCount").text(activity.actFollowCount);
-    //             //會員
-    //             $("#memId").text(activity.memId);
-    //             //參加人數
-    //             $("#actCount").text("(" + activity.actCount + ")");
-    //
-    //         },
-    //         error: function (xhr, status, error) {
-    //             Swal.fire("沒有此活動")
-    //             setTimeout(() => {
-    //                 window.history.back();
-    //             }, 2000);
-    //
-    //         }
-    //     });
-    // }
+    //關注活動
+    function followAct() {
+        let actFollow = {
+            actId: window.location.pathname.split('/')[2],
+            memId: 1, //改動態抓
+            folStatus: 2
+        }
+
+        $.ajax({
+            url: "/activity/actfollow",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(actFollow),
+            success: function (actFollow) {
+                Toast.fire({
+                    icon: 'success',
+                    title: '關注成功！'
+                })
+            },
+            error: function (xhr, status, error) {
+                Swal.fire("關注失敗")
+            }
+        });
+    }
+
+    //取消關注活動
+    function unFollowAct() {
+        let actFollow = {
+            actId: window.location.pathname.split('/')[2],
+            memId: 1, //改動態抓
+            folStatus: 1
+        }
+
+        $.ajax({
+            url: "/activity/unactfollow",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(actFollow),
+            success: function (actFollow) {
+                Toast.fire({
+                    icon: 'success',
+                    title: '已取消關注！'
+                })
+            },
+            error: function (xhr, status, error) {
+                Swal.fire("取消關注失敗")
+            }
+        });
+    }
+
+    function follow() {
+        //關注
+        if ($("#follow").hasClass("btn btn-outline-primary")) {
+            $("#follow").removeClass("btn btn-outline-primary");
+            $("#follow").addClass("btn btn-primary");
+
+            followAct();
+        } else {
+            //取消關注
+            $("#follow").removeClass("btn btn-primary");
+            $("#follow").addClass("btn btn-outline-primary");
+
+            unFollowAct();
+        }
+    }
+
+    //Sweetalart2
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        onOpen: toast => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+
+
 </script>
 
 </body>

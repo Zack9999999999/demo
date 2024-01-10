@@ -83,20 +83,24 @@
         <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>
         <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
         <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+        <select id="time">
+            <option value="ASC">舊到新</option>
+            <option value="DESC">新到舊</option>
+        </select>
     </div>
 
     <table id="comment_report_table" class="table table-hover table-bordered">
         <thead>
         <tr>
             <th scope="col">留言檢舉編號</th>
-            <th scope="col">被檢舉留言內容</th>
+            <th scope="col">被檢舉的留言內容</th>
             <th scope="col">會員編號</th>
-            <th scope="col">員工編號(誰審核的)</th>
             <th scope="col">檢舉標題</th>
-            <th scope="col">檢舉內容</th>
-            <th scope="col">檢舉狀態</th>
-            <th scope="col">檢舉時間</th>
+            <th scope="col">檢舉原因</th>
+            <th scope="col">狀態</th>
+            <th scope="col">時間</th>
             <th scope="col">審核</th>
+            <th scope="col">審核者</th>
         </tr>
         </thead>
         <tbody id="report">
@@ -147,17 +151,19 @@
 
     //載入頁面要先渲染出所有的留言檢舉
     $(function () {
-        loadCommentReports();
+        loadCommentReports(pageNumber = 1);
     });
 
     function loadPage(pageNumber, repStatus) {
+
         loadCommentReports(pageNumber, repStatus);
     }
 
 
     //顯示所有留言檢舉內容
-    function loadCommentReports(pageNumber, repStatus) {
+    function loadCommentReports(pageNumber, repTime, repStatus) {
         let url = "/commentreport";
+
         if (repStatus !== undefined && repStatus !== null) {
             url = url + '?repStatus=' + repStatus;
         }
@@ -166,7 +172,8 @@
             url: url,
             type: 'GET',
             data: {
-                page: pageNumber - 1
+                page: pageNumber - 1,
+                sortDirection: repTime
             },
             dataType: 'json',
             success: function (commentReportList) {
@@ -181,7 +188,7 @@
                 let first = commentReportList.first; //當前是第一頁為ture
                 let last = commentReportList.last; // 當前是最後一頁為true
 
-                nextPage(totalPages, repStatus, first, last);
+                nextPage(totalPages, repStatus, number, first, last);
 
                 let titleMap = {
                     "SPAM": "垃圾訊息",
@@ -205,16 +212,18 @@
                         '<tr><td>' + commetreport.repId + '</td>' +
                         '<td>' + commetreport.comment.comContent + '</td>' +
                         '<td>' + commetreport.memId + '</td>' +
-                        '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + commetreport.repContent + '</td>' +
                         '<td id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
                         '<td>' + commetreport.repTime + '</td>' +
-                        '<td><select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +
+                        '<td>' +
+                        '<select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +
                         '<option value="1">審核中</option>' +
                         '<option value="2">通過</option>' +
                         '<option value="3">未通過</option>' +
-                        '</select></td></tr>';
+                        '</select>' +
+                        '</td>' +
+                        '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td></tr>';
 
                 });
                 $("#countReport").html(": 共" + total);
@@ -253,7 +262,6 @@
 
                 Swal.fire("更新成功")
 
-                // loadCommentReports(1);
                 // location.href="commentreport.html";
             },
             error: function (xhr, status, error) {
@@ -268,19 +276,29 @@
     $(".filterButton").on("click", function () {
         let repStatus = $(this).data("repStatus");
 
-        loadCommentReports(1, repStatus);
+        loadCommentReports(1, "ASC", repStatus);
     });
 
-    function nextPage(totalPages, repStatus) {
+    //時間排序
+    $("#time").change(function () {
+        let repTime = $("#time").val();
+
+        loadCommentReports(1, repTime);
+    });
+
+    function nextPage(totalPages, repStatus, number) {
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
-            pageHTML += `<li  class="page-item">` +
-                `<a class="page-link" href="#" onclick="loadPage(${i + 1}, ${repStatus})"; return flase;">${i + 1}</a>` +
+            pageHTML +=
+                `<li  class="page-item">` +
+                `<a id="number" class="page-link" href="#" onclick="loadPage(${i + 1}, ${repStatus})"; return flase;">${i + 1}</a>` +
                 `</li>`;
         }
+
         $(".pagination").html(pageHTML); //插入頁碼
         $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
         $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+
     }
 
 </script>

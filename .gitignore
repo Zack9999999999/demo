@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 src/main/resources/static/js/googlemap.js
+sr/main/resources/static/Teacher_commentreport.html

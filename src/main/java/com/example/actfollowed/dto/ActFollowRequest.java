@@ -8,7 +8,7 @@ public class ActFollowRequest {
     private Integer actId;
     @NotNull
     private Integer memId;
-    private Byte folStatus;
+    private Byte folStatus = 1;
 
     public Integer getActId() {
         return actId;

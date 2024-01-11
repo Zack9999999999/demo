@@ -2,6 +2,7 @@ package com.example.comment.controller;
 
 import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
+import com.example.comment.dto.CommentStatus;
 import com.example.comment.model.CommentVO;
 import com.example.comment.service.ICommentService;
 import com.example.comment.util.Page;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -30,7 +32,7 @@ public class CommentController {
             @RequestParam Integer actId,
             @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit,
             @RequestParam(defaultValue = "com_time") String orderBy,
-            @RequestParam(defaultValue = "desc") String sort) {
+            @RequestParam(defaultValue = "DESC") String sort) {
 
         CommentQueryParams commentQueryParams = new CommentQueryParams();
         commentQueryParams.setActId(actId);
@@ -51,19 +53,33 @@ public class CommentController {
     }
 
     @GetMapping("/comments/{comId}")
-    public ResponseEntity<CommentVO> getComment(@PathVariable Integer comId) {
+    public ResponseEntity<CommentVO> getComment(@PathVariable Integer comId, HttpSession session) {
 
         CommentVO comment = commentService.getCommentById(comId);
 
-        if (comment != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(comment);
-        } else {
+        //模擬從session取出會員id
+        Integer testMemId = 5;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        if (comment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } else if (comment.getMemId() != memId) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<CommentVO> insertCommnet(@RequestBody @Valid CommentRequest commentRequest) {
+    public ResponseEntity<CommentVO> insertCommnet(@RequestBody @Valid CommentRequest commentRequest,
+                                                   HttpSession session) {
+        //模擬從session取出會員id
+        Integer testMemId = 5;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        commentRequest.setMemId(memId);
 
         Integer commentId = commentService.insertComment(commentRequest);
 
@@ -87,11 +103,39 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(updateComment);
     }
 
-    @DeleteMapping("/comments/{comId}")
-    public ResponseEntity<?> deleteComment(@PathVariable Integer comId) {
+    @PutMapping("/comment/{comId}")
+    public ResponseEntity<CommentVO> deleteComment(@PathVariable Integer comId, HttpSession session) {
 
-        commentService.deleteComment(comId);
+        //模擬從session取出會員id
+        Integer testMemId = 5;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        CommentStatus commentStatus = new CommentStatus();
+
+        //檢查 comment 是否存在
+        CommentVO comment = commentService.getCommentById(comId);
+
+        if (comment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } else if (comment.getMemId() != memId) { // 不是自己的留言
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        commentStatus.setMemId(memId);
+
+        commentService.deleteComment(comId, commentStatus);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+//    @DeleteMapping("/comments/{comId}")
+//    public ResponseEntity<?> deleteComment(@PathVariable Integer comId) {
+//
+//        commentService.deleteComment(comId);
+//
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
+
 }

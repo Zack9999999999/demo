@@ -9,7 +9,6 @@ import com.example.commentreport.model.CommentReportVO;
 import com.example.commentreport.repository.CommentReportRepository;
 import com.example.commentreport.service.ICommentReportService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

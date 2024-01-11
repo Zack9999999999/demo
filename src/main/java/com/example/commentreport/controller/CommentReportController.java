@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.NoSuchElementException;
@@ -34,7 +35,7 @@ public class CommentReportController {
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-
+        //傳進來是DESC的話替換掉pageable內的Sort
         if ("DESC".equalsIgnoreCase(sortDirection)) {
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
@@ -43,7 +44,6 @@ public class CommentReportController {
             );
         }
 
-log.info(pageable.toString());
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
         commentReportQueryParams.setRepStatus(repStatus);
@@ -67,8 +67,16 @@ log.info(pageable.toString());
 
 
     @PostMapping("/commentreport")
-    public ResponseEntity<CommentReportVO> createCommentReport(@RequestBody @Valid CommentReportRequest
-                                                                       commentReportRequest) {
+    public ResponseEntity<CommentReportVO> createCommentReport(
+            @RequestBody @Valid CommentReportRequest commentReportRequest,
+            HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 3;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        commentReportRequest.setMemId(memId);
+
         CommentReportVO commentReport = commentReportService.createCommentReport(commentReportRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(commentReport);

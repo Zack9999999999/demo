@@ -11,12 +11,14 @@ public class CommentReportRequest {
 
     @NotNull
     private Integer comId;
-    @NotNull
+
     private Integer memId;
     @NotNull
     private CommentReportRepTitle repTitle;
     @NotBlank
     private String repContent;
+
+    private Byte repStatus = 1;
 
     public Integer getComId() {
         return comId;
@@ -50,4 +52,11 @@ public class CommentReportRequest {
         this.repContent = repContent;
     }
 
+    public Byte getRepStatus() {
+        return repStatus;
+    }
+
+    public void setRepStatus(Byte repStatus) {
+        this.repStatus = repStatus;
+    }
 }

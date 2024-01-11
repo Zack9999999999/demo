@@ -11,7 +11,6 @@ public class ActivityReportRequest {
     @NotNull
     private Integer actId;
 
-    @NotNull
     private Integer memId;
 
     private Integer empId; //不需要
@@ -24,7 +23,7 @@ public class ActivityReportRequest {
 
     private byte[] repPic;
 
-    private Byte repStatus; //不需要
+    private Byte repStatus = 1;
 
 //    private Date repTime;
 }

@@ -18,7 +18,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ActivityReportController {
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-
+        //傳進來是DESC的話替換掉pageable內的Sort
         if ("DESC".equalsIgnoreCase(sortDirection)) {
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
@@ -62,28 +64,35 @@ public class ActivityReportController {
     @PostMapping("/activityreport")
     public ResponseEntity<ActivityReportVO> insert(
             @RequestParam("actId") Integer actId,
-            @RequestParam("memId") Integer memId,
             @RequestParam("repTitle") ReportTitle repTitle,
             @RequestParam("repContent") String repContent,
-            @RequestParam(required = false) MultipartFile repPic
+            @RequestParam(required = false) MultipartFile repPic,
+            HttpSession session
     ) {
+
         ActivityReportRequest activityReportRequest = new ActivityReportRequest();
         activityReportRequest.setActId(actId);
-        activityReportRequest.setMemId(memId);
         activityReportRequest.setRepTitle(repTitle);
         activityReportRequest.setRepContent(repContent);
-        // 處理文件數據
+        // 處理圖片
         if (repPic != null && !repPic.isEmpty()) {
             byte[] repPicBytes = new byte[0]; // 或其他所需的文件處理邏輯
             try {
                 repPicBytes = repPic.getBytes();
                 activityReportRequest.setRepPic(repPicBytes);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
         }
 
+        //模擬從session取出會員id
+        Integer testMemId = 3;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        activityReportRequest.setMemId(memId);
+
         ActivityReportVO activityReport = activityReportService.insert(activityReportRequest);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(activityReport);
     }
 

@@ -34,10 +34,10 @@ public class ActRegVO {
     private Date regTime;
 
     @Column(name = "reg_status")
-    private Byte regStatus = 2;
+    private Byte regStatus;
 
     @Column(name = "is_act_part")
-    private Byte isActPart = 2;
+    private Byte isActPart;
 
     @Column(name = "act_rating")
     private Double actRating;

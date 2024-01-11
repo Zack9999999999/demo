@@ -112,7 +112,10 @@
 <div class="container">
     <div class="text-bark text-center py-4">
         <div class="shadow p-3 mb-5 bg-body rounded">
-            <h1 id="activityName" th:text="${act.actName}">活動名稱</h1>
+            <h1 class="fw-bold" id="activityName" th:text="${act.actName}">活動名稱</h1>
+
+            <p>測試從RetailsController model拿會員ID:<span id="memberId" th:text="${memId}"></span></p>
+
         </div>
     </div>
 
@@ -121,10 +124,10 @@
             <div class="col-md-8">
                 <section class="h-100 shadow-none p-3 mb-5 bg-light rounded">
                     <div class="w-auto h-100">
-                        <img th:src="@{/activity/images/{actId}(actId=${act.actId})}" src=""
+                        <img th:src="@{/CHA104G3/activity/images/{actId}(actId=${act.actId})}" src=""
                              class="w-100 h-50 img-fluid"
                              alt="活動照片">
-                        <h2>活動內容:</h2>
+                        <h2 class="fw-bolder">活動內容:</h2>
                         <span id="actDescr" th:text="${act.actDescr}">活動內容</span>
                     </div>
                 </section>
@@ -136,15 +139,17 @@
                              class="bi bi-fire" viewBox="0 0 16 16">
                             <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
                         </svg>
-                        <span>關注此活動的人數:<span id="actFollowCount" th:text="${act.actFollowCount}">1</span></span>
+                        <span class="fst-italic">關注此活動的人數:<span id="actFollowCount"
+                                                                        th:text="${act.actFollowCount}">1</span></span>
                         <div style="margin: 10px">
-                            <p style="margin: 0;">人數上限:<span th:text="${act.actUpper}">1</span></p>
-                            <p>目前報名人數:<span th:text="${act.actCount}">1</span></p>
+                            <p class="fst-italic" style="margin: 0;">人數上限:<span th:text="${act.actUpper}">1</span>
+                            </p>
+                            <p class="fst-italic">目前報名人數:<span th:text="${act.actCount}">1</span></p>
                         </div>
                     </div>
                     <div class="shadow-none p-3 mb-5 bg-light rounded">
-                        <h2>活動訊息:</h2>
-                        <p>
+                        <h2 class="fw-bolder">活動訊息:</h2>
+                        <p class="fst-italic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
@@ -160,10 +165,11 @@
                             <path fill-rule="evenodd"
                                   d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
                         </svg>
-                        <span>活動地點:<span id="actLoc" th:text="${act.actLoc}">活動場地</span></span>
+                        <span class="fst-italic">活動地點:<span id="actLoc"
+                                                                th:text="${act.actLoc}">活動場地</span></span>
                         <hr>
 
-                        <p>
+                        <p class="fst-italic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-clock" viewBox="0 0 16 16">
                                 <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
@@ -172,7 +178,7 @@
                             活動開始時間：
                             <time id="startTime" th:text="${act.actStartTime}">2023-12-01 10:00 AM</time>
                         </p>
-                        <p>
+                        <p class="fst-italic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-clock-history" viewBox="0 0 16 16">
                                 <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
@@ -191,10 +197,14 @@
 
         <div class="mt-5 w-100">
             <div class="mt-3">
-                <span class="fs-3 fw-bolder">留言區<span id="commentcount">1</span></span>
-                <div class="card w-100 shadow-none p-3 mb-5 bg-light rounded" style="border: none;" id="scroll">
+                <div style="display: inline">
+                    <span class="fs-3 fw-bolder">留言區<span id="commentcount">(0)</span></span>
+                    <button id="newToOld" class="rounded-pill text-dark bg-light" onclick="newToOld()">新至舊</button>
+                    <button id="oldToNew" class="rounded-pill text-dark bg-light" onclick="oldToNew()">舊至新</button>
+                </div>
+                <div class="card w-100 shadow-none p-3 mb-2 bg-light rounded" style="border: none;" id="scroll">
                     <div id="comments" class="card-body">
-
+                        <p>無內容</p>
                     </div>
                     <button id="morecomments" type="button" class="btn btn-light" onclick="more()">查看更多</button>
                 </div>
@@ -354,80 +364,175 @@
     });
 
     //初始留言數量
-    var countLimit = 5;
+    let countLimit = 5;
+    //預設排序
+    let userSort = "DESC";
+    //當前顯示的留言數量 用來判斷查看更多可不可以按
+    let currentDisplayed = 0;
 
-    //當前顯示的留言數量
-    var currentDisplayed = 0;
-
+    //!!!!!!!!!從RetailsController的model取得到的 測試取得會員ID用
+    let MyMemId = $("#memberId").text();
 
     $(function () {
         //進入活動詳情頁面後要先跑一遍顯示所有留言
-        allComments(countLimit);
-
-        //進入活動詳情頁面初始化所有資料
-        // activity();
+        allComments(countLimit, userSort);
+        //判斷有沒有關注過
+        checkActFollow();
     });
+
+    let newToOldBtn = $("#newToOld");
+    let oldToNewBtn = $("#oldToNew");
+
+    function newToOld() {
+        //兩個按鈕切換顏色
+        if (newToOldBtn.hasClass("text-dark bg-light")) {
+            newToOldBtn.removeClass("text-dark bg-light")
+            newToOldBtn.addClass("text-light bg-dark")
+
+            if (oldToNewBtn.hasClass("text-light bg-dark")) {
+                oldToNewBtn.removeClass("text-light bg-dark")
+                oldToNewBtn.addClass("text-dark bg-light")
+            }
+        }
+
+        userSort = "DESC";
+        allComments(countLimit, userSort);
+    }
+
+    function oldToNew() {
+        //兩個按鈕切換顏色
+        if (oldToNewBtn.hasClass("text-dark bg-light")) {
+            oldToNewBtn.removeClass("text-dark bg-light")
+            oldToNewBtn.addClass("text-light bg-dark")
+
+            if (newToOldBtn.hasClass("text-light bg-dark")) {
+                newToOldBtn.removeClass("text-light bg-dark")
+                newToOldBtn.addClass("text-dark bg-light")
+            }
+        }
+
+        userSort = "ASC";
+        allComments(countLimit, userSort);
+    }
 
     //按下查看更多按鈕將limit加5並且再跑一遍顯示所有留言
     function more() {
         countLimit += 5;
-        allComments(countLimit);
+        allComments(countLimit, userSort);
+    }
+
+    //檢查有沒有關注過
+    function checkActFollow() {
+        $.ajax({
+            url: "/activity/actfollow",
+            type: 'GET',
+            contentType: 'application/json',
+            data: {
+                actId: window.location.pathname.split('/')[3]
+                // memId: MyMemId
+            },
+            dataType: 'json',
+            success: function (folStatus) {
+
+                //有關注的話關注按鈕為持續藍色
+                if (folStatus === 2) {
+                    $("#follow").removeClass("btn-outline-primary")
+                    $("#follow").addClass("btn-primary")
+                    $("#follow").text("已關注")
+                }
+
+            },
+            error(xhr, status, error) {
+
+                $("#follow").removeClass("btn-primary")
+                $("#follow").addClass("btn-outline-primary")
+                $("#follow").text("關注")
+            }
+        });
     }
 
     //進畫面後顯示所有留言
-    function allComments(countLimit) {
+    function allComments(countLimit, userSort) {
 
         // let urlParams = new URLSearchParams(window.location.search);
         // let actId = urlParams.get('actId');
 
-        // let actId = window.location.pathname.split('/')[2];
-
         $.ajax({
-            url: '/comments',
+            url: '/comments', //路徑有變動的話要改
             type: 'GET',
+            // cache: false, // 禁用緩存
             contentType: 'application/json',
             data: {
-                actId: window.location.pathname.split('/')[2],
-                limit: countLimit
-                // sort: userSort 讓用戶可以從新到舊 或舊到新
+                actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
+                limit: countLimit,
+                sort: userSort //讓用戶可以從新到舊 或舊到新
             },
             dataType: 'json',
             success: function (page) {
-
-                var commentsHTML = "";
-                var comments = page.comments;
-                var total = page.total;
-                var limit = page.limit;
+                let commentsHTML = "";
+                let comments = page.comments;
+                let total = page.total;
+                let limit = page.limit;
 
                 comments.forEach(function (comment) {
-                    if (comment.comStatus == 1) {
+                    if (comment.comStatus == 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
                         commentsHTML +=
                             '<div>' +
                             '<div class="d-flex mb-3">' +
-                            '<img src="../static/images/dog.jpg" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comment.memId +
+                            '<img src="" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
+                            '<p>' + comment.memId + '</p>' +
                             '</div>' +
                             '<p style="margin: 0">' + comment.comContent + '</p><hr style="margin: 0">' +
                             '<div class="d-flex align-items-center">' +
                             '<small class="text-muted">' + comment.comTime + '</small>' +
-                            '<a href="#" class="report ms-auto link-dark" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
-                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
+                            '<div class="userfunction ms-auto" data-mem-id="' + comment.memId + '">' +
+                            '<a href="#" class="nosee update link-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">修改</a>' +
+                            '<a href="#" class="nosee delete link-warning" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">刪除</a>' +
+                            '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
+                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>' +
+                            '</div>' +
                             '</div>' +
                             '</div>';
                     }
+
                 });
                 //留言總數
                 $("#commentcount").html("(" + total + ")");
 
-                if (comments.length > currentDisplayed) {
-                    $("#comments").html(commentsHTML);
+                $("#comments").html(commentsHTML);
 
+                // //each所有的.userfunction來抓memId做判斷
+                // $("#comments .userfunction").each(function () {
+                //     let memId = $(this).data("memId")
+                //
+                //     //自己的留言才看的到修改和刪除按紐
+                //     //判斷是不是自己的留言，不是的話將修改和刪除按鈕隱藏
+                //     //!!!!!!!!!看要不要用後端來判斷
+                //     if (memId != MyMemId) {
+                //         $(this).children(".nosee").remove();
+                //     }
+                // })
+
+                //跟上面一樣 都是判斷是不是自己的留言 做法不同而已
+                $("#comments .userfunction").each(function () {
+                    let comId = $(this).children("a").data("comId")
+                    // console.log(comId) //留言編號
+
+                    let nosee = $(this).children(".nosee");
+
+                    checkComment(comId, nosee);
+
+                })
+
+
+                //判斷查看更多可不可以按
+                if (total > currentDisplayed) {
                     currentDisplayed = comments.length;
                 } else {
                     $("#morecomments").prop("disabled", true).text("沒有更多留言");
                 }
 
                 // memid 用來顯示會員的大頭照
-                //改排序 最新的在上面 並且按查看更多是往下增加不是往上
 
             },
             error: function (xhr, status, error) {
@@ -440,29 +545,17 @@
     $("#commentsform").on("submit", function (e) {
         e.preventDefault();
 
-        // 假設從伺服器獲取memId值並儲存到localStorage
-        // localStorage.setItem('memId', '從伺服器獲取的值');
-
-        // var userMemId = localStorage.getItem('memId');
-        // if (!userMemId) {
-        //     console.error("未登入");
-        //     return;
-        // }
-
         // let urlParams = new URLSearchParams(window.location.search);
         // let actId = urlParams.get('actId');
 
-        // let actId = window.location.pathname.split('/')[2];
-
         var commentData = {
-            actId: window.location.pathname.split('/')[2],
-            memId: 1, //改動態抓 userMemId
+            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
             // comReplyId:null,
             comContent: $("#comment").val()
         };
 
         $.ajax({
-            url: '/comments',
+            url: '/comments', //路徑有變動的話要改
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(commentData),
@@ -474,13 +567,17 @@
                 commentsHTML +=
                     '<div>' +
                     '<div class="d-flex mb-3">' +
-                    '<img src="../static/images/dog.jpg" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comments.memId +
+                    '<img src="" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comments.memId +
                     '</div>' +
-                    '<p>' + comments.comContent + '<p><hr style="margin: 0">' +
+                    '<p style="margin: 0">' + comments.comContent + '<p><hr style="margin: 0">' +
                     '<div class="d-flex align-items-center">' +
                     '<small class="text-muted">' + comments.comTime + '</small>' +
-                    '<a href="#" class="report ms-auto" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
+                    '<div class="userfunction ms-auto" data-mem-id="' + comments.memId + '">' +
+                    '<a href="#" class="nosee update link-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">修改</a>' +
+                    '<a href="#" class="nosee delete link-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
+                    '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
                     'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
+                    '</div>' +
                     '</div>' +
                     '</div>'
 
@@ -496,42 +593,75 @@
 
     //檢舉留言
     //案檢舉後取得comId,並將comid存在檢舉model的form表單的data屬性
-    $(document).on("click", ".report", function () {
-        var comId = $(this).data("comId");
+    $(document).on("click", ".report", function (e) {
+        e.preventDefault();
+        let comId = $(this).data("comId");
         $("#reportfrom").data("comId", comId);
     });
 
     $("#reportfrom").submit(function (e) {
         e.preventDefault();
-
         //抓自定義的data屬性設的值,去查全部留言ajax那邊看
-        var thisComId = $(this).data("comId");
+        let thisComId = $(this).data("comId");
 
-        var commentReportData = {
+        if (!$("#message-text").val().trim()) {
+            Swal.fire("", "請輸入檢舉原因", "error");
+            return;
+        }
+
+        let commentReportData = {
             comId: thisComId, //留言編號
-            memId: 1, //改動態抓 userMemId
             repTitle: $("#report-title").val(),
             repContent: $("#message-text").val()
         };
         $.ajax({
-            url: "/commentreport",
+            url: "/commentreport", //路徑有變動的話要改
             type: "POST",
             contentType: 'application/json',
             data: JSON.stringify(commentReportData),
             success: function (response) {
                 $("#message-text").val("");
 
-                $.alert({
-                    title: '檢舉成功!!',
-                    content: '您的檢舉已成功，已交由後台人員處理中',
-                });
+                Swal.fire("檢舉成功", "已交由後台人員處理", "success")
                 exampleModal.hide();
             },
             error: function (xhr, status, error) {
-                $.alert({
-                    title: '檢舉失敗!!',
-                    content: '您的檢舉有問題，請再做確認',
-                });
+                Swal.fire("檢舉失敗", "請再次確認")
+            }
+        });
+    });
+
+    //刪除留言(修改狀態)
+    $(document).on("click", ".delete", function (e) {
+        e.preventDefault();
+        let comId = $(this).data("comId");
+
+        // let dleData = {
+        //     comStatus: 2
+        // }
+
+        Swal.fire({
+            title: "要刪除留言嗎?",
+            width: "300px",
+            showCancelButton: true,
+            confirmButtonText: "確定",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '/comment/' + comId,
+                    type: 'PUT',
+                    // data: JSON.stringify(dleData),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function () {
+                        allComments(countLimit, userSort)
+                    },
+                    error(xhr, status, error) {
+                        console.log(status + error)
+                    }
+                })
             }
         });
     });
@@ -551,7 +681,7 @@
         $("#actReportfrom").submit(function (e) {
             e.preventDefault();
 
-            let actId = window.location.pathname.split('/')[2];
+            let actId = window.location.pathname.split('/')[3]; //路徑有變動的話要改
 
             // 驗證 repContent 是否為空或僅包含空白
             if (!$("#act-text").val().trim()) {
@@ -561,7 +691,6 @@
 
             let formData = new FormData();
             formData.append("actId", actId);
-            formData.append("memId", 1); //改動態取 或在某個地方將memId藏在<input hidden>並取過來
             formData.append("repTitle", $("#act-report-title").val());
             formData.append("repContent", $("#act-text").val());
 
@@ -607,25 +736,15 @@
         }).then((result) => {
             if (result.isConfirmed && result.value) {
 
-                // 假設從伺服器獲取memId值並儲存到localStorage
-                // localStorage.setItem('memId', '從伺服器獲取的值');
-
-                // var userMemId = localStorage.getItem('memId');
-                // if (!userMemId) {
-                //     console.error("未登入");
-                //     return;
-                // }
-
                 // let urlParams = new URLSearchParams(window.location.search);
                 // let actId = urlParams.get('actId');
 
                 let numberOfPeople = {
-                    memId: 1, //改動態抓
-                    actId: window.location.pathname.split('/')[2],
+                    actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
                     regTotal: result.value
                 }
                 $.ajax({
-                    url: '/actreg',
+                    url: '/actreg', //路徑有變動的話要改
                     type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(numberOfPeople),
@@ -643,13 +762,12 @@
     //關注活動
     function followAct() {
         let actFollow = {
-            actId: window.location.pathname.split('/')[2],
-            memId: 1, //改動態抓
+            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
             folStatus: 2
         }
 
         $.ajax({
-            url: "/activity/actfollow",
+            url: "/activity/actfollow", //路徑有變動的話要改
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(actFollow),
@@ -658,6 +776,7 @@
                     icon: 'success',
                     title: '關注成功！'
                 })
+                $("#follow").text("已關注")
             },
             error: function (xhr, status, error) {
                 Swal.fire("關注失敗")
@@ -668,8 +787,7 @@
     //取消關注活動
     function unFollowAct() {
         let actFollow = {
-            actId: window.location.pathname.split('/')[2],
-            memId: 1, //改動態抓
+            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
             folStatus: 1
         }
 
@@ -683,6 +801,7 @@
                     icon: 'success',
                     title: '已取消關注！'
                 })
+                $("#follow").text("關注")
             },
             error: function (xhr, status, error) {
                 Swal.fire("取消關注失敗")
@@ -706,6 +825,23 @@
         }
     }
 
+    //查詢單留言(用來判斷是不是自己的留言,是的話才顯示修改和刪除功能)
+    function checkComment(comId, nosee) {
+        $.ajax({
+            url: '/comments/' + comId,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (comment) {
+                nosee.show(); //是自己的留言 看的到修改和刪除功能`
+                // console.log(comId)
+                // console.log(nosee)
+            },
+            error(xhr, status, error) {
+            }
+
+        });
+    }
+
     //Sweetalart2
     const Toast = Swal.mixin({
         toast: true,
@@ -717,7 +853,6 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
-
 
 </script>
 

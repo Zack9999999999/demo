@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -36,7 +37,17 @@ public class ActRegController {
     }
 
     @PostMapping("/actreg")
-    public ResponseEntity<ActRegVO> createActReg(@RequestBody @Valid ActRegRequest actRegRequest) {
+    public ResponseEntity<ActRegVO> createActReg(@RequestBody @Valid ActRegRequest actRegRequest, HttpSession session) {
+
+        //模擬從session取會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+
+        Integer memId = (Integer) session.getAttribute("memId");
+
+//        if (memId != null) {
+        actRegRequest.setMemId(memId);
+//        }
 
         ActRegVO actReg = actRegService.createActReg(actRegRequest);
 

@@ -3,6 +3,7 @@ package com.example.comment.dao.impl;
 import com.example.comment.dao.ICommentDAO;
 import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
+import com.example.comment.dto.CommentStatus;
 import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentRowMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,14 +64,14 @@ public class CommentDAO implements ICommentDAO {
 
         //排序
         sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();
+        log.info(commentQueryParams.getSort().toString());
 
         //簡易分頁(查看更多)
         sql = sql + " LIMIT :limit";
         map.put("limit", commentQueryParams.getLimit());
 
-        List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
+        return namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
 
-        return commentList;
     }
 
     @Override
@@ -94,14 +95,15 @@ public class CommentDAO implements ICommentDAO {
 //    @CachePut(value = "commentsCache", key = "'comments'")
     public Integer insertComment(CommentRequest commentRequest) {
 
-        String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time) " +
-                "VALUES(:actId, :memId, :comReplyId, :comContent, :comTime)";
+        String sql = "INSERT INTO activity_comment(act_id, mem_id, com_reply_id, com_content, com_time, com_status) " +
+                "VALUES(:actId, :memId, :comReplyId, :comContent, :comTime, :comStatus)";
 
         Map<String, Object> map = new HashMap<>();
         map.put("actId", commentRequest.getActId());
         map.put("memId", commentRequest.getMemId());
         map.put("comReplyId", commentRequest.getComReplyId());
         map.put("comContent", commentRequest.getComContent());
+        map.put("comStatus", commentRequest.getComStatus());
         map.put("comTime", new Date());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -114,7 +116,7 @@ public class CommentDAO implements ICommentDAO {
     @Override
     public void updateComment(Integer comId, CommentRequest commentRequest) {
 
-        String sql = "UPDATE activity_comment SET com_content = :comContent WHERE comId = :comId";
+        String sql = "UPDATE activity_comment SET com_content = :comContent WHERE com_id = :comId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("comContent", commentRequest.getComContent());
@@ -124,12 +126,16 @@ public class CommentDAO implements ICommentDAO {
     }
 
     @Override
-    public void deleteComment(Integer comId) {
+    public void deleteComment(Integer comId, CommentStatus commentStatus) {
 
-        String sql = "DELETE FROM activity_comment WHERE com_id = :comId";
+//        String sql = "DELETE FROM activity_comment WHERE com_id = :comId";
+
+        String sql = "UPDATE activity_comment SET com_status = :comStatus WHERE com_id = :comId AND mem_id = :memId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("comId", comId);
+        map.put("comStatus", commentStatus.getComStatus());
+        map.put("memId", commentStatus.getMemId());
 
         namedParameterJdbcTemplate.update(sql, map);
     }

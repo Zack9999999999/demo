@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 //@RestController
 @Controller
-@RequestMapping("/activity")
+@RequestMapping("/CHA104G3")
 @Slf4j
 public class RetailsController {
     @Autowired
@@ -29,10 +31,17 @@ public class RetailsController {
 //        return ResponseEntity.status(HttpStatus.OK).body(act);
 //    }
 
-    @GetMapping("/{actId}")
-    public String actDetail(@PathVariable Integer actId, Model model) {
+    @GetMapping("/activity/{actId}")
+    public String actDetail(@PathVariable Integer actId, Model model, HttpSession session) {
         ActVO act = retailsService.getDetail(actId);
         model.addAttribute("act", act);
+
+        //模擬從session取會員id
+        Integer testMemId = 2;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        model.addAttribute("memId", memId);
+
         return "actdetails";
     }
 

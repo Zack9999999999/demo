@@ -7,13 +7,15 @@ public class CommentRequest {
 
     @NotNull
     private Integer actId;
-    @NotNull
+
     private Integer memId;
 
     private Integer comReplyId;
     @NotNull
     @NotBlank
     private String comContent;
+
+    private Byte comStatus = 1;
 
     public Integer getActId() {
         return actId;
@@ -47,4 +49,11 @@ public class CommentRequest {
         this.comContent = comContent;
     }
 
+    public Byte getComStatus() {
+        return comStatus;
+    }
+
+    public void setComStatus(Byte comStatus) {
+        this.comStatus = comStatus;
+    }
 }

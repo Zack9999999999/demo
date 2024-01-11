@@ -7,16 +7,16 @@ import java.util.Date;
 
 @Data
 public class ActRegRequest {
-    @NotNull
+
     private Integer memId;
     @NotNull
     private Integer actId;
     @NotNull
     private Integer regTotal;
 
-    private Byte regStatus;
+    private Byte regStatus = 2;
 
-    private Byte isActPart;
+    private Byte isActPart = 2;
 
     private Double actRating;
 }

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>活動檢舉頁面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        /*th標題不換行*/
+        th {
+            white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .showPic {
+            white-space: nowrap;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+<header class="header">
+    <h1>【做伙後台管理系統】</h1>
+    <p class="welcome">歡迎您 管理員</p>
+    <nav>
+        <ul>
+            <li><a href="後台登入頁面.html">登出</a></li>
+        </ul>
+    </nav>
+</header>
+
+<aside class="aside">
+    <nav class="nav">
+        <div class="sidenav">
+            <a href="../static/後台首頁頁面.html">首頁</a>
+            <hr>
+            <button class="dropdown-btn">員工管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="修改密碼頁面.html">修改密碼</a>
+                <a href="員工資料管理首頁.html">員工資料管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">一般功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="新增公告.html">公告管理</a>
+                <a href="新增FAQ.html">FQA管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">會員功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="查詢會員.html">查詢會員</a>
+                <a href="產生會員通知訊息.html">產生通知訊息</a>
+                <a href="#">審核會員檢舉</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">活動功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a th:href="@{/CHA104G3/member/report}">審核活動管理</a>
+                <a th:href="@{/CHA104G3/member/commentreport}">審核留言管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">場地功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="新增場地.html">場地管理</a>
+                <a href="#">場地訂單管理</a>
+                <a href="#">場地狀態管理</a>
+            </div>
+        </div>
+
+    </nav>
+</aside>
+
+<main class="main">
+
+    <div style="display: inline">
+        <h1 class="fw-bold" style="display: inline">活動檢舉<span id="countReport"></span>筆</h1>
+        <button class="filterButton btn btn-outline-secondary" data-rep-status="" style="margin-left: 30px">所有
+        </button>
+        <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>
+        <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
+        <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+    </div>
+
+    <table id="act_report_table" class="table table-hover table-bordered table-sm">
+        <thead>
+        <tr>
+            <th scope="col">檢舉編號</th>
+            <th scope="col">活動編號</th>
+            <th scope="col">會員編號</th>
+            <th scope="col">檢舉標題</th>
+            <th scope="col">檢舉原因</th>
+            <th scope="col">檢舉圖片</th>
+            <th scope="col">狀態</th>
+            <th scope="col">時間
+                <select id="time">
+                    <option value="ASC">舊到新</option>
+                    <option value="DESC">新到舊</option>
+                </select>
+            </th>
+            <th scope="col">審核</th>
+            <th scope="col">審核者</th>
+        </tr>
+        </thead>
+        <tbody id="actReport">
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>OFFENSIVE</td>
+            <td>內容不當言論</td>
+            <td>1</td>
+            <td>2023-12-13 10:00:00</td>
+            <td>
+                <button>審核</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link">上一頁</a>
+            </li>
+            <li class="page-item">
+                <!--                <a class="page-link" href="#">1</a>-->
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">下一頁</a>
+            </li>
+        </ul>
+    </nav>
+
+</main>
+
+<!--檢舉留言框-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <img id="pic" src="../static/images/dog.jpg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+</script>
+
+<script th:src="@{/js/後台首頁頁面.js}"></script>
+
+<script>
+
+    $(function () {
+        loadReports();
+    });
+
+    let repStatus = 0; // 預設值
+    let repTime = "ASC"; // 預設值
+    let pageNumber = 1; // 預設值
+
+    function loadPage(pageNumber, repTime, repStatus) {
+        loadReports(pageNumber, repTime, repStatus);
+    }
+
+    //依審核狀態篩選
+    $(".filterButton").click(function () {
+        repStatus = $(this).data("repStatus");
+
+        loadReports(pageNumber, repTime, repStatus);
+    });
+
+    //時間排序
+    $("#time").change(function () {
+        repTime = $("#time").val();
+
+        loadReports(pageNumber, repTime, repStatus);
+    });
+
+    //顯示所有活動檢舉
+    function loadReports(pageNumber, repTime, repStatus) {
+
+        let url = "/activityreport";
+
+        if (repStatus !== undefined && repStatus != null) {
+            url = url + '?repStatus=' + repStatus;
+        }
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                page: pageNumber - 1,
+                sortDirection: repTime
+            },
+            dataType: 'json',
+            success: function (activityReport) {
+                let actReportHTML = "";
+                let report = activityReport.content;
+
+                //做分頁需要的
+                let total = activityReport.totalElements; //總數量
+                let size = activityReport.size; //每頁顯示的數據數量
+                let number = activityReport.number; //第幾頁(0為第一頁)
+                let totalPages = activityReport.totalPages; //總頁數
+                let first = activityReport.first; //當前是第一頁為ture
+                let last = activityReport.last; // 當前是最後一頁為true
+
+                //分頁元件生成
+                nextPage(totalPages, repTime, repStatus);
+
+                let titleMap = {
+                    "INAPPROPRIATE": "不恰當的内容",
+                    "NOSAFETY": "不安全的",
+                    "MISLEADING": "誤導信息,對活動真實性或內容產生誤解",
+                    "HARASSMENT": "騷擾或欺凌",
+                    "OTHER": "其他"
+                };
+
+                let statusMap = {
+                    "1": "審核中",
+                    "2": "通過",
+                    "3": "未通過"
+                };
+
+                report.forEach(function (actReport) {
+                    let titleChinese = titleMap[actReport.repTitle];
+                    let statusChinese = statusMap[actReport.repStatus];
+
+                    actReportHTML +=
+                        '<tr><td>' + actReport.repId + '</td>' +
+                        '<td>' + actReport.act.actId + '</td>' +
+                        '<td>' + actReport.memId + '</td>' +
+                        '<td>' + titleChinese + '</td>' +
+                        '<td>' + actReport.repContent + '</td>' +
+                        '<td>';
+
+                    if (actReport.repPic == null) {
+                        actReportHTML += '<button class="showPic btn btn-secondary btn-sm" ' +
+                            'data-rep-id="' + actReport.repId + '" disabled>未提供圖片</button>';
+                    } else {
+                        actReportHTML += '<button class="showPic btn btn-primary btn-sm" ' +
+                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
+                            'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
+                    }
+                    actReportHTML +=
+                        '</td>' +
+                        '<td  id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
+                        '<td>' + actReport.repTime + '</td>' +
+                        '<td>' +
+                        '<select class="changeStatus" data-rep-id="' + actReport.repId + '">' +
+                        '<option value="1">審核中</option>' +
+                        '<option value="2">通過</option>' +
+                        '<option value="3">未通過</option>' +
+                        '</select></td>' +
+                        '<td>' + (actReport.empId ? actReport.empId : "無") + '</td></tr>';
+
+                });
+
+                $("#countReport").html(": 共" + total);
+                $("#actReport").html(actReportHTML);
+
+            },
+            error: function (xhr, status, error) {
+                Swal.fire(
+                    "有問題",
+                    "question"
+                )
+            }
+        });
+    }
+
+    //圖片
+    $(document).on("click", ".showPic", function (e) {
+        e.preventDefault();
+        let repId = $(this).data("repId");
+
+        $.ajax({
+            url: "/activityreport/" + repId + "/pic",
+            type: 'GET',
+            xhrFields: {
+                responseType: "blob"
+            },
+            success: function (pic) {
+                let imgUrl = URL.createObjectURL(pic);
+                $("#pic").attr("src", imgUrl);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error:" + status + " " + error);
+            }
+        });
+    });
+
+    //更新狀態
+    $(document).on("change", ".changeStatus", function () {
+        let statusMap = {
+            "1": "審核中",
+            "2": "通過",
+            "3": "未通過"
+        };
+
+        let repId = $(this).data("repId");
+
+        let newStatus = {
+            repStatus: $(this).val()
+        };
+
+        $.ajax({
+            url: '/activityreport/' + repId,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(newStatus),
+            dataType: 'json',
+            success: function (updateActivityReport) {
+                let statusChinese = statusMap[updateActivityReport.repStatus]; // 从statusMap获取新状态的中文描述
+                $("#status-" + repId).text(statusChinese);
+                Swal.fire("更新成功")
+            },
+            error: function (xhr, status, error) {
+                Swal.fire("更新失敗")
+            }
+        });
+    });
+
+    //分頁元件生成
+    function nextPage(totalPages, repTime, repStatus) {
+        let pageHTML = "";
+        for (let i = 0; i < totalPages; i++) {
+            pageHTML += `<li  class="page-item">` +
+                `<a class="page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
+                `</li>`;
+        }
+        $(".pagination").html(pageHTML); //插入頁碼
+        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+    }
+
+</script>
+
+</body>
+
+</html>

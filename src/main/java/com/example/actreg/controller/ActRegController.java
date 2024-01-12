@@ -1,8 +1,10 @@
 package com.example.actreg.controller;
 
 import com.example.actreg.dto.ActRegRequest;
+import com.example.actreg.dto.MemIdAndPicDTO;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.service.IActRegService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Slf4j
 public class ActRegController {
 
     @Autowired
@@ -64,5 +67,14 @@ public class ActRegController {
         ActRegVO actReg = actRegService.updateActReg(actRegId, actRegRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(actReg);
+    }
+
+    @GetMapping("/actreg/members")
+    public ResponseEntity<List<MemIdAndPicDTO>> findMemIdAndPic(@RequestParam Integer actId,
+                                                                @RequestParam Integer isActPart) {
+
+        List<MemIdAndPicDTO> memIdAndPic = actRegService.findMemIdAndPic(actId, isActPart);
+
+        return ResponseEntity.status(HttpStatus.OK).body(memIdAndPic);
     }
 }

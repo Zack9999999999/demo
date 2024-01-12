@@ -3,6 +3,7 @@ package com.example.actreg.service.impl;
 import com.example.act.model.ActVO;
 import com.example.act.repository.ActRepository;
 import com.example.actreg.dto.ActRegRequest;
+import com.example.actreg.dto.MemIdAndPicDTO;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -98,5 +100,22 @@ public class ActRegService implements IActRegService {
         return actRegRepository.save(actReg);
 
         //1.活動主審核狀態regStatus 2.參加者修改參加狀態isActPart 3.參加者活動評分actRating 4.參加者報名人數也要可以改regTotal
+    }
+
+    @Override
+    public List<MemIdAndPicDTO> findMemIdAndPic(Integer actId, Integer isActPart) {
+
+        List<Object[]> membersAndPicByPart = actRegRepository.findMembersAndPicByPart(actId, isActPart);
+
+        List<MemIdAndPicDTO> dtos = new ArrayList<>();
+
+        for (Object[] obj : membersAndPicByPart) {
+            MemIdAndPicDTO memIdAndPicDTO = new MemIdAndPicDTO();
+            memIdAndPicDTO.setMemName((String) obj[0]);
+            memIdAndPicDTO.setMemPic((byte[]) obj[1]);
+            dtos.add(memIdAndPicDTO);
+        }
+
+        return dtos;
     }
 }

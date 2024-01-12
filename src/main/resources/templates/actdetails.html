@@ -236,17 +236,31 @@
             </form>
         </div>
 
-        <div class="container mt-4 border" id="people">
+        <div class="container mt-4 bg-light" id="people">
             <div>
-                <div>
-                    <h5>參與者:<span id="actCount" th:text="${act.actCount}">(1)</span></h5>
+                <h5 class="fw-bolder">參與者:<span id="actCount" th:text="${act.actCount}">(1)</span></h5>
+            </div>
+            <div id="add" class="row">
+                <div class="col-md-2 mb-3">
+                    <div class="shadow-sm p-3 mb-5 bg-light rounded text-center">
+                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
+                        <p class="badge bg-primary text-wrap text-center">小狗</p>
+                    </div>
                 </div>
                 <div class="col-md-2 mb-3">
-                    <div class="shadow-none p-3 mb-5 bg-light rounded border">
+                    <div class="shadow-sm p-3 mb-5 bg-light rounded text-center">
                         <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
+                        <p class="badge bg-primary text-wrap text-center">小貓</p>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="shadow-sm p-3 mb-5 bg-light rounded text-center">
+                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
+                        <p class="badge bg-primary text-wrap text-center">小豬</p>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="p-3 join">
@@ -396,6 +410,8 @@
         allComments(countLimit, userSort);
         //判斷有沒有關注過
         checkActFollow();
+        //搜出參與此活動者
+        findMemAndPic();
     });
 
     let newToOldBtn = $("#newToOld");
@@ -497,8 +513,8 @@
                         commentsHTML +=
                             '<div class="usertext">' +
                             // '<div class="d-flex mb-3">' +
-                            '<img src="data:image/png;base64,' + comment.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
-                            '<p class="badge bg-primary text-wrap">' + comment.memName + '</p>' +
+                            '<img src="data:image/png;base64,' + comment.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
+                            '<p class="badge bg-primary text-wrap align-top">' + comment.memName + '</p>' +
                             // '</div>' +
                             '<p class="content" style="margin: 0">' + comment.comContent + '</p>' +
                             '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comment.comContent + '">' +
@@ -587,8 +603,8 @@
                 commentsHTML +=
                     '<div class="usertext">' +
                     // '<div class="d-flex mb-3">' +
-                    '<img src="data:image/png;base64,' + comments.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
-                    '<p class="badge bg-primary text-wrap">' + comments.memName + '</p>' +
+                    '<img src="data:image/png;base64,' + comments.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
+                    '<p class="badge bg-primary text-wrap align-top">' + comments.memName + '</p>' +
                     // '</div>' +
                     '<p class="content" style="margin: 0">' + comments.comContent + '</p>' +
                     '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comments.comContent + '">' +
@@ -900,6 +916,43 @@
             }
 
         });
+    }
+
+
+    //顯示參與者
+    function findMemAndPic() {
+
+        let memAndPicData = {
+            actId: window.location.pathname.split('/')[3],
+            isActPart: 2 //參加狀態
+        }
+
+        $.ajax({
+            url: "/actreg/members",
+            type: "GET",
+            contentType: "application/json",
+            data: memAndPicData,
+            dataType: "json",
+            success: function (memIdAndPics) {
+
+                let userHTML = "";
+
+                memIdAndPics.forEach(function (memIdAndPic) {
+                    userHTML +=
+                        '<div class="col-md-2 mb-3">' +
+                        '<div class="shadow-sm p-3 bg-light rounded text-center">' +
+                        '<img src="data:image/png;base64,' + memIdAndPic.memPic + '" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
+                        '<p class="badge bg-primary text-wrap mt-2">' + memIdAndPic.memName + '</p>' +
+                        '</div>' +
+                        '</div>';
+                })
+
+                $("#add").html(userHTML)
+
+            },
+            error(xhr, status, error) {
+            }
+        })
     }
 
     //Sweetalart2

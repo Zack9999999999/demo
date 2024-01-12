@@ -1,6 +1,7 @@
 package com.example.commentreport.service.impl;
 
 import com.example.comment.model.CommentVO;
+import com.example.comment.model.CommentVOForComRep;
 import com.example.comment.repository.CommentRepository;
 import com.example.commentreport.dto.CommentReportQueryParams;
 import com.example.commentreport.dto.CommentReportRequest;
@@ -54,7 +55,7 @@ public class CommentReportService implements ICommentReportService {
     @Transactional
     public CommentReportVO createCommentReport(CommentReportRequest commentReportRequest) {
 
-        CommentVO comment = commentRepository.findById(commentReportRequest.getComId())
+        CommentVOForComRep comment = commentRepository.findById(commentReportRequest.getComId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         CommentReportVO commentReport = new CommentReportVO();
@@ -76,8 +77,18 @@ public class CommentReportService implements ICommentReportService {
 
         if (commentReport.isPresent()) {
             commentReport.get().setRepStatus(commentReportStatus.getRepStatus());
-            commentReport.get().getComment().setComStatus(commentReportStatus.getRepStatus());
 
+            switch (commentReportStatus.getRepStatus()) {
+                case 1:
+                    commentReport.get().getComment().setComStatus(Byte.valueOf("1"));
+                    break;
+                case 2:
+                    commentReport.get().getComment().setComStatus((byte) 2); //2=不會顯示留言
+                    break;
+                case 3:
+                    commentReport.get().getComment().setComStatus((byte) 1);
+                    break;
+            }
             return commentReportRepository.save(commentReport.get());
         } else {
             return null;

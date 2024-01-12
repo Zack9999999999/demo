@@ -45,13 +45,14 @@ public class RetailsController {
         return "actdetails";
     }
 
-    @GetMapping("/images/{actId}")
+    @GetMapping("/activity/images/{actId}")
     public ResponseEntity<byte[]> getActPic(@PathVariable Integer actId) {
 
         ActVO act = retailsService.getDetail(actId);
         byte[] actPic = act.getActPic();
 
         if (actPic == null) {
+            log.info(actPic.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(actPic);

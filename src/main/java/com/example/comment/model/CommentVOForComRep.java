@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentVO implements Serializable {
+public class CommentVOForComRep implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -37,11 +37,6 @@ public class CommentVO implements Serializable {
     private Date comTime;
     @Column(name = "com_status")
     private Byte comStatus;
-
-    //會員的
-    private String memName;
-    //會員的
-    private byte[] memPic;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     @JsonIgnore

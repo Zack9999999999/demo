@@ -104,11 +104,10 @@
         <thead>
         <tr>
             <th scope="col">檢舉編號</th>
-            <th scope="col">留言內容</th>
             <th scope="col">會員編號</th>
+            <th scope="col">留言內容</th>
             <th scope="col">檢舉標題</th>
             <th scope="col">檢舉原因</th>
-            <th scope="col">狀態</th>
             <th scope="col">時間
                 <select id="time">
                     <option value="ASC">舊到新</option>
@@ -116,6 +115,7 @@
                 </select>
             </th>
             <th scope="col">審核</th>
+            <th scope="col">狀態</th>
             <th scope="col">審核者</th>
         </tr>
         </thead>
@@ -244,11 +244,10 @@
 
                     commentReportHTML +=
                         '<tr><td>' + commetreport.repId + '</td>' +
-                        '<td>' + commetreport.comment.comContent + '</td>' +
                         '<td>' + commetreport.memId + '</td>' +
+                        '<td>' + commetreport.comment.comContent + '</td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + commetreport.repContent + '</td>' +
-                        '<td id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
                         '<td>' + commetreport.repTime + '</td>' +
                         '<td>' +
                         '<select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +
@@ -257,6 +256,7 @@
                         '<option value="3">未通過</option>' +
                         '</select>' +
                         '</td>' +
+                        '<td id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
                         '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td></tr>';
 
                 });

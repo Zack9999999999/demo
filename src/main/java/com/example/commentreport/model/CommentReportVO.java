@@ -1,6 +1,7 @@
 package com.example.commentreport.model;
 
 import com.example.comment.model.CommentVO;
+import com.example.comment.model.CommentVOForComRep;
 import com.example.commentreport.constant.CommentReportRepTitle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class CommentReportVO implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "com_id", referencedColumnName = "com_id")
-    private CommentVO comment;
+    private CommentVOForComRep comment;
 
     @Column(name = "mem_id") //有table後再改成ManyToOne
     private Integer memId;

@@ -5,6 +5,7 @@ import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.dto.CommentStatus;
 import com.example.comment.model.CommentVO;
+import com.example.comment.rowmapper.CommentJoinRowMapper;
 import com.example.comment.rowmapper.CommentRowMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -49,10 +50,12 @@ public class CommentDAO implements ICommentDAO {
     @Override
 //    @Cacheable(value = "commentsCache", key = "'comments'")
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
-        String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
-                "FROM activity_comment WHERE 1=1";
+//        String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
+//                "FROM activity_comment WHERE 1=1";
 
-        //會員id要改成顯示會員名稱 即顯示會員大頭貼
+        String sql = "SELECT c.com_id, c.act_id, c.mem_id, c.com_reply_id, c.com_content, c.com_time, c.com_status," +
+                " m.mem_name, m.mem_pic" +
+                " FROM activity_comment c JOIN membership m ON c.mem_id = m.mem_id WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -64,25 +67,25 @@ public class CommentDAO implements ICommentDAO {
 
         //排序
         sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();
-        log.info(commentQueryParams.getSort().toString());
 
         //簡易分頁(查看更多)
         sql = sql + " LIMIT :limit";
         map.put("limit", commentQueryParams.getLimit());
 
-        return namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
+        return namedParameterJdbcTemplate.query(sql, map, new CommentJoinRowMapper());
 
     }
 
     @Override
     public CommentVO getCommentById(Integer comId) {
-        String sql = "SELECT com_id, act_id, mem_id, com_reply_id, com_content, com_time, com_status " +
-                "FROM activity_comment WHERE com_id = :comId";
+        String sql = "SELECT c.com_id, c.act_id, c.mem_id, c.com_reply_id, c.com_content, c.com_time, c.com_status," +
+                " m.mem_name, m.mem_pic" +
+                " FROM activity_comment c JOIN membership m ON c.mem_id = m.mem_id WHERE com_id = :comId";
 
         Map<String, Object> map = new HashMap<>();
         map.put("comId", comId);
 
-        List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentRowMapper());
+        List<CommentVO> commentList = namedParameterJdbcTemplate.query(sql, map, new CommentJoinRowMapper());
 
         if (commentList.size() > 0) {
             return commentList.get(0);

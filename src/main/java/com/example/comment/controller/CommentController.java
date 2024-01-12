@@ -1,5 +1,6 @@
 package com.example.comment.controller;
 
+import com.example.comment.dto.CommentMemPic;
 import com.example.comment.dto.CommentQueryParams;
 import com.example.comment.dto.CommentRequest;
 import com.example.comment.dto.CommentStatus;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -48,6 +50,14 @@ public class CommentController {
         page.setComments(comments);
         page.setTotal(total);
         page.setLimit(limit);
+
+//        CommentMemPic commentMemPic = new CommentMemPic();
+//        List<byte[]> pic = new ArrayList<>();
+//
+//        for (CommentVO comment : comments) {
+//            pic.add(comment.getMemPic());
+//        }
+//        commentMemPic.setMemPic(pic);
 
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }

@@ -44,7 +44,6 @@ public class CommentReportController {
             );
         }
 
-
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
         commentReportQueryParams.setRepStatus(repStatus);
 

@@ -77,6 +77,22 @@
             box-shadow: none;
         }
 
+        /*編輯留言要用的 標籤切換*/
+        .none {
+            display: none;
+        }
+
+        .userinput {
+            border: none;
+            width: 100%;
+
+        }
+
+        /*關閉input外框*/
+        .userinput:focus {
+            outline: none;
+        }
+
     </style>
 </head>
 
@@ -370,6 +386,8 @@
     //當前顯示的留言數量 用來判斷查看更多可不可以按
     let currentDisplayed = 0;
 
+    let total;
+
     //!!!!!!!!!從RetailsController的model取得到的 測試取得會員ID用
     let MyMemId = $("#memberId").text();
 
@@ -471,22 +489,24 @@
             success: function (page) {
                 let commentsHTML = "";
                 let comments = page.comments;
-                let total = page.total;
+                total = page.total;
                 let limit = page.limit;
 
                 comments.forEach(function (comment) {
                     if (comment.comStatus == 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
                         commentsHTML +=
-                            '<div>' +
-                            '<div class="d-flex mb-3">' +
-                            '<img src="" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
-                            '<p>' + comment.memId + '</p>' +
-                            '</div>' +
-                            '<p style="margin: 0">' + comment.comContent + '</p><hr style="margin: 0">' +
+                            '<div class="usertext">' +
+                            // '<div class="d-flex mb-3">' +
+                            '<img src="data:image/png;base64,' + comment.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
+                            '<p class="badge bg-primary text-wrap">' + comment.memName + '</p>' +
+                            // '</div>' +
+                            '<p class="content" style="margin: 0">' + comment.comContent + '</p>' +
+                            '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comment.comContent + '">' +
+                            '<hr style="margin: 0">' +
                             '<div class="d-flex align-items-center">' +
                             '<small class="text-muted">' + comment.comTime + '</small>' +
                             '<div class="userfunction ms-auto" data-mem-id="' + comment.memId + '">' +
-                            '<a href="#" class="nosee update link-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">修改</a>' +
+                            '<a href="#" class="nosee update link-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">編輯</a>' +
                             '<a href="#" class="nosee delete link-warning" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">刪除</a>' +
                             '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
                             'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>' +
@@ -563,23 +583,29 @@
             success: function (comments) {
                 $("#comment").val("");
 
-                var commentsHTML = "";
+                let commentsHTML = "";
                 commentsHTML +=
-                    '<div>' +
-                    '<div class="d-flex mb-3">' +
-                    '<img src="" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' + comments.memId +
-                    '</div>' +
-                    '<p style="margin: 0">' + comments.comContent + '<p><hr style="margin: 0">' +
+                    '<div class="usertext">' +
+                    // '<div class="d-flex mb-3">' +
+                    '<img src="data:image/png;base64,' + comments.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 60px; height: auto;">' +
+                    '<p class="badge bg-primary text-wrap">' + comments.memName + '</p>' +
+                    // '</div>' +
+                    '<p class="content" style="margin: 0">' + comments.comContent + '</p>' +
+                    '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comments.comContent + '">' +
+                    '<hr style="margin: 0">' +
                     '<div class="d-flex align-items-center">' +
                     '<small class="text-muted">' + comments.comTime + '</small>' +
                     '<div class="userfunction ms-auto" data-mem-id="' + comments.memId + '">' +
-                    '<a href="#" class="nosee update link-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">修改</a>' +
+                    '<a href="#" class="nosee update link-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">編輯</a>' +
                     '<a href="#" class="nosee delete link-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
                     '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
                     'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
                     '</div>' +
                     '</div>' +
                     '</div>'
+
+                $("#commentcount").html("(" + ++total + ")");
+                console.log(total)
 
                 $("#comments").prepend(commentsHTML);
 
@@ -665,6 +691,40 @@
             }
         });
     });
+
+    //修改留言
+    $(document).on("click", ".update", function (e) {
+        e.preventDefault();
+
+        //當前的input
+        let input = $(this).closest(".usertext").find(".userinput")
+        //p跟input切換顯示
+        $(this).closest(".usertext").find(".content").toggleClass("none");
+        //自動focus到input
+        input.focus();
+
+
+        let comId = $(this).data("comId");
+        let updataData = {
+            actId: window.location.pathname.split('/')[3],
+            // memId:,
+            // comContent:
+        }
+
+        // $.ajax({
+        //     url: '/comments/' + comId,
+        //     type: 'PUT',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(updataData),
+        //     dataType: 'json',
+        //     success: function (updateComment) {
+        //         alert(ok)
+        //     },
+        //     error(xhr, status, error) {
+        //         alert(not)
+        //     }
+        // })
+    })
 
     //檢舉活動
     function actReport() {

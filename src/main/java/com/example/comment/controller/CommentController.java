@@ -100,7 +100,15 @@ public class CommentController {
 
     @PutMapping("/comments/{comId}")
     public ResponseEntity<CommentVO> updateComment(@PathVariable Integer comId,
-                                                   @RequestBody @Valid CommentRequest commentRequest) {
+                                                   @RequestBody @Valid CommentRequest commentRequest,
+                                                   HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 5;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        commentRequest.setMemId(memId);
+
         //檢查 comment 是否存在
         CommentVO comment = commentService.getCommentById(comId);
         if (comment == null) {

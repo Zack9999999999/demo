@@ -14,4 +14,6 @@ public interface ICommentService {
     Integer insertComment(CommentRequest commentRequest);
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId , CommentStatus commentStatus);
+
+    void insertCommentCache(CommentRequest commentRequest);
 }

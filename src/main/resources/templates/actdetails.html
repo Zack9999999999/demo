@@ -140,9 +140,11 @@
             <div class="col-md-8">
                 <section class="h-100 shadow-none p-3 mb-5 bg-light rounded">
                     <div class="w-auto h-100">
-                        <img th:src="@{/CHA104G3/activity/images/{actId}(actId=${act.actId})}" src=""
-                             class="w-100 h-50 img-fluid"
-                             alt="活動照片">
+                        <div>
+                            <img th:src="@{/CHA104G3/activity/images/{actId}(actId=${act.actId})}" src=""
+                                 class="w-100 h-50 img-fluid img-thumbnail"
+                                 alt="活動照片">
+                        </div>
                         <h2 class="fw-bolder">活動內容:</h2>
                         <span id="actDescr" th:text="${act.actDescr}">活動內容</span>
                     </div>
@@ -173,7 +175,9 @@
                                       d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                             </svg>
                             主辦人:
-                        <p id="memId" th:text="${act.memId}">張三</p></p>
+                            <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
+                        <p id="memId" class="badge bg-primary text-wrap" th:text="${act.membership.memName}">
+                            張三</p></p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-pin-map" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -238,7 +242,8 @@
 
         <div class="container mt-4 bg-light" id="people">
             <div>
-                <h5 class="fw-bolder">參與者:<span id="actCount" th:text="${act.actCount}">(1)</span></h5>
+                <h5 class="fw-bolder">(要再改 不應該抓人數)參與者:<span id="actCount"
+                                                                        th:text="${act.actCount}">(1)</span></h5>
             </div>
             <div id="add" class="row">
                 <div class="col-md-2 mb-3">
@@ -251,12 +256,6 @@
                     <div class="shadow-sm p-3 mb-5 bg-light rounded text-center">
                         <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
                         <p class="badge bg-primary text-wrap text-center">小貓</p>
-                    </div>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <div class="shadow-sm p-3 mb-5 bg-light rounded text-center">
-                        <img src="" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">
-                        <p class="badge bg-primary text-wrap text-center">小豬</p>
                     </div>
                 </div>
             </div>
@@ -342,7 +341,7 @@
                         <select class="form-control" id="act-report-title">
                             <option value="INAPPROPRIATE">不恰當的内容</option>
                             <option value="NOSAFETY">不安全的</option>
-                            <option value="MISLEADING">誤導信息,對活動真實性或內容產生誤解</option>
+                            <option value="MISLEADING">誤導信息</option>
                             <option value="HARASSMENT">騷擾或欺凌</option>
                             <option value="OTHER">其他</option>
                         </select>
@@ -512,19 +511,20 @@
                     if (comment.comStatus == 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
                         commentsHTML +=
                             '<div class="usertext">' +
-                            // '<div class="d-flex mb-3">' +
+                            '<div class="mb-3">' +
                             '<img src="data:image/png;base64,' + comment.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
                             '<p class="badge bg-primary text-wrap align-top">' + comment.memName + '</p>' +
-                            // '</div>' +
+                            '</div>' +
                             '<p class="content" style="margin: 0">' + comment.comContent + '</p>' +
                             '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comment.comContent + '">' +
                             '<hr style="margin: 0">' +
-                            '<div class="d-flex align-items-center">' +
+                            '<div class="d-flex align-items-center mb-3">' +
                             '<small class="text-muted">' + comment.comTime + '</small>' +
                             '<div class="userfunction ms-auto" data-mem-id="' + comment.memId + '">' +
-                            '<a href="#" class="nosee update link-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">編輯</a>' +
-                            '<a href="#" class="nosee delete link-warning" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">刪除</a>' +
-                            '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
+                            '<a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">確認</a>' +
+                            '<a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">編輯</a>' +
+                            '<a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">刪除</a>' +
+                            '<a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
                             'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>' +
                             '</div>' +
                             '</div>' +
@@ -602,19 +602,19 @@
                 let commentsHTML = "";
                 commentsHTML +=
                     '<div class="usertext">' +
-                    // '<div class="d-flex mb-3">' +
+                    '<div class="mb-3">' +
                     '<img src="data:image/png;base64,' + comments.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
                     '<p class="badge bg-primary text-wrap align-top">' + comments.memName + '</p>' +
-                    // '</div>' +
+                    '</div>' +
                     '<p class="content" style="margin: 0">' + comments.comContent + '</p>' +
                     '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comments.comContent + '">' +
                     '<hr style="margin: 0">' +
-                    '<div class="d-flex align-items-center">' +
+                    '<div class="d-flex align-items-center mb-3">' +
                     '<small class="text-muted">' + comments.comTime + '</small>' +
                     '<div class="userfunction ms-auto" data-mem-id="' + comments.memId + '">' +
-                    '<a href="#" class="nosee update link-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">編輯</a>' +
-                    '<a href="#" class="nosee delete link-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
-                    '<a href="#" class="report link-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
+                    '<a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">編輯</a>' +
+                    '<a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
+                    '<a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
                     'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
                     '</div>' +
                     '</div>' +
@@ -711,35 +711,62 @@
     //修改留言
     $(document).on("click", ".update", function (e) {
         e.preventDefault();
-
         //當前的input
         let input = $(this).closest(".usertext").find(".userinput")
+        //當前的p
+        let p = $(this).closest(".usertext").find(".content")
+        //當前的確認按鈕
+        let ok = $(this).closest(".usertext").find(".ok")
         //p跟input切換顯示
         $(this).closest(".usertext").find(".content").toggleClass("none");
         //自動focus到input
         input.focus();
+        //確認按鈕顯示切換
+        $(this).closest(".usertext").find(".ok").toggle();
 
+    })
+    //修改留言確認
+    $(document).on("click", ".ok", function (e) {
+        e.preventDefault();
+        //p跟input切換顯示
+        $(this).closest(".usertext").find(".content").toggleClass("none");
+        //當前的input
+        let input = $(this).closest(".usertext").find(".userinput")
+        //當前的p
+        let p = $(this).closest(".usertext").find(".content")
+        //當前的確認按鈕
+        let ok = $(this).closest(".usertext").find(".ok")
+
+        if(!input.val().trim()){
+            Toast.fire({
+                icon: 'info',
+                title: '請輸入內容！'
+            })
+            $(this).closest(".usertext").find(".content").toggleClass("none");
+            return;
+        }
+        //將input的val賦值給p
+        p.text(input.val());
 
         let comId = $(this).data("comId");
         let updataData = {
             actId: window.location.pathname.split('/')[3],
             // memId:,
-            // comContent:
+            comContent: input.val()
         }
-
-        // $.ajax({
-        //     url: '/comments/' + comId,
-        //     type: 'PUT',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(updataData),
-        //     dataType: 'json',
-        //     success: function (updateComment) {
-        //         alert(ok)
-        //     },
-        //     error(xhr, status, error) {
-        //         alert(not)
-        //     }
-        // })
+        $.ajax({
+            url: '/comments/' + comId,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(updataData),
+            dataType: 'json',
+            success: function (updateComment) {
+                ok.hide();
+            },
+            error(xhr, status, error) {
+                ok.hide();
+            }
+        })
     })
 
     //檢舉活動
@@ -885,6 +912,7 @@
         });
     }
 
+    //切換關注活動按鈕顏色
     function follow() {
         //關注
         if ($("#follow").hasClass("btn btn-outline-primary")) {
@@ -918,7 +946,6 @@
         });
     }
 
-
     //顯示參與者
     function findMemAndPic() {
 
@@ -937,12 +964,12 @@
 
                 let userHTML = "";
 
-                memIdAndPics.forEach(function (memIdAndPic) {
+                memIdAndPics.forEach(function (memNameAndPic) {
                     userHTML +=
                         '<div class="col-md-2 mb-3">' +
                         '<div class="shadow-sm p-3 bg-light rounded text-center">' +
-                        '<img src="data:image/png;base64,' + memIdAndPic.memPic + '" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
-                        '<p class="badge bg-primary text-wrap mt-2">' + memIdAndPic.memName + '</p>' +
+                        '<img src="data:image/png;base64,' + memNameAndPic.memPic + '" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
+                        '<p class="badge bg-primary text-wrap mt-2">' + memNameAndPic.memName + '</p>' +
                         '</div>' +
                         '</div>';
                 })
@@ -968,7 +995,5 @@
     })
 
 </script>
-
 </body>
-
 </html>

@@ -1,7 +1,8 @@
 package com.example.actreg.controller;
 
 import com.example.actreg.dto.ActRegRequest;
-import com.example.actreg.dto.MemIdAndPicDTO;
+import com.example.actreg.dto.ActRegStatus;
+import com.example.actreg.dto.MemNameAndPicDTO;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.service.IActRegService;
 import lombok.extern.slf4j.Slf4j;
@@ -63,17 +64,17 @@ public class ActRegController {
 
     @PutMapping("/actreg/{actRegId}")
     public ResponseEntity<ActRegVO> updateActReg(@PathVariable Integer actRegId,
-                                                 @RequestBody @Valid ActRegRequest actRegRequest) {
-        ActRegVO actReg = actRegService.updateActReg(actRegId, actRegRequest);
+                                                 @RequestBody @Valid ActRegStatus actRegStatus) {
+        ActRegVO actReg = actRegService.updateActReg(actRegId, actRegStatus);
 
         return ResponseEntity.status(HttpStatus.OK).body(actReg);
     }
 
     @GetMapping("/actreg/members")
-    public ResponseEntity<List<MemIdAndPicDTO>> findMemIdAndPic(@RequestParam Integer actId,
-                                                                @RequestParam Integer isActPart) {
+    public ResponseEntity<List<MemNameAndPicDTO>> findMemIdAndPic(@RequestParam Integer actId,
+                                                                  @RequestParam Integer isActPart) {
 
-        List<MemIdAndPicDTO> memIdAndPic = actRegService.findMemIdAndPic(actId, isActPart);
+        List<MemNameAndPicDTO> memIdAndPic = actRegService.findMemIdAndPic(actId, isActPart);
 
         return ResponseEntity.status(HttpStatus.OK).body(memIdAndPic);
     }

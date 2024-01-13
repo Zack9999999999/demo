@@ -21,7 +21,11 @@
         td {
             text-align: center;
             vertical-align: middle;
-            font-size: 14px;
+            font-size: 16px;
+
+            /*overflow: hidden;*/
+            /*text-overflow: ellipsis;*/
+            /*white-space: nowrap;*/
         }
 
         .showPic {
@@ -110,7 +114,7 @@
         <tr>
             <th scope="col">檢舉編號</th>
             <th scope="col">活動編號</th>
-            <th scope="col">會員編號</th>
+            <th scope="col">檢舉者</th>
             <th scope="col">檢舉標題</th>
             <th scope="col">檢舉原因</th>
             <th scope="col">檢舉圖片</th>
@@ -141,20 +145,23 @@
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link">上一頁</a>
-            </li>
-            <li class="page-item">
-                <!--                <a class="page-link" href="#">1</a>-->
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">下一頁</a>
-            </li>
-        </ul>
-    </nav>
-
+    <div class="fixed-bottom">
+        <div class="container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">上一頁</a>
+                    </li>
+                    <li class="page-item">
+                        <!--                <a class="page-link" href="#">1</a>-->
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">下一頁</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </main>
 
 <!--檢舉留言框-->
@@ -251,7 +258,7 @@
                 let titleMap = {
                     "INAPPROPRIATE": "不恰當的内容",
                     "NOSAFETY": "不安全的",
-                    "MISLEADING": "誤導信息,對活動真實性或內容產生誤解",
+                    "MISLEADING": "誤導信息",
                     "HARASSMENT": "騷擾或欺凌",
                     "OTHER": "其他"
                 };
@@ -291,13 +298,27 @@
                         '<option value="2">通過</option>' +
                         '<option value="3">未通過</option>' +
                         '</select></td>' +
-                        '<td  id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
+                        '<td class="color" id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
                         '<td>' + (actReport.empId ? actReport.empId : "無") + '</td></tr>';
 
                 });
 
                 $("#countReport").html(": 共" + total);
                 $("#actReport").html(actReportHTML);
+
+                $(".color").each(function () {
+                    switch ($(this).text()) {
+                        case "審核中":
+                            $(this).addClass("text-warning");
+                            break;
+                        case "通過":
+                            $(this).addClass("text-success");
+                            break;
+                        case "未通過":
+                            $(this).addClass("text-danger");
+                            break;
+                    }
+                })
 
             },
             error: function (xhr, status, error) {

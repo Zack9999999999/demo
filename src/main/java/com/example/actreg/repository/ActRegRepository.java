@@ -1,6 +1,5 @@
 package com.example.actreg.repository;
 
-import com.example.actreg.dto.MemIdAndPicDTO;
 import com.example.actreg.model.ActRegVO;
 import com.github.houbb.heaven.annotation.reflect.Param;
 import org.springframework.data.jpa.repository.JpaRepository;

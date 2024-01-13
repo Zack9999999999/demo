@@ -3,11 +3,11 @@ package com.example.actreg.service.impl;
 import com.example.act.model.ActVO;
 import com.example.act.repository.ActRepository;
 import com.example.actreg.dto.ActRegRequest;
-import com.example.actreg.dto.MemIdAndPicDTO;
+import com.example.actreg.dto.ActRegStatus;
+import com.example.actreg.dto.MemNameAndPicDTO;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ActRegService implements IActRegService {
@@ -59,7 +58,7 @@ public class ActRegService implements IActRegService {
         actReg.setRegTime(new Date());
         actReg.setAct(actRepository.findById(actRegRequest.getActId()).orElse(null));
 
-        //如果報名人數超過 則不能報名
+        //如果報名人數超過活動人數上限 則不能報名
         if ((actRepository.findById(actRegRequest.getActId()).orElse(null).getActUpper()) - actRegRequest.getRegTotal() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -68,49 +67,32 @@ public class ActRegService implements IActRegService {
 
     @Override
     @Transactional
-    public ActRegVO updateActReg(Integer actRegId, ActRegRequest actRegRequest) {
+    public ActRegVO updateActReg(Integer actRegId, ActRegStatus actRegStatus) {
 
-        ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
+        ActVO act = actRepository.findById(actRegStatus.getActId()).orElse(null);
 
         ActRegVO actReg = actRegRepository.findById(actRegId).orElse(null);
 
-        modelMapper.map(actRegRequest, actReg);
+        modelMapper.map(actRegStatus, actReg);
 
-//        if (actRegRequest.getRegStatus() != null) { //未通過的話要將活動的總人數扣掉報名人數
-//            actReg.setRegStatus(actRegRequest.getRegStatus());
-//            if (actRegRequest.getRegStatus() == 1) {
-//                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
-//                act.setActCount(act.getActCount() - actReg.getRegTotal());
-//
-//            } else if (actRegRequest.getRegStatus() == 3) {
-//
-//            }
-//        } else if (actRegRequest.getIsActPart() != null) { //取消參加要將活動的總人數扣掉報名人數
-//            actReg.setIsActPart(actRegRequest.getIsActPart());
-//            if (actRegRequest.getRegStatus() == 1) {
-//                ActVO act = actRepository.findById(actRegRequest.getActId()).orElse(null);
-//                act.setActCount(act.getActCount() - actReg.getRegTotal());
-//
-//            } else if (actRegRequest.getRegStatus() == 2) {
-//
-//            }
-//        } else
-//            actReg.setActRating(actRegRequest.getActRating());
+        //3 = 報名成功才將活動人數加上報名人數
+        if (actReg.getRegStatus() == 3) {
+            act.setActCount(act.getActCount() + actReg.getRegTotal());
+        }
 
         return actRegRepository.save(actReg);
 
-        //1.活動主審核狀態regStatus 2.參加者修改參加狀態isActPart 3.參加者活動評分actRating 4.參加者報名人數也要可以改regTotal
     }
 
     @Override
-    public List<MemIdAndPicDTO> findMemIdAndPic(Integer actId, Integer isActPart) {
+    public List<MemNameAndPicDTO> findMemIdAndPic(Integer actId, Integer isActPart) {
 
         List<Object[]> membersAndPicByPart = actRegRepository.findMembersAndPicByPart(actId, isActPart);
 
-        List<MemIdAndPicDTO> dtos = new ArrayList<>();
+        List<MemNameAndPicDTO> dtos = new ArrayList<>();
 
         for (Object[] obj : membersAndPicByPart) {
-            MemIdAndPicDTO memIdAndPicDTO = new MemIdAndPicDTO();
+            MemNameAndPicDTO memIdAndPicDTO = new MemNameAndPicDTO();
             memIdAndPicDTO.setMemName((String) obj[0]);
             memIdAndPicDTO.setMemPic((byte[]) obj[1]);
             dtos.add(memIdAndPicDTO);

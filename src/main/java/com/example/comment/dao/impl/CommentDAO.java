@@ -6,11 +6,9 @@ import com.example.comment.dto.CommentRequest;
 import com.example.comment.dto.CommentStatus;
 import com.example.comment.model.CommentVO;
 import com.example.comment.rowmapper.CommentJoinRowMapper;
-import com.example.comment.rowmapper.CommentRowMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,8 +26,7 @@ public class CommentDAO implements ICommentDAO {
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    @Autowired
-    private RedisTemplate redisTemplate;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -108,6 +105,7 @@ public class CommentDAO implements ICommentDAO {
         map.put("comContent", commentRequest.getComContent());
         map.put("comStatus", commentRequest.getComStatus());
         map.put("comTime", new Date());
+
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);

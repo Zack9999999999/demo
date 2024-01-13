@@ -1,6 +1,9 @@
 package com.example.act.model;
+
 import com.example.actreg.model.ActRegVO;
 import com.example.commentreport.model.CommentReportVO;
+import com.example.mem.model.MembershipVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -13,6 +16,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -26,40 +30,49 @@ public class ActVO implements Serializable {
     @Column(name = "act_id")
     private Integer actId;
 
-    @Column(name = "mem_id",nullable = false)
-    private Integer memId;
+    //    @Column(name = "mem_id",nullable = false)
+//    private Integer memId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mem_id", referencedColumnName = "mem_id")
+    private MembershipVO membership;
 
-    @Column(name = "act_name",nullable = false)
+    @Column(name = "act_name", nullable = false)
     private String actName;
 
-    @Column(name = "act_start_time",nullable = false)
+    @Column(name = "act_start_time", nullable = false)
     private Date actStartTime;
 
-    @Column(name = "act_end_time",nullable = false)
+    @Column(name = "act_end_time", nullable = false)
     private Date actEndTime;
 
-    @Column(name = "act_loc",nullable = false)
+    @Column(name = "act_loc", nullable = false)
     private String actLoc;
 
-    @Column(name = "act_descr",nullable = false)
+    @Column(name = "act_descr", nullable = false)
     private String actDescr;
 
-    @Column(name = "act_upper",nullable = false)
+    @Column(name = "act_upper", nullable = false)
     private Integer actUpper;
 
     @Column(name = "act_count")
     private Integer actCount;
 
-    @Column(name = "act_status",nullable = false)
+    @Column(name = "act_status", nullable = false)
     private Byte actStatus;
 
-    @Column(name = "act_cr_time",nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "act_cr_time", nullable = false)
     private LocalDateTime actCrTime;
 
-    @Column(name = "reg_start_time",nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "reg_start_time", nullable = false)
     private LocalDateTime regStartTime;
 
-    @Column(name = "reg_end_time",nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "reg_end_time", nullable = false)
     private LocalDateTime regEndTime;
 
     @Column(name = "act_pic")
@@ -83,6 +96,5 @@ public class ActVO implements Serializable {
     @OneToMany(mappedBy = "act", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ActRegVO> actReg;
-
 
 }

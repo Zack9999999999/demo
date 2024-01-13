@@ -1,5 +1,7 @@
 package com.example.mem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "membership")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class MembershipVO implements java.io.Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

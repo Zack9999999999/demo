@@ -14,7 +14,7 @@ public class ActRegRequest {
     @NotNull
     private Integer regTotal;
 
-    private Byte regStatus = 2;
+    private Byte regStatus = 2; //2為審核 3為成功報名
 
     private Byte isActPart = 2;
 

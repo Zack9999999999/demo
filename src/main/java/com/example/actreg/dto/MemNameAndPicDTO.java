@@ -1,6 +1,6 @@
 package com.example.actreg.dto;
 
-public class MemIdAndPicDTO {
+public class MemNameAndPicDTO {
     private String memName;
     private byte[] memPic;
 

@@ -1,5 +1,6 @@
 package com.example.comment.config;
 
+import com.example.comment.model.CommentVO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -13,14 +14,33 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<String, CommentVO> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, CommentVO> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         // 设置key的序列化方式
         template.setKeySerializer(new StringRedisSerializer());
 
         // 设置value的序列化方式
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        // 设置hash key和value的序列化方式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        return template;
+    }
+
+    @Bean(name = "redisTemplateForObject")
+    public RedisTemplate<String, Object> redisTemplateForObject(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        // 设置key的序列化方式
+        template.setKeySerializer(new StringRedisSerializer());
+
+        // 设置value的序列化方式为 Jackson2JsonRedisSerializer
+        // 这里使用 Jackson2JsonRedisSerializer 而不是 GenericJackson2JsonRedisSerializer
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
         // 设置hash key和value的序列化方式

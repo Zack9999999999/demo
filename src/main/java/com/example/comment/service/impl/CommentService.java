@@ -23,7 +23,7 @@ public class CommentService implements ICommentService {
     private ICommentDAO commentDAO;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, CommentVO> redisTemplate;
 
     @Override
     public Integer countComments(CommentQueryParams commentQueryParams) {
@@ -34,16 +34,8 @@ public class CommentService implements ICommentService {
     @Override
     @Transactional
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
-        if (commentQueryParams == null) {
 
-        }
-        StringBuilder redisKey = new StringBuilder()
-                .append("comment")
-                .append(":")
-                .append("actId")
-                .append(":")
-                .append(commentQueryParams.getActId()
-                        .toString());
+        String redisKey = buildRedisKey(commentQueryParams.getActId());
         //redis查詢
         List<CommentVO> commentsCache = getCommentsCache(commentQueryParams);
 
@@ -53,11 +45,10 @@ public class CommentService implements ICommentService {
             //反轉redis 變成新至舊
             Collections.reverse(comments);
             //查完同時存入Redis
-            redisTemplate.opsForList().rightPushAll(redisKey.toString(), comments);
+            redisTemplate.opsForList().rightPushAll(redisKey, comments);
 
             return getCommentsCache(commentQueryParams);
         }
-
         //redis改變排序
         if (commentQueryParams.getSort().equals("DESC")) {
             Collections.reverse(commentsCache);
@@ -88,49 +79,54 @@ public class CommentService implements ICommentService {
     @Transactional
     public void updateComment(Integer comId, CommentRequest commentRequest) {
 
+        Integer actId = getCommentById(comId).getActId();
+
         commentDAO.updateComment(comId, commentRequest);
 
+//        String redisKey = buildRedisKey(actId);
+
+        redisTemplate.delete(buildRedisKey(actId));
 
     }
 
     @Override
+    @Transactional
     public void deleteComment(Integer comId, CommentStatus commentStatus) {
+
+        Integer actId = getCommentById(comId).getActId();
 
         commentDAO.deleteComment(comId, commentStatus);
 
-        //為了可以call getComments而new
-        CommentQueryParams commentQueryParams = new CommentQueryParams();
+//        String redisKey = buildRedisKey(actId);
 
-        commentDAO.getComments(commentQueryParams);
+        redisTemplate.delete(buildRedisKey(actId));
     }
 
     //存進Redis
     public void insertCommentCache(CommentVO commentById) {
+        String redisKey = buildRedisKey(commentById.getActId());
 
-        StringBuilder redisKey = new StringBuilder()
-                .append("comment")
-                .append(":")
-                .append("actId")
-                .append(":")
-                .append(commentById.getActId()
-                        .toString());
-
-        redisTemplate.opsForList().leftPush(redisKey.toString(), commentById);
+        redisTemplate.opsForList().leftPush(redisKey, commentById);
     }
 
     //查詢Redis
     public List<CommentVO> getCommentsCache(CommentQueryParams commentQueryParams) {
-        StringBuilder redisKey = new StringBuilder()
+
+        String redisKey = buildRedisKey(commentQueryParams.getActId());
+
+        return redisTemplate.opsForList().range(redisKey, 0, commentQueryParams.getLimit() - 1);
+    }
+
+    //建構RedisKey
+    private String buildRedisKey(Integer actId) {
+        return new StringBuilder()
                 .append("comment")
                 .append(":")
                 .append("actId")
                 .append(":")
-                .append(commentQueryParams.getActId()
-                        .toString());
-
-        return (List<CommentVO>) redisTemplate
-                .opsForList()
-                .range(redisKey.toString(), 0, commentQueryParams.getLimit() - 1);
+                .append(actId.toString())
+                .toString();
     }
+
 
 }

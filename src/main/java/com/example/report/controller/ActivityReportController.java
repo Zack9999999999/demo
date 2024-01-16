@@ -86,7 +86,7 @@ public class ActivityReportController {
         }
 
         //模擬從session取出會員id
-        Integer testMemId = 3;
+        Integer testMemId = 1;
         session.setAttribute("memId", testMemId);
         Integer memId = (Integer) session.getAttribute("memId");
         activityReportRequest.setMemId(memId);

@@ -33,24 +33,35 @@ public class CommentService implements ICommentService {
     @Override
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
 
-//        String redisKey = commentQueryParams.getActId().toString();
+        StringBuilder redisKey = new StringBuilder()
+                .append("comment")
+                .append(":")
+                .append("actId")
+                .append(":")
+                .append(commentQueryParams.getActId()
+                        .toString());
 
-//        List<CommentVO> comment = (List<CommentVO>) redisTemplate.opsForValue().get(redisKey);
+        List<CommentVO> comment = (List<CommentVO>) redisTemplate
+                .opsForList()
+                .range(redisKey.toString(), 0, -1);
+
+//1.        commentQueryParams.setLimit();// 幾筆
+//2.        if(comment.equals(comments))
 
         //Redis沒有 就去DB查
-//        if (comment == null || comment.isEmpty()) {
-//            List<CommentVO> comments = commentDAO.getComments(commentQueryParams);
-//
-//            //查完同時存入Redis
-//            redisTemplate.opsForValue().set(redisKey, comments);
-//
-//            return comments;
-//        }
+        if (comment == null || comment.isEmpty()) {
+            List<CommentVO> comments = commentDAO.getComments(commentQueryParams);
+
+            //查完同時存入Redis
+            redisTemplate.opsForList().rightPushAll(redisKey.toString(), comments);
+
+            return comments;
+        }
 
         //有的話就直接return Redis
-//        return comment;
+        return comment;
 
-        return commentDAO.getComments(commentQueryParams);
+//        return commentDAO.getComments(commentQueryParams);
     }
 
     @Override
@@ -64,8 +75,9 @@ public class CommentService implements ICommentService {
 
         Integer commentId = commentDAO.insertComment(commentRequest);
 
+        CommentVO commentById = commentDAO.getCommentById(commentId);
         //存Redis
-//        insertCommentCache(commentRequest);
+        insertCommentCache(commentById);
 
         return commentId;
     }
@@ -83,12 +95,17 @@ public class CommentService implements ICommentService {
 
     //存進Redis
     @Override
-    public void insertCommentCache(CommentRequest commentRequest) {
+    public void insertCommentCache(CommentVO commentById) {
 
-        String redisKey = commentRequest.getActId().toString();
+        StringBuilder redisKey = new StringBuilder()
+                .append("comment")
+                .append(":")
+                .append("actId")
+                .append(":")
+                .append(commentById.getActId()
+                        .toString());
 
-        redisTemplate.opsForValue().set(redisKey, commentRequest);
+        redisTemplate.opsForList().rightPush(redisKey.toString(), commentById);
     }
 
-    //新增跟刪除要更新redis
 }

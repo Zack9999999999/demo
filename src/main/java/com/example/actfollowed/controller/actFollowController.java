@@ -24,7 +24,7 @@ public class actFollowController {
         //第1種方式.actId從原先詳情那邊的controller的session存到model 存給前端了
 
         //第2種方式.模擬從session取會員id
-        Integer testMemId = 2;
+        Integer testMemId = 1;
         session.setAttribute("memId", testMemId);
 
         Integer memId = (Integer) session.getAttribute("memId");
@@ -39,7 +39,7 @@ public class actFollowController {
                                                          HttpSession session) {
 
         //模擬從session取會員id
-        Integer testMemId = 2;
+        Integer testMemId = 1;
         session.setAttribute("memId", testMemId);
 
         Integer memId = (Integer) session.getAttribute("memId");
@@ -55,7 +55,7 @@ public class actFollowController {
     public ResponseEntity<ActFollowedVO> updateActFollow(@RequestBody ActFollowRequest actFollowRequest,
                                                          HttpSession session) {
         //模擬從session取會員id
-        Integer testMemId = 2;
+        Integer testMemId = 1;
         session.setAttribute("memId", testMemId);
 
         Integer memId = (Integer) session.getAttribute("memId");

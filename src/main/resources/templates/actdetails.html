@@ -146,7 +146,7 @@
                                  alt="活動照片">
                         </div>
                         <h2 class="fw-bolder">活動內容:</h2>
-                        <span id="actDescr" th:text="${act.actDescr}">活動內容</span>
+                        <span id="actDescr" class="fw-normal" th:text="${act.actDescr}">活動內容</span>
                     </div>
                 </section>
             </div>
@@ -160,9 +160,11 @@
                         <span class="fst-italic">關注此活動的人數:<span id="actFollowCount"
                                                                         th:text="${act.actFollowCount}">1</span></span>
                         <div style="margin: 10px">
-                            <p class="fst-italic" style="margin: 0;">人數上限:<span th:text="${act.actUpper}">1</span>
+                            <p class="fst-italic" style="margin: 0;">人數上限:<span id="actUpper"
+                                                                                    th:text="${act.actUpper}">1</span>
                             </p>
-                            <p class="fst-italic">目前報名人數:<span th:text="${act.actCount}">1</span></p>
+                            <p class="fst-italic">目前參與人數:<span id="actCount" th:text="${act.actCount}">1</span>
+                            </p>
                         </div>
                     </div>
                     <div class="shadow-none p-3 mb-5 bg-light rounded">
@@ -242,8 +244,7 @@
 
         <div class="container mt-4 bg-light" id="people">
             <div>
-                <h5 class="fw-bolder">(要再改 不應該抓人數)參與者:<span id="actCount"
-                                                                        th:text="${act.actCount}">(1)</span></h5>
+                <h5 class="fw-bolder">參與者:<span id="addPeople">(1)</span></h5>
             </div>
             <div id="add" class="row">
                 <div class="col-md-2 mb-3">
@@ -266,7 +267,9 @@
             <div class="text-bark">
                 <div class="d-flex justify-content-between shadow p-4 bg-body rounded">
                     <div>
-                        <button type="button" class="btn btn-danger btn-lg mx-3" onclick="signup()">報名活動</button>
+                        <button type="button" id="addAct" class="btn btn-outline-danger btn-lg mx-3" onclick="signup()">
+                            報名活動
+                        </button>
                         <button type="button" id="follow" class="btn btn-outline-primary btn-lg mx-3"
                                 onclick="follow()">關注
                         </button>
@@ -409,6 +412,8 @@
         allComments(countLimit, userSort);
         //判斷有沒有關注過
         checkActFollow();
+        //判斷有沒有報名錯
+        checkActReg();
         //搜出參與此活動者
         findMemAndPic();
     });
@@ -612,6 +617,7 @@
                     '<div class="d-flex align-items-center mb-3">' +
                     '<small class="text-muted">' + comments.comTime + '</small>' +
                     '<div class="userfunction ms-auto" data-mem-id="' + comments.memId + '">' +
+                    '<a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="' + comments.comId + '">確認</a>' +
                     '<a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">編輯</a>' +
                     '<a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
                     '<a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
@@ -737,7 +743,7 @@
         //當前的確認按鈕
         let ok = $(this).closest(".usertext").find(".ok")
 
-        if(!input.val().trim()){
+        if (!input.val().trim()) {
             Toast.fire({
                 icon: 'info',
                 title: '請輸入內容！'
@@ -819,47 +825,204 @@
         });
     }
 
+    let actCount = $("#actCount").text(); //參加人數
+    let actUpper = $("#actUpper").text(); //人數上限
+    let actTotal = (actUpper - actCount); //還可以參加的人數
     //報名活動按鈕
     function signup() {
-        Swal.fire({
-            title: '人數',
-            input: 'text',
-            inputPlaceholder: '報名人數',
-            inputValidator: (value) => {
-                if (!value) {
-                    return '請輸入人數'
-                }
-                if (isNaN(value)) {
-                    return '請輸入數字';
-                }
-            },
-            showCancelButton: true,
-            confirmButtonText: '送出',
-            cancelButtonText: '取消',
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
+        let addBtn = $("#addAct");
+        let actRegStatus = addBtn.data("actRegStatus");
 
-                // let urlParams = new URLSearchParams(window.location.search);
-                // let actId = urlParams.get('actId');
-
-                let numberOfPeople = {
-                    actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
-                    regTotal: result.value
-                }
-                $.ajax({
-                    url: '/actreg', //路徑有變動的話要改
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(numberOfPeople),
-                    success: function (actReg) {
-                        Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
+        switch (actRegStatus) {
+            case 0:
+                //第一次報名 走新增api
+                Swal.fire({
+                    title: '人數',
+                    text: '還可以報名的人數: ' + actTotal,
+                    input: 'text',
+                    inputPlaceholder: '報名人數',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return '請輸入人數'
+                        }
+                        if (isNaN(value)) {
+                            return '請輸入數字';
+                        }
                     },
-                    error: function (xhr, status, error) {
-                        Swal.fire("報名人數超過上限，請重新確認");
+                    showCancelButton: true,
+                    confirmButtonText: '送出',
+                    cancelButtonText: '取消',
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+
+                        let numberOfPeople = {
+                            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
+                            regTotal: result.value
+                        }
+                        $.ajax({
+                            url: '/actreg', //路徑有變動的話要改
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(numberOfPeople),
+                            success: function (actReg) {
+                                Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
+
+                                //報名完直接在判斷有沒有報名過 用來切換按鈕
+                                checkActReg();
+                            },
+                            error: function (xhr, status, error) {
+                                if (xhr.status === 400) {
+                                    Swal.fire("報名過了");
+                                } else if (xhr.status === 405) {
+                                    Swal.fire("報名人數超過上限，請重新確認");
+                                }
+                            }
+                        });
                     }
                 });
+                break;
+            //防止用戶利用F12搞事 報名審核失敗 不可再報名
+            case 1:
+                return;
+            case 2:
+                //取消報名 走刪除(update) api
+                Swal.fire({
+                    title: "要取消報名嗎?",
+                    width: "300px",
+                    showCancelButton: true,
+                    confirmButtonText: "確定",
+                    cancelButtonText: "取消"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        unsignupData = {
+                            actId: window.location.pathname.split('/')[3],
+                            regStatus: 4
+                        }
+                        $.ajax({
+                            url: "/actreg",
+                            type: "PUT",
+                            data: JSON.stringify(unsignupData),
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (actReg) {
+                                checkActReg();
+                            },
+                            error(xhr, status, error) {
+                                console.error(status, error);
+                            }
+                        })
+                    }
+                });
+                break;
+            //防止用戶用F12搞事 報名成功 不可再報名
+            case 3:
+                return;
+            //曾經報名過但是取消了 現在再次申請報名 走update api
+            case 4:
+                Swal.fire({
+                    title: '人數',
+                    text: '還可以報名的人數: ' + actTotal,
+                    input: 'text',
+                    inputPlaceholder: '報名人數',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return '請輸入人數'
+                        }
+                        if (isNaN(value)) {
+                            return '請輸入數字';
+                        }
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: '送出',
+                    cancelButtonText: '取消',
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+
+                        let numberOfPeople = {
+                            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
+                            regTotal: result.value,
+                            regStatus: 2
+                        }
+                        $.ajax({
+                            url: '/actreg', //路徑有變動的話要改
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify(numberOfPeople),
+                            success: function (actReg) {
+                                Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
+
+                                //報名完直接在判斷有沒有報名過 用來切換按鈕
+                                checkActReg();
+                            },
+                            error: function (xhr, status, error) {
+                                if (xhr.status === 400) {
+                                    Swal.fire("報名過了");
+                                } else if (xhr.status === 405) {
+                                    Swal.fire("報名人數超過上限，請重新確認");
+                                }
+                            }
+                        });
+                    }
+                });
+        }
+    }
+
+    //判斷有沒有報名過此活動
+    function checkActReg() {
+        let actId = window.location.pathname.split('/')[3];
+
+        $.ajax({
+            url: "/actreg/" + actId,
+            type: "GET",
+            // data: "",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (actReg) {
+                console.log("報名過")
+
+                let addBtn = $("#addAct");
+                let regStatus = actReg.regStatus;
+
+                switch (regStatus) {
+                    case 1:   //1 = 報名未通過
+                        addBtn.data("actRegStatus", actReg.regStatus);
+                        addBtn.addClass("disabled");
+                        addBtn.text("不可報名");
+                        break;
+
+                    case 2:   //2 = 報名了審核中
+                        addBtn.data("actRegStatus", actReg.regStatus);
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
+                        addBtn.text("取消報名");
+                        break;
+
+                    case 3:   //3 = 報名成功
+                        addBtn.data("actRegStatus", actReg.regStatus);
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
+                        addBtn.addClass("disabled");
+                        addBtn.text("已參加活動");
+                        break;
+
+                    case 4:   //4 = 報名過 自己取消報名
+                        addBtn.data("actRegStatus", actReg.regStatus);
+                        addBtn.removeClass("btn-danger");
+                        addBtn.addClass("btn-outline-danger");
+                        addBtn.text("報名活動");
+                        break;
+                }
+
+            },
+            error(xhr, sttus, error) {
+                console.log("沒報名過")
+                let addBtn = $("#addAct");
+                addBtn.data("actRegStatus", 0); //用來點擊報名活動判斷沒報名過用
+                addBtn.removeClass("btn-danger");
+                addBtn.addClass("btn-outline-danger");
+                addBtn.text("報名活動");
             }
-        });
+        })
     }
 
     //關注活動
@@ -929,7 +1092,7 @@
         }
     }
 
-    //查詢單留言(用來判斷是不是自己的留言,是的話才顯示修改和刪除功能)
+    //查詢留言(用來判斷是不是自己的留言,是的話才顯示修改和刪除功能)
     function checkComment(comId, nosee) {
         $.ajax({
             url: '/comments/' + comId,
@@ -961,7 +1124,7 @@
             data: memAndPicData,
             dataType: "json",
             success: function (memIdAndPics) {
-
+                let count = 0;
                 let userHTML = "";
 
                 memIdAndPics.forEach(function (memNameAndPic) {
@@ -972,10 +1135,13 @@
                         '<p class="badge bg-primary text-wrap mt-2">' + memNameAndPic.memName + '</p>' +
                         '</div>' +
                         '</div>';
+
+                    count++;
                 })
 
-                $("#add").html(userHTML)
+                $("#add").html(userHTML);
 
+                $("#addPeople").text(count);
             },
             error(xhr, status, error) {
             }
@@ -993,7 +1159,6 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
-
 </script>
 </body>
 </html>

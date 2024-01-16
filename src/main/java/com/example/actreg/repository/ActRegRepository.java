@@ -12,8 +12,10 @@ import java.util.Optional;
 @Repository
 public interface ActRegRepository extends JpaRepository<ActRegVO, Integer> {
 
-    @Query("SELECT a FROM ActRegVO a JOIN FETCH a.act WHERE a.actRegId = :actRegId")
-    Optional<ActRegVO> findByActRegIdAndFetchActEagerly(@Param("actRegId") Integer actRegId);
+    ActRegVO findByAct_ActIdAndMemId(Integer actId, Integer memId);
+
+//    @Query("SELECT a FROM ActRegVO a JOIN FETCH a.act WHERE a.actRegId = :actRegId")
+//    Optional<ActRegVO> findByActRegIdAndFetchActEagerly(@Param("actRegId") Integer actRegId);
 
     @Query(value = "SELECT m.mem_name, m.mem_pic FROM activity_registration r" +
             " JOIN membership m ON r.mem_id = m.mem_id" +

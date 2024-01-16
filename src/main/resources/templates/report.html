@@ -201,7 +201,7 @@
         loadReports();
     });
 
-    let repStatus = 0; // 預設值
+    let repStatus = 1; // 預設值
     let repTime = "ASC"; // 預設值
     let pageNumber = 1; // 預設值
 
@@ -365,6 +365,9 @@
             repStatus: $(this).val()
         };
 
+        if (newStatus.repStatus === "1") {
+            return;
+        }
         $.ajax({
             url: '/activityreport/' + repId,
             type: 'PUT',
@@ -373,7 +376,27 @@
             dataType: 'json',
             success: function (updateActivityReport) {
                 let statusChinese = statusMap[updateActivityReport.repStatus]; // 从statusMap获取新状态的中文描述
-                $("#status-" + repId).text(statusChinese);
+
+                let status = $("#status-" + repId);
+                status.text(statusChinese);
+
+                switch (status.text()) {
+                    case "審核中":
+                        status.removeClass("text-success");
+                        status.removeClass("text-danger");
+                        status.addClass("text-warning");
+                        break;
+                    case "通過":
+                        status.removeClass("text-warning");
+                        status.removeClass("text-danger");
+                        status.addClass("text-success");
+                        break;
+                    case "未通過":
+                        status.removeClass("text-success");
+                        status.removeClass("text-danger");
+                        status.addClass("text-danger");
+                        break;
+                }
                 Swal.fire("更新成功")
             },
             error: function (xhr, status, error) {

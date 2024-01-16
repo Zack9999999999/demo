@@ -52,7 +52,6 @@ public class RetailsController {
         byte[] actPic = act.getActPic();
 
         if (actPic == null) {
-            log.info(actPic.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(actPic);

@@ -30,9 +30,18 @@ public class ActRegController {
         return ResponseEntity.status(HttpStatus.OK).body(actRegVOList);
     }
 
-    @GetMapping("/actreg/{actRegId}")
-    public ResponseEntity<ActRegVO> getActReg(@PathVariable Integer actRegId) {
-        ActRegVO actReg = actRegService.getActReg(actRegId);
+    //此方法用來判斷此會員有沒有報名過這個活動
+    @GetMapping("/actreg/{actId}")
+    public ResponseEntity<ActRegVO> getActReg(@PathVariable Integer actId,
+//                                              @RequestParam Integer memId,
+                                              HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        ActRegVO actReg = actRegService.getActReg(actId, memId);
         if (actReg != null) {
             return ResponseEntity.status(HttpStatus.OK).body(actReg);
         } else {
@@ -62,20 +71,27 @@ public class ActRegController {
         }
     }
 
-    @PutMapping("/actreg/{actRegId}")
-    public ResponseEntity<ActRegVO> updateActReg(@PathVariable Integer actRegId,
-                                                 @RequestBody @Valid ActRegStatus actRegStatus) {
-        ActRegVO actReg = actRegService.updateActReg(actRegId, actRegStatus);
+    @PutMapping("/actreg")
+    public ResponseEntity<ActRegVO> updateActReg(@RequestBody @Valid ActRegStatus actRegStatus,
+                                                 HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+        actRegStatus.setMemId(memId);
+
+        ActRegVO actReg = actRegService.updateActReg(actRegStatus);
 
         return ResponseEntity.status(HttpStatus.OK).body(actReg);
     }
 
     @GetMapping("/actreg/members")
-    public ResponseEntity<List<MemNameAndPicDTO>> findMemIdAndPic(@RequestParam Integer actId,
-                                                                  @RequestParam Integer isActPart) {
+    public ResponseEntity<List<MemNameAndPicDTO>> findMemNameAndPic(@RequestParam Integer actId,
+                                                                    @RequestParam Integer isActPart) {
 
-        List<MemNameAndPicDTO> memIdAndPic = actRegService.findMemIdAndPic(actId, isActPart);
+        List<MemNameAndPicDTO> memNameAndPic = actRegService.findMemNameAndPic(actId, isActPart);
 
-        return ResponseEntity.status(HttpStatus.OK).body(memIdAndPic);
+        return ResponseEntity.status(HttpStatus.OK).body(memNameAndPic);
     }
 }

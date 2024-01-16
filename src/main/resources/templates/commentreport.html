@@ -182,7 +182,7 @@
         loadCommentReports();
     });
 
-    let repStatus = 0; // 預設值
+    let repStatus = 1; // 預設值
     let repTime = "ASC"; // 預設值
     let pageNumber = 1; // 預設值
 
@@ -305,11 +305,13 @@
         };
 
         let repId = $(this).data("repId");
-
         let newStatus = {
             repStatus: $(this).val()
         };
 
+        if (newStatus.repStatus === "1") {
+            return;
+        }
         $.ajax({
             url: '/commentreport/' + repId,
             type: 'PUT',
@@ -317,12 +319,31 @@
             data: JSON.stringify(newStatus),
             dataType: 'json',
             success: function (updateCommentReport) {
-                let statusChinese = statusMap[updateCommentReport.repStatus]; // 從statusMap取新狀態的中文
-                $("#status-" + repId).text(statusChinese);
 
+                let statusChinese = statusMap[updateCommentReport.repStatus]; // 從statusMap取新狀態的中文
+                let status = $("#status-" + repId);
+
+                status.text(statusChinese);
+
+                switch (status.text()) {
+                    case "審核中":
+                        status.removeClass("text-success");
+                        status.removeClass("text-danger");
+                        status.addClass("text-warning");
+                        break;
+                    case "通過":
+                        status.removeClass("text-warning");
+                        status.removeClass("text-danger");
+                        status.addClass("text-success");
+                        break;
+                    case "未通過":
+                        status.removeClass("text-success");
+                        status.removeClass("text-danger");
+                        status.addClass("text-danger");
+                        break;
+                }
                 Swal.fire("更新成功");
 
-                // loadCommentReports(pageNumber, repTime, repStatus);
             },
             error: function (xhr, status, error) {
                 Swal.fire("更新失敗")

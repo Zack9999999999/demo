@@ -11,11 +11,11 @@ public interface IActRegService {
 
     List<ActRegVO> getActRegs();
 
-    ActRegVO getActReg(Integer actRegId);
+    ActRegVO getActReg(Integer actId, Integer memId);
 
     ActRegVO createActReg(ActRegRequest actRegRequest);
 
-    ActRegVO updateActReg(Integer actRegId, ActRegStatus actRegStatus);
+    ActRegVO updateActReg(ActRegStatus actRegStatus);
 
-    List<MemNameAndPicDTO> findMemIdAndPic(Integer actId, Integer isActPart);
+    List<MemNameAndPicDTO> findMemNameAndPic(Integer actId, Integer isActPart);
 }

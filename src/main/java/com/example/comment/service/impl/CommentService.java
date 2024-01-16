@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -31,8 +32,11 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional
     public List<CommentVO> getComments(CommentQueryParams commentQueryParams) {
+        if (commentQueryParams == null) {
 
+        }
         StringBuilder redisKey = new StringBuilder()
                 .append("comment")
                 .append(":")
@@ -40,28 +44,26 @@ public class CommentService implements ICommentService {
                 .append(":")
                 .append(commentQueryParams.getActId()
                         .toString());
-
-        List<CommentVO> comment = (List<CommentVO>) redisTemplate
-                .opsForList()
-                .range(redisKey.toString(), 0, -1);
-
-//1.        commentQueryParams.setLimit();// 幾筆
-//2.        if(comment.equals(comments))
+        //redis查詢
+        List<CommentVO> commentsCache = getCommentsCache(commentQueryParams);
 
         //Redis沒有 就去DB查
-        if (comment == null || comment.isEmpty()) {
+        if (commentsCache == null || commentsCache.isEmpty()) {
             List<CommentVO> comments = commentDAO.getComments(commentQueryParams);
-
+            //反轉redis 變成新至舊
+            Collections.reverse(comments);
             //查完同時存入Redis
             redisTemplate.opsForList().rightPushAll(redisKey.toString(), comments);
 
-            return comments;
+            return getCommentsCache(commentQueryParams);
         }
 
+        //redis改變排序
+        if (commentQueryParams.getSort().equals("DESC")) {
+            Collections.reverse(commentsCache);
+        }
         //有的話就直接return Redis
-        return comment;
-
-//        return commentDAO.getComments(commentQueryParams);
+        return commentsCache;
     }
 
     @Override
@@ -85,16 +87,24 @@ public class CommentService implements ICommentService {
     @Override
     @Transactional
     public void updateComment(Integer comId, CommentRequest commentRequest) {
+
         commentDAO.updateComment(comId, commentRequest);
+
+
     }
 
     @Override
     public void deleteComment(Integer comId, CommentStatus commentStatus) {
+
         commentDAO.deleteComment(comId, commentStatus);
+
+        //為了可以call getComments而new
+        CommentQueryParams commentQueryParams = new CommentQueryParams();
+
+        commentDAO.getComments(commentQueryParams);
     }
 
     //存進Redis
-    @Override
     public void insertCommentCache(CommentVO commentById) {
 
         StringBuilder redisKey = new StringBuilder()
@@ -105,7 +115,22 @@ public class CommentService implements ICommentService {
                 .append(commentById.getActId()
                         .toString());
 
-        redisTemplate.opsForList().rightPush(redisKey.toString(), commentById);
+        redisTemplate.opsForList().leftPush(redisKey.toString(), commentById);
+    }
+
+    //查詢Redis
+    public List<CommentVO> getCommentsCache(CommentQueryParams commentQueryParams) {
+        StringBuilder redisKey = new StringBuilder()
+                .append("comment")
+                .append(":")
+                .append("actId")
+                .append(":")
+                .append(commentQueryParams.getActId()
+                        .toString());
+
+        return (List<CommentVO>) redisTemplate
+                .opsForList()
+                .range(redisKey.toString(), 0, commentQueryParams.getLimit() - 1);
     }
 
 }

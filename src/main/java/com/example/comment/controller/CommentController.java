@@ -17,8 +17,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -32,9 +30,9 @@ public class CommentController {
     @GetMapping("/comments")
     public ResponseEntity<Page<CommentVO>> getComments(
             @RequestParam Integer actId,
-            @RequestParam(defaultValue = "5") @Max(100) @Min(0) Integer limit,
+            @RequestParam(defaultValue = "50") @Max(100) @Min(0) Integer limit,
             @RequestParam(defaultValue = "com_time") String orderBy,
-            @RequestParam(defaultValue = "DESC") String sort) {
+            @RequestParam(defaultValue = "ASC") String sort) {
 
         CommentQueryParams commentQueryParams = new CommentQueryParams();
         commentQueryParams.setActId(actId);
@@ -50,11 +48,6 @@ public class CommentController {
         page.setComments(comments);
         page.setTotal(total);
         page.setLimit(limit);
-
-        //redis改變排序
-//        if (sort.equals("ASC")) {
-//            Collections.reverse(comments);
-//        }
 
         return ResponseEntity.status(HttpStatus.OK).body(page);
     }

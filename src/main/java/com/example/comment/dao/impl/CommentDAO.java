@@ -66,8 +66,9 @@ public class CommentDAO implements ICommentDAO {
         sql = sql + " ORDER BY " + commentQueryParams.getOrderBy() + " " + commentQueryParams.getSort();
 
         //簡易分頁(查看更多)
-        sql = sql + " LIMIT :limit";
-        map.put("limit", commentQueryParams.getLimit());
+        //DB為撈全部 limit給Redis用
+//        sql = sql + " LIMIT :limit";
+//        map.put("limit", commentQueryParams.getLimit());
 
         return namedParameterJdbcTemplate.query(sql, map, new CommentJoinRowMapper());
 

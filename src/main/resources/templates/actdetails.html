@@ -398,7 +398,7 @@
     //初始留言數量
     let countLimit = 5;
     //預設排序
-    let userSort = "DESC";
+    let userSort = "ASC";
     //當前顯示的留言數量 用來判斷查看更多可不可以按
     let currentDisplayed = 0;
 
@@ -433,7 +433,7 @@
             }
         }
 
-        userSort = "DESC";
+        userSort = "ASC";
         allComments(countLimit, userSort);
     }
 
@@ -449,7 +449,7 @@
             }
         }
 
-        userSort = "ASC";
+        userSort = "DESC";
         allComments(countLimit, userSort);
     }
 
@@ -492,8 +492,9 @@
     //進畫面後顯示所有留言
     function allComments(countLimit, userSort) {
 
-        // let urlParams = new URLSearchParams(window.location.search);
-        // let actId = urlParams.get('actId');
+        // if (countLimit === 0) { //配合redis
+        //     countLimit = 5;
+        // }
 
         $.ajax({
             url: '/comments', //路徑有變動的話要改
@@ -538,7 +539,7 @@
 
                 });
                 //留言總數
-                $("#commentcount").html("(" + total + ")");
+                $("#commentcount").html("(" + (total ? total : "無") + ")");
 
                 $("#comments").html(commentsHTML);
 

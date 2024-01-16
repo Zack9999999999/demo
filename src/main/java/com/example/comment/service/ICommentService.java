@@ -15,5 +15,4 @@ public interface ICommentService {
     void updateComment(Integer comId, CommentRequest commentRequest);
     void deleteComment(Integer comId , CommentStatus commentStatus);
 
-    void insertCommentCache(CommentVO commentById);
 }

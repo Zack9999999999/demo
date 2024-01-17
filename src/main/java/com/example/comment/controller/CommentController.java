@@ -100,10 +100,10 @@ public class CommentController {
         commentRequest.setMemId(memId);
 
         //檢查 comment 是否存在
-        CommentVO comment = commentService.getCommentById(comId);
-        if (comment == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+//        CommentVO comment = commentService.getCommentById(comId);
+//        if (comment == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
         //修改留言的數據
         commentService.updateComment(comId, commentRequest);
         CommentVO updateComment = commentService.getCommentById(comId);

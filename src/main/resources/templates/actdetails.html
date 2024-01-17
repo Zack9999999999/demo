@@ -93,6 +93,12 @@
             outline: none;
         }
 
+        .pic{
+            position: absolute;
+            /*z-index: 2;*/
+            width: 100px;
+            /*left: 60px;*/
+        }
     </style>
 </head>
 
@@ -281,6 +287,13 @@
             </div>
         </div>
     </main>
+</div>
+
+<div class="aa">
+    <img th:src="@{/images/dog.jpg}" style="position: absolute; z-index: 1; width: 100px;left: 10px;">
+</div>
+<div class="bb">
+    <img th:src="@{/images/dog.jpg}" style="position: absolute; z-index: 2; width: 100px;left: 60px;">
 </div>
 
 <div class="container">
@@ -1132,7 +1145,7 @@
                     userHTML +=
                         '<div class="col-md-2 mb-3">' +
                         '<div class="shadow-sm p-3 bg-light rounded text-center">' +
-                        '<img src="data:image/png;base64,' + memNameAndPic.memPic + '" class="img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
+                        '<img src="data:image/png;base64,' + memNameAndPic.memPic + '" class="pic img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
                         '<p class="badge bg-primary text-wrap mt-2">' + memNameAndPic.memName + '</p>' +
                         '</div>' +
                         '</div>';

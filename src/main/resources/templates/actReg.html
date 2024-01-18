@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>會員查詢報名活動</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+
+        th {
+            white-space: nowrap;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+
+<body>
+<header class="header">
+    <h1>【會員查詢報名活動】</h1>
+    <p class="welcome">歡迎您 管理員</p>
+    <nav>
+        <ul>
+            <li><a href="後台登入頁面.html">登出</a></li>
+        </ul>
+    </nav>
+</header>
+
+<aside class="aside">
+    <nav class="nav">
+        <div class="sidenav">
+            <a href="../static/後台首頁頁面.html">首頁</a>
+            <hr>
+            <button class="dropdown-btn">員工管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="修改密碼頁面.html">修改密碼</a>
+                <a href="員工資料管理首頁.html">員工資料管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">一般功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="新增公告.html">公告管理</a>
+                <a href="新增FAQ.html">FQA管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">會員功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="查詢會員.html">查詢會員</a>
+                <a href="產生會員通知訊息.html">產生通知訊息</a>
+                <a href="#">審核會員檢舉</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">活動功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a th:href="@{/CHA104G3/member/report}">審核活動管理</a>
+                <a th:href="@{/CHA104G3/member/commentreport}">審核留言管理</a>
+            </div>
+            <hr>
+            <button class="dropdown-btn">場地功能管理
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-container">
+                <a href="新增場地.html">場地管理</a>
+                <a href="#">場地訂單管理</a>
+                <a href="#">場地狀態管理</a>
+            </div>
+        </div>
+    </nav>
+</aside>
+
+<main class="main">
+
+    <!--        <div>-->
+    <!--            <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>-->
+    <!--            <div class="d-md-flex justify-content-md-end mb-1">-->
+    <!--                <div class="btn-group" role="group">-->
+    <!--                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有-->
+    <!--                    </button>-->
+    <!--                    <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>-->
+    <!--                    <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>-->
+    <!--                    <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+
+    <div>
+        <h1 class="fw-bold">報名的活動</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm shadow-sm">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Number</th>
+                <th>活動名稱</th>
+                <th>活動詳情</th>
+                <th>開始時間</th>
+                <th>報名結束時間</th>
+                <th>審核狀態</th>
+                <th>已報名</th>
+            </tr>
+            </thead>
+            <tbody id="actreg">
+
+            </tbody>
+        </table>
+    </div>
+
+    <!--    <div class="d-flex p-2">-->
+    <!--        <div class="table-responsive m-2"style="max-width: 40%">-->
+    <!--            <table class="table table-striped table-sm">-->
+    <!--                <tr>-->
+    <!--                    <th>S.N</th>-->
+    <!--                    <td>1</td>-->
+    <!--                </tr>-->
+    <!--                <tr>-->
+    <!--                    <th>Article Title</th>-->
+    <!--                    <td>Create confirmation Modal</td>-->
+    <!--                </tr>-->
+    <!--                <tr>-->
+    <!--                    <th>Author</th>-->
+    <!--                    <td>Harry Rohdes</td>-->
+    <!--                </tr>-->
+    <!--            </table>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <div class="fixed-bottom">
+        <div class="container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">上一頁</a>
+                    </li>
+                    <li class="page-item">
+                        <!--                <a class="page-link" href="#">1</a>-->
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">下一頁</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>
+
+<script th:src="@{/js/後台首頁頁面.js}"></script>
+
+<script>
+    $(function () {
+        checkActReg();
+    })
+
+    let statusMap = {
+        "1": "未通過",
+        "2": "審核中",
+        "3": "報名成功"
+        // "4": "已取消"
+    };
+
+    function checkActReg() {
+        $.ajax({
+            url: '/actreg',
+            type: 'GET',
+            // data: '',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (actregs) {
+                let actregHTML = "";
+                let count = 1;
+                actregs.forEach(function (actreg) {
+
+                    let statusChinese = statusMap[actreg.regStatus];
+
+                    if (actreg.regStatus !== 4) { //4 = 自己取消報名 就不用再顯示給使用者看到
+                        actregHTML =
+                            `<tr>
+                        <td><span class="badge rounded-circle bg-dark">${count}</span></td>
+                        <td><span class="fw-bold">${actreg.act.actName}</span></td>
+                        <td>
+                            <button class="rounded-pill btn btn-info" data-act-id="${actreg.act.actId}" onclick="view(this)">查看</button>
+                        </td>
+                        <td>${actreg.act.actStartTime}</td>
+                        <td>${actreg.act.actEndTime}</td>
+                        <td class="status">${statusChinese}</td>
+                        <td>
+                            <button class="rounded-pill btn btn-danger" data-act-id="${actreg.act.actId}" onclick="del(this)">取消</button>
+                        </td>
+                    </tr>`;
+
+                        count++;
+                    }
+                    $("#actreg").append(actregHTML);
+
+                    let status = $(".status");
+                    let statusCh = $(".status").text();
+
+                    switch (statusCh) {
+                        case "未通過":
+                            status.addClass("text-danger");
+                            break;
+                        case "審核中":
+                            status.addClass("text-warning");
+                            break;
+                        case "報名成功":
+                            status.addClass("text-success");
+                            break;
+                    }
+
+                });
+            },
+            error(xhr, status, error) {
+            }
+        })
+    }
+
+    //查看活動詳情
+    function view(e) {
+        let actId = $(e).data("actId");
+        window.location.href = `/CHA104G3/activity/${actId}`;
+    }
+
+    function del(e) {
+        let btn = $(e);
+        let actId = btn.data("actId");
+
+        Swal.fire({
+            title: "要取消報名嗎?",
+            width: "300px",
+            showCancelButton: true,
+            confirmButtonText: "確定",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                unsignupData = {
+                    actId: actId,
+                    regStatus: 4
+                }
+                $.ajax({
+                    url: "/actreg",
+                    type: "PUT",
+                    data: JSON.stringify(unsignupData),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (actReg) {
+                        btn.text("已取消");
+                        btn.addClass("disabled");
+                    },
+                    error(xhr, status, error) {
+                        console.error(status, error);
+                    }
+                })
+            }
+        });
+    }
+
+</script>
+
+</body>
+
+</html>

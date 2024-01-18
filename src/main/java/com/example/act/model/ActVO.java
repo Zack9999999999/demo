@@ -30,11 +30,12 @@ public class ActVO implements Serializable {
     @Column(name = "act_id")
     private Integer actId;
 
-    //    @Column(name = "mem_id",nullable = false)
-//    private Integer memId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mem_id", referencedColumnName = "mem_id")
-    private MembershipVO membership;
+        @Column(name = "mem_id",nullable = false)
+    private Integer memId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "mem_id", referencedColumnName = "mem_id")
+//    private MembershipVO membership;
 
     @Column(name = "act_name", nullable = false)
     private String actName;

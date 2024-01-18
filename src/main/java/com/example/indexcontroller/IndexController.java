@@ -8,17 +8,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
 
     @RequestMapping("")
-    public String index(){
+    public String index() {
         return "index";
     }
 
     @RequestMapping("/member/commentreport")
-    public String commentReport(){
+    public String commentReport() {
         return "commentreport";
     }
 
     @RequestMapping("/member/report")
-    public String report(){
+    public String report() {
         return "report";
+    }
+
+    @RequestMapping("/member/actreg")
+    public String actreg() {
+        return "actReg";
+    }
+
+    @RequestMapping("/member/actfollow")
+    public String actfollow() {
+        return "actFollow";
     }
 }

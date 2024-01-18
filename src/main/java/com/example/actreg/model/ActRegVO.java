@@ -1,6 +1,7 @@
 package com.example.actreg.model;
 
 import com.example.act.model.ActVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -97,8 +97,6 @@ public class CommentService implements ICommentService {
 
         commentDAO.deleteComment(comId, commentStatus);
 
-//        String redisKey = buildRedisKey(actId);
-
         redisTemplate.delete(buildRedisKey(actId));
     }
 

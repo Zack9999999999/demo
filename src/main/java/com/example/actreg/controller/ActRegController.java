@@ -23,9 +23,14 @@ public class ActRegController {
     private IActRegService actRegService;
 
     @GetMapping("/actreg")
-    public ResponseEntity<List<ActRegVO>> getActRegs() {
+    public ResponseEntity<List<ActRegVO>> getActRegs(HttpSession session) {
 
-        List<ActRegVO> actRegVOList = actRegService.getActRegs();
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        List<ActRegVO> actRegVOList = actRegService.getActRegs(memId);
 
         return ResponseEntity.status(HttpStatus.OK).body(actRegVOList);
     }

@@ -1,6 +1,7 @@
 package com.example.details.controller;
 
 import com.example.act.model.ActVO;
+import com.example.details.dto.ActDTO;
 import com.example.details.service.IRetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.Base64;
 
 //@RestController
 @Controller
@@ -33,8 +35,11 @@ public class RetailsController {
 
     @GetMapping("/activity/{actId}")
     public String actDetail(@PathVariable Integer actId, Model model, HttpSession session) {
-        ActVO act = retailsService.getDetail(actId);
+        ActDTO act = retailsService.getDetail(actId);
         model.addAttribute("act", act);
+
+        String base64Pic = Base64.getEncoder().encodeToString(act.getMemPic());
+        model.addAttribute("memPic", base64Pic);
 
         //模擬從session取會員id
         Integer testMemId = 2;
@@ -48,7 +53,7 @@ public class RetailsController {
     @GetMapping("/activity/images/{actId}")
     public ResponseEntity<byte[]> getActPic(@PathVariable Integer actId) {
 
-        ActVO act = retailsService.getDetail(actId);
+        ActDTO act = retailsService.getDetail(actId);
         byte[] actPic = act.getActPic();
 
         if (actPic == null) {

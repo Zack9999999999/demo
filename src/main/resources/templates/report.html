@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>活動檢舉頁面</title>
+    <title>活動檢舉審核</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -100,50 +100,56 @@
 
 <main class="main">
 
-    <div style="display: inline">
-        <h1 class="fw-bold" style="display: inline">活動檢舉<span id="countReport"></span>筆</h1>
-        <button class="filterButton btn btn-outline-secondary" data-rep-status="" style="margin-left: 30px">所有
-        </button>
-        <button class="filterButton btn btn-outline-warning" data-rep-status="1">審核中</button>
-        <button class="filterButton btn btn-outline-danger" data-rep-status="3">未通過</button>
-        <button class="filterButton btn btn-outline-success" data-rep-status="2">已通過</button>
+    <div>
+        <h1 class="fw-bold">活動檢舉<span id="countReport"></span>筆</h1>
+        <div class="d-md-flex justify-content-md-end mb-1">
+            <div class="btn-group" role="group">
+                <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有
+                </button>
+                <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>
+                <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>
+                <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>
+            </div>
+        </div>
     </div>
 
-    <table id="act_report_table" class="table table-hover table-bordered table-sm">
-        <thead>
-        <tr>
-            <th scope="col">檢舉編號</th>
-            <th scope="col">活動編號</th>
-            <th scope="col">檢舉者</th>
-            <th scope="col">檢舉標題</th>
-            <th scope="col">檢舉原因</th>
-            <th scope="col">檢舉圖片</th>
-            <th scope="col">時間
-                <select id="time">
-                    <option value="ASC">舊到新</option>
-                    <option value="DESC">新到舊</option>
-                </select>
-            </th>
-            <th scope="col">審核</th>
-            <th scope="col">狀態</th>
-            <th scope="col">審核者</th>
-        </tr>
-        </thead>
-        <tbody id="actReport">
-        <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>OFFENSIVE</td>
-            <td>內容不當言論</td>
-            <td>2023-12-13 10:00:00</td>
-            <td>
-                <button>審核</button>
-            </td>
-            <td>1</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table id="act_report_table" class="table table-hover table-bordered table-sm shadow-sm">
+            <thead class="table-secondary">
+            <tr>
+                <th scope="col">檢舉編號</th>
+                <th scope="col">活動編號</th>
+                <th scope="col">檢舉者</th>
+                <th scope="col">檢舉標題</th>
+                <th scope="col">檢舉原因</th>
+                <th scope="col">檢舉圖片</th>
+                <th scope="col">時間
+                    <select id="time">
+                        <option value="ASC">舊到新</option>
+                        <option value="DESC">新到舊</option>
+                    </select>
+                </th>
+                <th scope="col">審核</th>
+                <th scope="col">狀態</th>
+                <th scope="col">審核者</th>
+            </tr>
+            </thead>
+            <tbody id="actReport" class="table-light text-nowrap">
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>OFFENSIVE</td>
+                <td>內容不當言論</td>
+                <td>2023-12-13 10:00:00</td>
+                <td>
+                    <button>審核</button>
+                </td>
+                <td>1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="fixed-bottom">
         <div class="container">
@@ -282,10 +288,10 @@
                         '<td>';
 
                     if (actReport.repPic == null) {
-                        actReportHTML += '<button class="showPic btn btn-secondary btn-sm" ' +
-                            'data-rep-id="' + actReport.repId + '" disabled>未提供圖片</button>';
+                        actReportHTML += '<button class="showPic rounded-pill btn btn-secondary btn-sm" ' +
+                            'data-rep-id="' + actReport.repId + '" disabled>未提供</button>';
                     } else {
-                        actReportHTML += '<button class="showPic btn btn-primary btn-sm" ' +
+                        actReportHTML += '<button class="showPic rounded-pill btn btn-primary btn-sm" ' +
                             'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
                             'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
                     }

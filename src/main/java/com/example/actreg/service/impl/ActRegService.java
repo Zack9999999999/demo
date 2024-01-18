@@ -38,9 +38,10 @@ public class ActRegService implements IActRegService {
     private final static Logger log = LoggerFactory.getLogger(ActRegService.class);
 
     @Override
-    public List<ActRegVO> getActRegs() {
-        actRepository.findAll();
-        return actRegRepository.findAll();
+    public List<ActRegVO> getActRegs(Integer memId) {
+
+        return actRegRepository.findRegByMemId(memId);
+
     }
 
     @Override
@@ -58,7 +59,7 @@ public class ActRegService implements IActRegService {
         ActRegVO byActActIdAndMemId = actRegRepository.findByAct_ActIdAndMemId(actRegRequest.getActId(), actRegRequest.getMemId());
 
         if (byActActIdAndMemId == null) { //找不到的話才可以報名 找到的話代表報名過了
-            log.info("沒報名過");
+
             ActRegVO actReg = new ActRegVO();
             BeanUtils.copyProperties(actRegRequest, actReg);
             actReg.setRegTime(new Date());
@@ -71,7 +72,6 @@ public class ActRegService implements IActRegService {
             }
             return actRegRepository.save(actReg);
         }
-        log.info("報名過了");
 
         return null;
     }
@@ -86,7 +86,6 @@ public class ActRegService implements IActRegService {
 
         Integer actRegId = actReg.getActRegId(); //為了解決modelMapper映射問題 先將PK存起來 mapper完後再將PK set回正確的
         modelMapper.map(actRegStatus, actReg);
-
         actReg.setActRegId(actRegId); //modelMapper映射會將actId的值連動改到PK-actRegId
 
         //審核報名者

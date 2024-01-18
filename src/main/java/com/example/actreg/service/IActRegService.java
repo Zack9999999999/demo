@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IActRegService {
 
-    List<ActRegVO> getActRegs();
+    List<ActRegVO> getActRegs(Integer memId);
 
     ActRegVO getActReg(Integer actId, Integer memId);
 

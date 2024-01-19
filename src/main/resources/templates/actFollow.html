@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>會員查詢報名活動</title>
+    <title>會員的關注活動</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -10,7 +10,15 @@
     <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
     <style>
+
+        main {
+            font-family: 'Ma Shan Zheng', cursive;
+        }
 
         th {
             white-space: nowrap;
@@ -90,40 +98,25 @@
 
 <main class="main">
 
-    <!--        <div>-->
-    <!--            <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>-->
-    <!--            <div class="d-md-flex justify-content-md-end mb-1">-->
-    <!--                <div class="btn-group" role="group">-->
-    <!--                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有-->
-    <!--                    </button>-->
-    <!--                    <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>-->
-    <!--                    <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>-->
-    <!--                    <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
     <div>
         <h1 class="fw-bold">關注活動</h1>
     </div>
 
     <div class="table-responsive">
         <table class="table table-striped table-hover table-sm shadow-sm">
+            <caption id="count">筆</caption>
             <thead class="thead-inverse">
             <tr>
-                <th>Number</th>
+                <th>編號</th>
                 <th>活動名稱</th>
                 <th>活動詳情</th>
-                <th>關注狀態</th>
                 <th>取消關注</th>
             </tr>
             </thead>
             <tbody id="actreg">
             <tr>
+                <td>1</td>
                 <td>今晚打老虎</td>
-                <td>
-                    <button>查看</button>
-                </td>
                 <td>審核中</td>
                 <td>關注中</td>
                 <td>
@@ -167,8 +160,103 @@
 <script th:src="@{/js/後台首頁頁面.js}"></script>
 
 <script>
+    $(function () {
+        checkFollows();
+    })
 
+    //查看所有關注的活動
+    function checkFollows() {
+        $.ajax({
+            url: '/activity/actfollows',
+            type: 'GET',
+            // data: '',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (actFollows) {
+                let followHTML = "";
+                let count = 0;
 
+                actFollows.forEach(function (actFollow) {
+                    if (actFollow.folStatus === 2) {
+                        count++;
+
+                        followHTML += `<tr>
+                                <td><span class="badge rounded-circle bg-dark">${count}</span></td>
+                                <td>${actFollow.act.actName}</td>
+                                <td>
+                                    <button class="rounded-pill btn btn-info" data-act-id="${actFollow.actId}" onclick="view(this)">查看</button>
+                                </td>
+                                <td>
+                                    <button class="delbtn rounded-pill btn btn-danger" data-act-id="${actFollow.actId}"
+                                     onclick="delFollow(this)">取消關注</button>
+                                </td>
+                              </tr>`;
+                    }
+                });
+
+                $("#count").html(`${count}筆`);
+                $("#actreg").html(followHTML);
+
+            },
+            error: function (xhr, status, error) {
+                alert("!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        });
+    }
+
+    function view(e) {
+        let actId = $(e).data("actId");
+        window.location.href = `/CHA104G3/activity/${actId}`;
+    }
+
+    function delFollow(e) {
+        let actId = $(e).data("actId");
+
+        Swal.fire({
+            title: "要取消關注嗎?",
+            width: "300px",
+            showCancelButton: true,
+            confirmButtonText: "確定",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                unsFollowData = {
+                    actId: actId,
+                    folStatus: 1
+                }
+
+                $.ajax({
+                    url: '/activity/unactfollow',
+                    type: 'POST',
+                    data: JSON.stringify(unsFollowData),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (res) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: '已取消關注！'
+                        });
+                        checkFollows();
+                    },
+                    error(xhr, status, error) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    //Sweetalart2
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        onOpen: toast => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
 </script>
 
 </body>

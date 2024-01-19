@@ -1,5 +1,9 @@
 package com.example.actfollowed.model;
 
+import com.example.act.model.ActVO;
+import com.example.mem.model.MembershipVO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -19,6 +23,15 @@ public class ActFollowedVO implements Serializable {
 
     @Column(name = "fol_status")
     private Byte folStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "act_id", insertable = false, updatable = false)
+    private ActVO act;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "mem_id", insertable = false, updatable = false)
+    private MembershipVO membership;
 
     public Integer getActId() {
         return actId;
@@ -42,6 +55,22 @@ public class ActFollowedVO implements Serializable {
 
     public void setFolStatus(Byte folStatus) {
         this.folStatus = folStatus;
+    }
+
+    public ActVO getAct() {
+        return act;
+    }
+
+    public void setAct(ActVO act) {
+        this.act = act;
+    }
+
+    public MembershipVO getMembership() {
+        return membership;
+    }
+
+    public void setMembership(MembershipVO membership) {
+        this.membership = membership;
     }
 
     @Override

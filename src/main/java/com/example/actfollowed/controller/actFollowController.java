@@ -1,5 +1,6 @@
 package com.example.actfollowed.controller;
 
+import com.example.actfollowed.dto.ActFollowDTO;
 import com.example.actfollowed.dto.ActFollowRequest;
 import com.example.actfollowed.model.ActFollowedVO;
 import com.example.actfollowed.service.IActFollowedService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RestController
 public class actFollowController {
@@ -16,10 +18,29 @@ public class actFollowController {
     @Autowired
     private IActFollowedService actFollowedService;
 
+    @GetMapping("/activity/actfollows")
+    public ResponseEntity<List<ActFollowedVO>> getActFollows(
+//            @RequestParam Integer memId,
+            HttpSession session) {
+
+        //第1種方式.actId從原先詳情那邊的controller的session存到model 存給前端了
+        //第2種方式.模擬從session取會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        List<ActFollowedVO> actFollows = actFollowedService.getActFollows(memId);
+
+        if (actFollows == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(actFollows);
+    }
+
     @GetMapping("/activity/actfollow")
-    public ResponseEntity<Byte> getActFollows(@RequestParam Integer actId,
+    public ResponseEntity<Byte> getActFollow(@RequestParam Integer actId,
 //                                              @RequestParam Integer memId,
-                                              HttpSession session) {
+                                             HttpSession session) {
 
         //第1種方式.actId從原先詳情那邊的controller的session存到model 存給前端了
 

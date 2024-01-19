@@ -10,7 +10,14 @@
     <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
     <style>
+        main {
+            font-family: 'Ma Shan Zheng', cursive;
+        }
 
         th {
             white-space: nowrap;
@@ -90,19 +97,6 @@
 
 <main class="main">
 
-    <!--        <div>-->
-    <!--            <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>-->
-    <!--            <div class="d-md-flex justify-content-md-end mb-1">-->
-    <!--                <div class="btn-group" role="group">-->
-    <!--                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有-->
-    <!--                    </button>-->
-    <!--                    <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>-->
-    <!--                    <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>-->
-    <!--                    <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
     <div>
         <h1 class="fw-bold">審核報名</h1>
     </div>
@@ -118,6 +112,36 @@
             </tr>
             </thead>
             <tbody id="actreg">
+            <tr>
+                <td>小白痴</td>
+                <td>
+                    <button>查看</button>
+                </td>
+                <td>就想參加</td>
+                <td>
+                    <button>這邊放審核過不過</button>
+                </td>
+            </tr>
+            <tr>
+                <td>小白痴</td>
+                <td>
+                    <button>查看</button>
+                </td>
+                <td>就想參加</td>
+                <td>
+                    <button>這邊放審核過不過</button>
+                </td>
+            </tr>
+            <tr>
+                <td>小白痴</td>
+                <td>
+                    <button>查看</button>
+                </td>
+                <td>就想參加</td>
+                <td>
+                    <button>這邊放審核過不過</button>
+                </td>
+            </tr>
             <tr>
                 <td>小白痴</td>
                 <td>
@@ -166,7 +190,24 @@
 
 <script>
 
+    $(function () {
+        // actReview();
+    })
 
+    function actReview() {
+        $.ajax({
+            url: '/',
+            type: 'GET',
+            data: '',
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function () {
+
+            }, error: function (xhr, status, error) {
+
+            }
+        });
+    }
 </script>
 
 </body>

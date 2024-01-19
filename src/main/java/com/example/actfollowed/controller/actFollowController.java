@@ -1,16 +1,17 @@
 package com.example.actfollowed.controller;
 
-import com.example.actfollowed.dto.ActFollowDTO;
 import com.example.actfollowed.dto.ActFollowRequest;
 import com.example.actfollowed.model.ActFollowedVO;
 import com.example.actfollowed.service.IActFollowedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @RestController
 public class actFollowController {
@@ -19,8 +20,8 @@ public class actFollowController {
     private IActFollowedService actFollowedService;
 
     @GetMapping("/activity/actfollows")
-    public ResponseEntity<List<ActFollowedVO>> getActFollows(
-//            @RequestParam Integer memId,
+    public ResponseEntity<Page<ActFollowedVO>> getActFollows(
+            @PageableDefault(size = 5) Pageable pageable,
             HttpSession session) {
 
         //第1種方式.actId從原先詳情那邊的controller的session存到model 存給前端了
@@ -29,7 +30,7 @@ public class actFollowController {
         session.setAttribute("memId", testMemId);
         Integer memId = (Integer) session.getAttribute("memId");
 
-        List<ActFollowedVO> actFollows = actFollowedService.getActFollows(memId);
+        Page<ActFollowedVO> actFollows = actFollowedService.getActFollows(memId, pageable);
 
         if (actFollows == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

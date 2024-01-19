@@ -273,6 +273,13 @@
 
                 nextPage(totalPages, actTime, regStatus);
 
+                //在哪頁就將那頁的按鈕加顏色
+                $(".number").each(function () {
+                    if ($(this).text() === (number + 1).toString()) {
+                        $(this).addClass("active");
+                    }
+                })
+
                 actRegs.forEach(function (actReg) {
                     let statusChinese = statusMap[actReg.regStatus];
 
@@ -380,7 +387,7 @@
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
                 `<li  class="page-item">
-                <a id="number" class="page-link" href="#" onclick="loadPage(${i + 1},'${actTime}',${regStatus}); return false;">${i + 1}</a>
+                <a class="number page-link" href="#" onclick="loadPage(${i + 1},'${actTime}',${regStatus}); return false;">${i + 1}</a>
                 </li>`;
         }
 

@@ -201,6 +201,7 @@
     let pageNumber = 1; // 第幾頁預設(進function會 -1 所以會變0)
     let size = 5; //顯示筆數預設
 
+    //第幾頁
     function loadPage(pageNumber, repTime, repStatus) {
 
         loadCommentReports(pageNumber, repTime, repStatus);
@@ -251,6 +252,13 @@
                 let last = commentReportList.last; // 當前是最後一頁為true
 
                 nextPage(totalPages, repTime, repStatus);
+
+                //在哪頁就將哪頁按鈕加顏色
+                $(".number").each(function () {
+                    if ($(this).text() === (number + 1).toString()) {
+                        $(this).addClass("active");
+                    }
+                })
 
                 let titleMap = {
                     "SPAM": "垃圾訊息",
@@ -375,7 +383,7 @@
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
                 `<li  class="page-item">` +
-                `<a id="number" class="page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
+                `<a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
                 `</li>`;
         }
 

@@ -1,14 +1,13 @@
 package com.example.actfollowed.service;
 
-import com.example.actfollowed.dto.ActFollowDTO;
 import com.example.actfollowed.dto.ActFollowRequest;
 import com.example.actfollowed.model.ActFollowedVO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IActFollowedService {
 
-    List<ActFollowedVO> getActFollows(Integer memId);
+    Page<ActFollowedVO> getActFollows(Integer memId,  Pageable pageable);
 
     Byte getActFollows(Integer actId,  Integer memId);
 

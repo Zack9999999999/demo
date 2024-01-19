@@ -2,19 +2,17 @@ package com.example.actfollowed.service.impl;
 
 import com.example.act.model.ActVO;
 import com.example.act.repository.ActRepository;
-import com.example.actfollowed.dto.ActFollowDTO;
 import com.example.actfollowed.dto.ActFollowRequest;
 import com.example.actfollowed.model.ActFollowedVO;
 import com.example.actfollowed.repository.ActFollowedRepository;
 import com.example.actfollowed.service.IActFollowedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ActFollowedService implements IActFollowedService {
@@ -25,10 +23,10 @@ public class ActFollowedService implements IActFollowedService {
     private ActRepository actRepository;
 
     @Override
-    public List<ActFollowedVO> getActFollows(Integer memId) {
+    public Page<ActFollowedVO> getActFollows(Integer memId, Pageable pageable) {
         Byte folStatus = 2; // 2 = 關注的活動
 
-        List<ActFollowedVO> actFollowed = actFollowedRepository.findByMemIdAndFolStatus(memId, folStatus);
+        Page<ActFollowedVO> actFollowed = actFollowedRepository.findByMemIdAndFolStatus(memId, folStatus, pageable);
 //        ActVO act = actRepository.findById(actId).orElse(null);
 
 //        ActFollowDTO actFollowDTO = new ActFollowDTO();

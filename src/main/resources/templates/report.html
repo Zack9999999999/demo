@@ -272,6 +272,12 @@
                 //分頁元件生成
                 nextPage(totalPages, repTime, repStatus);
 
+                $(".number").each(function () {
+                    if ($(this).text() === (number + 1).toString()) {
+                        $(this).addClass("active");
+                    }
+                })
+
                 let titleMap = {
                     "INAPPROPRIATE": "不恰當的内容",
                     "NOSAFETY": "不安全的",
@@ -428,7 +434,7 @@
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML += `<li  class="page-item">` +
-                `<a class="page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
+                `<a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
                 `</li>`;
         }
         $(".pagination").html(pageHTML); //插入頁碼

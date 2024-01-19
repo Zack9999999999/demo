@@ -31,4 +31,9 @@ public class IndexController {
     public String actfollow() {
         return "actFollow";
     }
+
+    @RequestMapping("/member/actreview")
+    public String actreview() {
+        return "actReview";
+    }
 }

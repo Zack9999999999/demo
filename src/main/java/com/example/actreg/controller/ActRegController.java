@@ -1,5 +1,6 @@
 package com.example.actreg.controller;
 
+import com.example.actreg.dto.ActRegQueryParams;
 import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.dto.ActRegStatus;
 import com.example.actreg.dto.MemNameAndPicDTO;
@@ -7,6 +8,11 @@ import com.example.actreg.model.ActRegVO;
 import com.example.actreg.service.IActRegService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,14 +29,31 @@ public class ActRegController {
     private IActRegService actRegService;
 
     @GetMapping("/actreg")
-    public ResponseEntity<List<ActRegVO>> getActRegs(HttpSession session) {
+    public ResponseEntity<Page<ActRegVO>> getActRegs(
+            HttpSession session,
+            @RequestParam(required = false) Byte regStatus,
+            @RequestParam(required = false) String sortDirection,
+            @PageableDefault(size = 5, sort = "act.actStartTime", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
 
         //模擬從session取出會員id
         Integer testMemId = 1;
         session.setAttribute("memId", testMemId);
         Integer memId = (Integer) session.getAttribute("memId");
 
-        List<ActRegVO> actRegVOList = actRegService.getActRegs(memId);
+        //傳進來是DESC的話替換掉pageable內的Sort
+        if ("DESC".equalsIgnoreCase(sortDirection)) {
+            pageable = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.DESC, "act.actStartTime")
+            );
+        }
+
+        ActRegQueryParams actRegQueryParams = new ActRegQueryParams();
+        actRegQueryParams.setRegStatus(regStatus);
+
+        Page<ActRegVO> actRegVOList = actRegService.getActRegs(memId, actRegQueryParams, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(actRegVOList);
     }

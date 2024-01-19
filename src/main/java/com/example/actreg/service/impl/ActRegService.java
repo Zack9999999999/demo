@@ -2,6 +2,7 @@ package com.example.actreg.service.impl;
 
 import com.example.act.model.ActVO;
 import com.example.act.repository.ActRepository;
+import com.example.actreg.dto.ActRegQueryParams;
 import com.example.actreg.dto.ActRegRequest;
 import com.example.actreg.dto.ActRegStatus;
 import com.example.actreg.dto.MemNameAndPicDTO;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +41,13 @@ public class ActRegService implements IActRegService {
     private final static Logger log = LoggerFactory.getLogger(ActRegService.class);
 
     @Override
-    public List<ActRegVO> getActRegs(Integer memId) {
+    public Page<ActRegVO> getActRegs(Integer memId, ActRegQueryParams actRegQueryParams, Pageable pageable) {
 
-        return actRegRepository.findRegByMemId(memId);
-
+        if (actRegQueryParams.getRegStatus() != null) {
+            Page<ActRegVO> byMemIdAndRegStatus = actRegRepository.findByMemIdAndRegStatus(memId, actRegQueryParams.getRegStatus(), pageable);
+            return byMemIdAndRegStatus;
+        }
+        return actRegRepository.findRegByMemId(memId, pageable);
     }
 
     @Override

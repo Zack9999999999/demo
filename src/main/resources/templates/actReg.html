@@ -10,7 +10,14 @@
     <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+
     <style>
+        main {
+            font-family: 'Ma Shan Zheng', cursive;
+        }
 
         th {
             white-space: nowrap;
@@ -105,19 +112,39 @@
 
     <div>
         <h1 class="fw-bold">報名的活動</h1>
+        <div class="d-flex justify-content-between mb-1">
+            <div>
+                <button class="btn btn-primary btn-sm" onclick="plusFive()">+5</button>
+            </div>
+            <div class="d-flex">
+                <div class="btn-group" role="group">
+                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有
+                    </button>
+                    <button class="filterButton btn btn-warning btn-sm" data-reg-status="2">審核中</button>
+                    <button class="filterButton btn btn-danger btn-sm" data-reg-status="1">未通過</button>
+                    <button class="filterButton btn btn-success btn-sm" data-reg-status="3">報名成功</button>
+                    <button class="filterButton btn btn-dark btn-sm" data-reg-status="3">歷史紀錄</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="table-responsive">
         <table class="table table-striped table-hover table-sm shadow-sm">
+            <caption id="count">筆</caption>
             <thead class="thead-inverse">
             <tr>
-                <th>Number</th>
+                <th>活動編號</th>
                 <th>活動名稱</th>
                 <th>活動詳情</th>
-                <th>開始時間</th>
-                <th>報名結束時間</th>
+                <th>開始時間
+                    <select id="time">
+                        <option value="ASC">舊到新</option>
+                        <option value="DESC">新到舊</option>
+                    </select>
+                </th>
                 <th>審核狀態</th>
-                <th>已報名</th>
+                <th>是否取消</th>
             </tr>
             </thead>
             <tbody id="actreg">
@@ -186,59 +213,115 @@
         "1": "未通過",
         "2": "審核中",
         "3": "報名成功"
-        // "4": "已取消"
     };
+    let regStatus; // 狀態預設
+    let pageNumber = 1; //第幾頁預設(進function會 -1 所以會變0)
+    let actTime = "ASC"; // 排序預設
+    // let size = 5; //顯示筆數預設
 
-    function checkActReg() {
+    //審核狀態篩選
+    $(".filterButton").click(function () {
+        regStatus = $(this).data("regStatus");
+        checkActReg(pageNumber, actTime, regStatus);
+    });
+
+    //時間排序
+    $("#time").change(function () {
+        actTime = $("#time").val();
+
+        checkActReg(pageNumber, actTime, regStatus);
+    });
+
+    //分頁
+    function loadPage(pageNumber, actTime, regStatus) {
+        checkActReg(pageNumber, actTime, regStatus);
+    }
+
+    //多顯示5筆
+    // function plusFive() {
+    //     size += 5;
+    //     checkActReg(pageNumber, actTime, regStatus, size);
+    // }
+
+    //查會員報名的所有活動
+    function checkActReg(pageNumber, actTime, regStatus) {
+        let url = "/actreg";
+
+        if (regStatus !== undefined && regStatus !== null) {
+            url = url + '?regStatus=' + regStatus;
+        }
+
         $.ajax({
-            url: '/actreg',
+            url: url,
             type: 'GET',
-            // data: '',
+            data: {
+                page: pageNumber - 1,
+                sortDirection: actTime
+                // size: size
+            },
             dataType: 'json',
             contentType: 'application/json',
-            success: function (actregs) {
+            success: function (actRegsPageable) {
                 let actregHTML = "";
-                let count = 1;
-                actregs.forEach(function (actreg) {
+                let pageCount = 0;
 
-                    let statusChinese = statusMap[actreg.regStatus];
+                let actRegs = actRegsPageable.content;
+                let totalElements = actRegsPageable.totalElements; //總數量
+                let totalPages = actRegsPageable.totalPages; //總頁數
+                let size = actRegsPageable.size; //顯示幾筆
+                let number = actRegsPageable.number; //第幾頁
 
-                    if (actreg.regStatus !== 4) { //4 = 自己取消報名 就不用再顯示給使用者看到
-                        actregHTML =
+                nextPage(totalPages, actTime, regStatus);
+
+                actRegs.forEach(function (actReg) {
+                    let statusChinese = statusMap[actReg.regStatus];
+
+                    if (actReg.regStatus !== 4) { //4 = 自己取消報名 就不用再顯示給使用者看到
+                        actregHTML +=
                             `<tr>
-                        <td><span class="badge rounded-circle bg-dark">${count}</span></td>
-                        <td><span class="fw-bold">${actreg.act.actName}</span></td>
+                        <td><span class="badge rounded-circle bg-dark">${actReg.act.actId}</span></td>
+                        <td><span class="fw-bold">${actReg.act.actName}</span></td>
                         <td>
-                            <button class="rounded-pill btn btn-info" data-act-id="${actreg.act.actId}" onclick="view(this)">查看</button>
+                            <button class="rounded-pill btn btn-info" data-act-id="${actReg.act.actId}" onclick="view(this)">查看</button>
                         </td>
-                        <td>${actreg.act.actStartTime}</td>
-                        <td>${actreg.act.actEndTime}</td>
+                        <td>${actReg.act.actStartTime}</td>
                         <td class="status">${statusChinese}</td>
                         <td>
-                            <button class="rounded-pill btn btn-danger" data-act-id="${actreg.act.actId}" onclick="del(this)">取消</button>
+                            <button class="delbtn rounded-pill btn btn-danger"
+                            data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消報名
+                            </button>
                         </td>
                     </tr>`;
 
-                        count++;
+                        pageCount++;
                     }
-                    $("#actreg").append(actregHTML);
+                });
+                $("#actreg").html(actregHTML);
 
-                    let status = $(".status");
-                    let statusCh = $(".status").text();
+                let count = $("#count");
+                count.html(`${pageCount}筆`);
 
-                    switch (statusCh) {
-                        case "未通過":
-                            status.addClass("text-danger");
-                            break;
+                $(".status").each(function () {
+
+                    let delbtn = $(this).closest('tr').find(".delbtn");
+
+                    switch ($(this).text()) {
                         case "審核中":
-                            status.addClass("text-warning");
+                            $(this).addClass("text-warning");
                             break;
                         case "報名成功":
-                            status.addClass("text-success");
+                            $(this).addClass("text-success");
+
+                            delbtn.text("已參加");
+                            delbtn.removeClass("btn-danger");
+                            delbtn.addClass("btn-success");
+                            delbtn.addClass("disabled");
+                            break;
+                        case "未通過":
+                            $(this).addClass("text-danger");
                             break;
                     }
-
-                });
+                })
             },
             error(xhr, status, error) {
             }
@@ -251,9 +334,16 @@
         window.location.href = `/CHA104G3/activity/${actId}`;
     }
 
+    //取消報名
     function del(e) {
         let btn = $(e);
         let actId = btn.data("actId");
+        let actregStatus = btn.data("actregStatus");
+
+        // 3 = 報名審核通過 不給再取消 防止用戶搞事
+        if (actregStatus === 3) {
+            return;
+        }
 
         Swal.fire({
             title: "要取消報名嗎?",
@@ -283,6 +373,21 @@
                 })
             }
         });
+    }
+
+    function nextPage(totalPages, actTime, regStatus) {
+        let pageHTML = "";
+        for (let i = 0; i < totalPages; i++) {
+            pageHTML +=
+                `<li  class="page-item">
+                <a id="number" class="page-link" href="#" onclick="loadPage(${i + 1},'${actTime}',${regStatus}); return false;">${i + 1}</a>
+                </li>`;
+        }
+
+        $(".pagination").html(pageHTML); //插入頁碼
+        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+
     }
 
 </script>

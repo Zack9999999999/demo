@@ -10,7 +10,15 @@
     <link rel="stylesheet" th:href="@{/css/後台首頁頁面.css}">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+
     <style>
+        main {
+            font-family: 'ZCOOL KuaiLe', sans-serif;
+        }
+
         /*th標題不換行*/
         th {
             white-space: nowrap;
@@ -100,7 +108,7 @@
 <main class="main">
 
     <div>
-        <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>
+        <h1 class="fw-bold">活動留言檢舉</h1>
         <div class="d-md-flex justify-content-md-end mb-1">
             <div class="btn-group" role="group">
                 <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有
@@ -114,6 +122,7 @@
 
     <div class="table-responsive">
         <table id="comment_report_table" class="table table-hover table-bordered table-sm shadow-sm">
+            <caption id="count">筆</caption>
             <thead class="table-secondary">
             <tr>
                 <th scope="col">檢舉編號</th>
@@ -187,9 +196,10 @@
         loadCommentReports();
     });
 
-    let repStatus = 1; // 預設值
-    let repTime = "ASC"; // 預設值
-    let pageNumber = 1; // 預設值
+    let repStatus; // 狀態預設
+    let repTime = "ASC"; // 排序預設
+    let pageNumber = 1; // 第幾頁預設(進function會 -1 所以會變0)
+    let size = 5; //顯示筆數預設
 
     function loadPage(pageNumber, repTime, repStatus) {
 
@@ -229,6 +239,7 @@
             dataType: 'json',
             success: function (commentReportList) {
                 let commentReportHTML = "";
+                let pageCount = 0;
                 let commentReports = commentReportList.content;
 
                 //做分頁需要的
@@ -276,8 +287,9 @@
                         '<td class="color" id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
                         '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td></tr>';
 
+                    pageCount++;
                 });
-                $("#countReport").html(": 共" + total);
+                $("#count").html(`${pageCount}筆`);
                 $("#report").html(commentReportHTML);
 
                 $(".color").each(function () {

@@ -2,7 +2,10 @@ package com.example.actreg.repository;
 
 import com.example.actreg.dto.ActRegDTO;
 import com.example.actreg.model.ActRegVO;
+import com.example.commentreport.model.CommentReportVO;
 import com.github.houbb.heaven.annotation.reflect.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,6 +23,12 @@ public interface ActRegRepository extends JpaRepository<ActRegVO, Integer> {
             " WHERE r.act_id = :actId AND r.is_act_part = :isActPart", nativeQuery = true)
     List<Object[]> findMembersAndPicByPart(@Param("actId") Integer actId, @Param("isActPart") Integer isActPart);
 
-    @Query("SELECT r FROM ActRegVO r JOIN r.act a WHERE r.memId = :memId")
-    List<ActRegVO> findRegByMemId(@Param("memId") Integer memId);
+    // <> = 不等於
+    @Query("SELECT r FROM ActRegVO r JOIN r.act a WHERE r.memId = :memId AND r.regStatus <> 4")
+    Page<ActRegVO> findRegByMemId(@Param("memId") Integer memId, Pageable pageable);
+
+    Page<ActRegVO> findByMemIdAndRegStatus(Integer memId, Byte regStatus, Pageable pageable);
+
+//    @Query("SELECT r FROM ActRegVO r WHERE r.memId = :memId AND (r.regStatus = :regStatus AND r.regStatus <> 4)")
+//    Page<ActRegVO> findByMemIdAndRegStatus(Integer memId, Byte regStatus, Pageable pageable);
 }

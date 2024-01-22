@@ -100,6 +100,14 @@
 </head>
 
 <body>
+<button id="returnPage" class="position-fixed top-0 start-0 btn btn-outline-primary btn-sm rounded-pill m-2"
+        onclick="javascript:history.go(-1)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left"
+         viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+    </svg>
+</button>
 
 <div class="container">
     <header
@@ -1142,24 +1150,34 @@
                     $("#add").append(userHTML);
 
                     //疊加圖片
-                    // if (count > 6) {
-                    //     let pic = $(".pic").last();
-                    //
-                    //     pic.addClass("position-absolute");
-                    //     pic.css("z-index", zIndex++);
-                    //     pic.css("left", left + "px")
-                    //     left += 25;
-                    // }
+                    if (count > 6) {
+                        //     let pic = $(".pic").last();
+                        //
+                        //     pic.addClass("position-absolute");
+                        //     pic.css("z-index", zIndex++);
+                        //     pic.css("left", left + "px")
+                        //     left += 25;
+                    }
                 })
 
                 // $("#add").html(userHTML);
-                console.log(count)
                 $("#addPeople").text(count);
             },
             error(xhr, status, error) {
             }
         })
     }
+
+    // $("#returnPage").on("hover", () => {
+    //    alert("!!!")
+    // });
+
+    returnPage = document.querySelector("#returnPage");
+    returnPage.addEventListener("mouseover", () => {
+        Toast.fire({
+            title: '這是讓你回上一頁的按鈕！'
+        })
+    })
 
     //Sweetalart2
     const Toast = Swal.mixin({

@@ -2,10 +2,7 @@ package com.example.actreg.service.impl;
 
 import com.example.act.model.ActVO;
 import com.example.act.repository.ActRepository;
-import com.example.actreg.dto.ActRegQueryParams;
-import com.example.actreg.dto.ActRegRequest;
-import com.example.actreg.dto.ActRegStatus;
-import com.example.actreg.dto.MemNameAndPicDTO;
+import com.example.actreg.dto.*;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.repository.ActRegRepository;
 import com.example.actreg.service.IActRegService;
@@ -21,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +37,18 @@ public class ActRegService implements IActRegService {
 
     //log紀錄
     private final static Logger log = LoggerFactory.getLogger(ActRegService.class);
+
+
+    @Override
+    public Page<ActVO> reviewActRegs(Integer memId, Pageable pageable) {
+
+        return actRepository.findByMemId(memId, pageable);
+    }
+
+    @Override
+    public Page<ActRegVO> findByActId(Integer actId, Pageable pageable) {
+        return actRegRepository.findByAct_ActId(actId, pageable);
+    }
 
     @Override
     public Page<ActRegVO> getActRegs(Integer memId, ActRegQueryParams actRegQueryParams, Pageable pageable) {
@@ -96,11 +106,6 @@ public class ActRegService implements IActRegService {
 
         //審核報名者
         switch (actRegStatus.getRegStatus()) {
-            case 1:
-                //失敗要通知會員
-                log.info("通知會員報名失敗");
-                break;
-
             case 2:
                 //取消過現在再次報名
                 log.info("再次報名");
@@ -110,17 +115,33 @@ public class ActRegService implements IActRegService {
                     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED);
                 }
                 break;
-
-            case 3:
-                //通過要將活動table參加人數增加
-                act.setActCount(act.getActCount() + actReg.getRegTotal());
-                log.info("通知會員報名成功");
-                //通過通知會員
-                break;
-
             case 4:
                 //會員自己取消報名
                 log.info("已取消報名");
+                break;
+        }
+        return actRegRepository.save(actReg);
+    }
+
+    @Override
+    @Transactional
+    public ActRegVO reviewActReg(ActRegReviewRequest actRegReviewRequest) {
+
+        ActRegVO actReg = actRegRepository.findById(actRegReviewRequest.getActRegId()).orElse(null);
+
+        actReg.setRegStatus(actRegReviewRequest.getRegStatus());
+
+        //審核報名者
+        switch (actRegReviewRequest.getRegStatus()) {
+            case 1:
+                //失敗要通知會員
+                log.info("通知會員報名失敗");
+                break;
+            case 3:
+                //通過要將活動table參加人數增加
+                actReg.getAct().setActCount(actReg.getAct().getActCount() + actReg.getRegTotal());
+                log.info("通知會員報名成功");
+                //通過通知會員
                 break;
         }
         return actRegRepository.save(actReg);

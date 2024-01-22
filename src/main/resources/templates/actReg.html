@@ -270,6 +270,8 @@
                 let totalPages = actRegsPageable.totalPages; //總頁數
                 let size = actRegsPageable.size; //顯示幾筆
                 let number = actRegsPageable.number; //第幾頁
+                let first = actRegsPageable.first;
+                let last = actRegsPageable.last;
 
                 nextPage(totalPages, actTime, regStatus);
 
@@ -279,6 +281,19 @@
                         $(this).addClass("active");
                     }
                 })
+
+                //判斷上下頁可不可以按
+                if (!first || !last) {
+                    $("#first").removeClass("disabled")
+                    $("#last").removeClass("disabled")
+                }
+                if (first) {
+                    $("#first").addClass("disabled")
+                }
+                if (last) {
+                    $("#last").addClass("disabled")
+                }
+
 
                 actRegs.forEach(function (actReg) {
                     let statusChinese = statusMap[actReg.regStatus];
@@ -392,8 +407,18 @@
         }
 
         $(".pagination").html(pageHTML); //插入頁碼
-        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
-        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+        $(".pagination").prepend('<li id="first" class="page-item disabled"><a class="page-link" href="#" onclick="previous()">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li id="last" class="page-item"><a class="page-link" href="#" onclick="next()">下一頁</a></li>');  //將下一頁插入
+    }
+
+    //下一頁
+    function next() {
+        checkActReg(++pageNumber, actTime, regStatus)
+    }
+
+    //上一頁
+    function previous() {
+        checkActReg(--pageNumber, actTime, regStatus);
     }
 </script>
 

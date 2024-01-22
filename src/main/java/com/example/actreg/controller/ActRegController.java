@@ -1,9 +1,7 @@
 package com.example.actreg.controller;
 
-import com.example.actreg.dto.ActRegQueryParams;
-import com.example.actreg.dto.ActRegRequest;
-import com.example.actreg.dto.ActRegStatus;
-import com.example.actreg.dto.MemNameAndPicDTO;
+import com.example.act.model.ActVO;
+import com.example.actreg.dto.*;
 import com.example.actreg.model.ActRegVO;
 import com.example.actreg.service.IActRegService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +25,28 @@ public class ActRegController {
 
     @Autowired
     private IActRegService actRegService;
+
+    @GetMapping("/actregs")
+    public ResponseEntity<Page<ActVO>> reviewActRegs(
+            @PageableDefault(size = 5) Pageable pageable,
+            HttpSession session
+    ) {
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        Page<ActVO> actRegList = actRegService.reviewActRegs(memId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(actRegList);
+    }
+
+    @GetMapping("/actregs/members")
+    public ResponseEntity<Page<ActRegVO>> findByActId(@RequestParam Integer actId,
+                                                      Pageable pageable) {
+        Page<ActRegVO> byActId = actRegService.findByActId(actId, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(byActId);
+    }
 
     @GetMapping("/actreg")
     public ResponseEntity<Page<ActRegVO>> getActRegs(
@@ -97,6 +117,20 @@ public class ActRegController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @PutMapping("/actreg/member")
+    public ResponseEntity<ActRegVO> reviewActReg(@RequestBody ActRegReviewRequest actRegReviewRequest,
+                                                 HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        ActRegVO actReg = actRegService.reviewActReg(actRegReviewRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(actReg);
     }
 
     @PutMapping("/actreg")

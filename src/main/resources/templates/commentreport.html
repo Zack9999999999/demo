@@ -12,11 +12,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
     <style>
         main {
-            font-family: 'ZCOOL KuaiLe', sans-serif;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         /*th標題不換行*/
@@ -258,7 +258,19 @@
                     if ($(this).text() === (number + 1).toString()) {
                         $(this).addClass("active");
                     }
-                })
+                });
+
+                //判斷上下頁可不可以按
+                if (!first || !last) {
+                    $("#first").removeClass("disabled")
+                    $("#last").removeClass("disabled")
+                }
+                if (first) {
+                    $("#first").addClass("disabled")
+                }
+                if (last) {
+                    $("#last").addClass("disabled")
+                }
 
                 let titleMap = {
                     "SPAM": "垃圾訊息",
@@ -388,9 +400,19 @@
         }
 
         $(".pagination").html(pageHTML); //插入頁碼
-        $(".pagination").prepend('<li class="page-item disabled"><a class="page-link">上一頁</a></li>'); //將上一頁插入
-        $(".pagination").append('<li class="page-item"><a class="page-link" href="#">下一頁</a></li>');  //將下一頁插入
+        $(".pagination").prepend('<li id="first" class="page-item disabled"><a class="page-link" href="#" onclick="previous(this)">上一頁</a></li>'); //將上一頁插入
+        $(".pagination").append('<li id="last" class="page-item"><a class="page-link" href="#" onclick="next(this)">下一頁</a></li>');  //將下一頁插入
 
+    }
+
+    //下一頁
+    function next() {
+        loadCommentReports(++pageNumber, repTime, repStatus);
+    }
+
+    //上一頁
+    function previous() {
+        loadCommentReports(--pageNumber, repTime, repStatus);
     }
 
 </script>

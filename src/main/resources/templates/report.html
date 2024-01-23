@@ -126,7 +126,7 @@
             <caption id="count">筆</caption>
             <thead class="table-secondary">
             <tr>
-                <th scope="col">檢舉編號</th>
+                <th scope="col">編號</th>
                 <th scope="col">活動編號</th>
                 <th scope="col">檢舉者</th>
                 <th scope="col">檢舉標題</th>
@@ -310,8 +310,8 @@
 
                     actReportHTML +=
                         '<tr><td>' + actReport.repId + '</td>' +
-                        '<td>' + actReport.act.actId + '</td>' +
-                        '<td>' + actReport.memId + '</td>' +
+                        '<td><a href="">' + actReport.act.actId + '</a></td>' +
+                        '<td><a href="">' + actReport.memId + '</a></td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + actReport.repContent + '</td>' +
                         '<td>';

@@ -300,7 +300,6 @@
                 actMembers.forEach(function (actMember) {
                     if (actMember.regStatus !== 4) {
                         let statusChinese = statusMap[actMember.regStatus];
-
                         memberHTML +=
                             `<tr>
                                 <td>${actMember.memId}</td>
@@ -315,21 +314,29 @@
                                     </div>
                                 </td>
                             </tr>`;
+
                     }
                 });
-
                 $("#actmember").html(memberHTML);
 
                 $(".status").each(function () {
+
+                    let ok = $(this).closest("tr").find(".ok");
+                    let not = $(this).closest("tr").find(".not");
+
                     switch ($(this).text()) {
                         case "審核中":
                             $(this).addClass("text-warning");
                             break;
                         case "已通過":
                             $(this).addClass("text-success");
+                            ok.addClass("disabled")
+                            not.addClass("disabled")
                             break;
                         case "未通過":
                             $(this).addClass("text-danger");
+                            ok.addClass("disabled")
+                            not.addClass("disabled")
                             break;
                     }
 
@@ -367,6 +374,7 @@
                 status.removeClass("text-warning");
                 status.removeClass("text-danger"); //再刪掉 只需要warning才對 審核通過後即不再審核
                 status.addClass("text-success");
+                thisBtn.addClass("disabled");
 
                 Toast.fire({
                     icon: 'success',
@@ -400,6 +408,7 @@
                 status.removeClass("text-warning");
                 status.removeClass("text-success"); //再刪掉 只需要warning才對 審核通過後即不再審核
                 status.addClass("text-danger");
+                thisBtn.addClass("disabled")
 
                 Toast.fire({
                     icon: 'success',

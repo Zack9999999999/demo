@@ -97,19 +97,6 @@
 
 <main class="main">
 
-    <!--        <div>-->
-    <!--            <h1 class="fw-bold">活動留言檢舉<span id="countReport"></span>筆</h1>-->
-    <!--            <div class="d-md-flex justify-content-md-end mb-1">-->
-    <!--                <div class="btn-group" role="group">-->
-    <!--                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有-->
-    <!--                    </button>-->
-    <!--                    <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>-->
-    <!--                    <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>-->
-    <!--                    <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
     <div>
         <h1 class="fw-bold">報名的活動</h1>
         <div class="d-flex justify-content-between mb-1">
@@ -152,25 +139,6 @@
             </tbody>
         </table>
     </div>
-
-    <!--    <div class="d-flex p-2">-->
-    <!--        <div class="table-responsive m-2"style="max-width: 40%">-->
-    <!--            <table class="table table-striped table-sm">-->
-    <!--                <tr>-->
-    <!--                    <th>S.N</th>-->
-    <!--                    <td>1</td>-->
-    <!--                </tr>-->
-    <!--                <tr>-->
-    <!--                    <th>Article Title</th>-->
-    <!--                    <td>Create confirmation Modal</td>-->
-    <!--                </tr>-->
-    <!--                <tr>-->
-    <!--                    <th>Author</th>-->
-    <!--                    <td>Harry Rohdes</td>-->
-    <!--                </tr>-->
-    <!--            </table>-->
-    <!--        </div>-->
-    <!--    </div>-->
 
     <div class="fixed-bottom">
         <div class="container">
@@ -334,13 +302,16 @@
                         case "報名成功":
                             $(this).addClass("text-success");
 
-                            delbtn.text("已參加");
+                            delbtn.text("報名成功");
                             delbtn.removeClass("btn-danger");
                             delbtn.addClass("btn-success");
                             delbtn.addClass("disabled");
                             break;
                         case "未通過":
                             $(this).addClass("text-danger");
+
+                            delbtn.text("未通過");
+                            delbtn.addClass("disabled");
                             break;
                     }
                 })

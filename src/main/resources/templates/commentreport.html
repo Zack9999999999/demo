@@ -125,9 +125,9 @@
             <caption id="count">筆</caption>
             <thead class="table-secondary">
             <tr>
-                <th scope="col">檢舉編號</th>
-                <th scope="col">檢舉者</th>
-                <th scope="col">留言內容</th>
+                <th scope="col">編號</th>
+                <th scope="col">檢舉者ID</th>
+                <th scope="col">檢舉留言內容</th>
                 <th scope="col">檢舉標題</th>
                 <th scope="col">檢舉原因</th>
                 <th scope="col">時間
@@ -138,7 +138,7 @@
                 </th>
                 <th scope="col">審核</th>
                 <th scope="col">狀態</th>
-                <th scope="col">審核者</th>
+                <th scope="col">審核者ID</th>
             </tr>
             </thead>
             <tbody id="report" class="table-light text-nowrap">
@@ -291,21 +291,23 @@
                     let statusChinese = statusMap[commetreport.repStatus];
 
                     commentReportHTML +=
-                        '<tr><td>' + commetreport.repId + '</td>' +
-                        '<td>' + commetreport.memId + '</td>' +
-                        '<td>' + commetreport.comment.comContent + '</td>' +
-                        '<td>' + titleChinese + '</td>' +
-                        '<td>' + commetreport.repContent + '</td>' +
-                        '<td>' + commetreport.repTime + '</td>' +
-                        '<td>' +
-                        '<select class="changeStatus" data-rep-id="' + commetreport.repId + '">' +
-                        '<option value="1">審核中</option>' +
-                        '<option value="2">通過</option>' +
-                        '<option value="3">未通過</option>' +
-                        '</select>' +
-                        '</td>' +
-                        '<td class="color" id="status-' + commetreport.repId + '">' + statusChinese + '</td>' +
-                        '<td>' + (commetreport.empId ? commetreport.empId : "無") + '</td></tr>';
+                        `<tr>
+                            <td>${commetreport.repId}</td>
+                            <td><a href="">${commetreport.memId}</a></td>
+                            <td>${commetreport.comment.comContent}</td>
+                            <td>${titleChinese}</td>
+                            <td>${commetreport.repContent}</td>
+                            <td>${commetreport.repTime}</td>
+                            <td>
+                                <select class="changeStatus" data-rep-id="${commetreport.repId}">
+                                <option value="1">審核中</option>
+                                <option value="2">通過</option>
+                                <option value="3">未通過</option>
+                                </select>
+                            </td>
+                            <td class="color" id="status-${commetreport.repId}">${statusChinese}</td>
+                            <td>${(commetreport.empId ? commetreport.empId : "無")}</td>
+                        </tr>`;
 
                     pageCount++;
                 });
@@ -394,9 +396,9 @@
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
-                `<li  class="page-item">` +
-                `<a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>` +
-                `</li>`;
+                `<li  class="page-item">
+                <a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>
+                </li>`;
         }
 
         $(".pagination").html(pageHTML); //插入頁碼

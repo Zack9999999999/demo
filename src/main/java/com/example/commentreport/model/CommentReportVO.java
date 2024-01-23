@@ -3,6 +3,7 @@ package com.example.commentreport.model;
 import com.example.comment.model.CommentVO;
 import com.example.comment.model.CommentVOForComRep;
 import com.example.commentreport.constant.CommentReportRepTitle;
+import com.example.mem.model.MembershipVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,10 @@ public class CommentReportVO implements Serializable {
 
     @Column(name = "mem_id") //有table後再改成ManyToOne
     private Integer memId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "mem_id", referencedColumnName = "mem_id")
+//    private MembershipVO membership;
 
     @Column(name = "emp_id")
     private Integer empId;

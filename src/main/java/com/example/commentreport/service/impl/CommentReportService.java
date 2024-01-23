@@ -63,10 +63,6 @@ public class CommentReportService implements ICommentReportService {
         commentReport.setComment(comment);
         commentReport.setRepTime(new Date());
 
-
-//        commentReport.setMemId(commentReportRequest.getMemId());
-//        commentReport.setRepTitle(commentReportRequest.getRepTitle());
-//        commentReport.setRepContent(commentReportRequest.getRepContent());
         return commentReportRepository.save(commentReport);
     }
 

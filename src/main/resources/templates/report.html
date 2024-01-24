@@ -128,7 +128,7 @@
             <tr>
                 <th scope="col">編號</th>
                 <th scope="col">活動編號</th>
-                <th scope="col">檢舉者</th>
+                <th scope="col">檢舉者ID</th>
                 <th scope="col">檢舉標題</th>
                 <th scope="col">檢舉原因</th>
                 <th scope="col">檢舉圖片</th>
@@ -140,7 +140,7 @@
                 </th>
                 <th scope="col">審核</th>
                 <th scope="col">狀態</th>
-                <th scope="col">審核者</th>
+                <th scope="col">審核者ID</th>
             </tr>
             </thead>
             <tbody id="actReport" class="table-light text-nowrap">
@@ -291,7 +291,7 @@
                 }
 
                 let titleMap = {
-                    "INAPPROPRIATE": "不恰當的内容",
+                    "INAPPROPRIATE": "不恰當的內容",
                     "NOSAFETY": "不安全的",
                     "MISLEADING": "誤導信息",
                     "HARASSMENT": "騷擾或欺凌",
@@ -309,8 +309,8 @@
                     let statusChinese = statusMap[actReport.repStatus];
 
                     actReportHTML +=
-                        '<tr><td>' + actReport.repId + '</td>' +
-                        '<td><a href="">' + actReport.act.actId + '</a></td>' +
+                        '<tr><td><span class="badge rounded-circle bg-dark">' + actReport.repId + '</span></td>' +
+                        '<td><a class="badge rounded-circle bg-primary text-decoration-none" href="/CHA104G3/activity/' + actReport.act.actId + '">' + actReport.act.actId + '</a></td>' +
                         '<td><a href="">' + actReport.memId + '</a></td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + actReport.repContent + '</td>' +

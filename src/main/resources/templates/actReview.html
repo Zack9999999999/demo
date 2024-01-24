@@ -109,6 +109,7 @@
                 <th>活動名稱</th>
                 <th>活動詳情</th>
                 <th>審核報名</th>
+                <th>活動狀態</th>
             </tr>
             </thead>
             <tbody id="actreg">
@@ -121,6 +122,7 @@
                 <td>
                     <button>查看</button>
                 </td>
+                <td>報名中</td>
             </tr>
             </tbody>
         </table>
@@ -139,7 +141,7 @@
                         <table class="table table-striped table-hover table-sm shadow-sm">
                             <thead class="thead-inverse">
                             <tr>
-                                <th>會員名稱</th>
+                                <th>會員ID</th>
                                 <th>會員資訊</th>
                                 <th>報名人數</th>
                                 <th>報名原因</th>
@@ -248,11 +250,20 @@
                     $("#last").addClass("disabled")
                 }
 
+                // 1:活動結束; 2:活動取消; 3:活動進行中; 4:活動報名中(預設))
+                let actStatusMap = {
+                    "1": "已結束",
+                    "2": "已取消",
+                    "3": "進行中",
+                    "4": "報名中"
+                }
                 acts.forEach(function (act) {
+                    let actStatusChinese = actStatusMap[act.actStatus];
+
                     actHTML +=
                         `<tr>
-                            <td>${act.actId}</td>
-                            <td>${act.actName}</td>
+                            <td><span class="badge rounded-circle bg-dark">${act.actId}</span></td>
+                            <td><span class="fw-bold">${act.actName}</span></td>
                             <td>
                                 <button class="rounded-pill btn btn-info" data-act-id="${act.actId}" onclick="view(this)">查看</button>
                             </td>
@@ -260,6 +271,7 @@
                                 <button type="button" class="showMem rounded-pill btn btn-warning" data-act-id="${act.actId}"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">查看</button>
                             </td>
+                            <td>${actStatusChinese}</td>
                          </tr>`;
                 });
                 $("#actreg").html(actHTML);
@@ -355,8 +367,10 @@
 
     //審核通過
     $(document).on("click", ".ok", function () {
-        let thisBtn = $(this)
+        let thisBtn = $(this);
+        let notBtn = thisBtn.next(".not");
 
+        console.log(notBtn)
         reviewData = {
             actRegId: $(this).data("actRegId"),
             regStatus: 3
@@ -376,6 +390,7 @@
                 status.addClass("text-success");
                 thisBtn.addClass("disabled");
 
+                notBtn.addClass("disabled")
                 Toast.fire({
                     icon: 'success',
                     title: '完成審核！'
@@ -388,7 +403,8 @@
     });
     //不通過
     $(document).on("click", ".not", function () {
-        let thisBtn = $(this)
+        let thisBtn = $(this);
+        let okBtn = thisBtn.prev(".ok");
 
         reviewData = {
             actRegId: $(this).data("actRegId"),
@@ -408,8 +424,9 @@
                 status.removeClass("text-warning");
                 status.removeClass("text-success"); //再刪掉 只需要warning才對 審核通過後即不再審核
                 status.addClass("text-danger");
-                thisBtn.addClass("disabled")
+                thisBtn.addClass("disabled");
 
+                okBtn.addClass("disabled")
                 Toast.fire({
                     icon: 'success',
                     title: '完成審核！'

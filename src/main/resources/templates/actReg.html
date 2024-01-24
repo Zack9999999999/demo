@@ -110,7 +110,7 @@
                     <button class="filterButton btn btn-warning btn-sm" data-reg-status="2">審核中</button>
                     <button class="filterButton btn btn-danger btn-sm" data-reg-status="1">未通過</button>
                     <button class="filterButton btn btn-success btn-sm" data-reg-status="3">報名成功</button>
-                    <button class="filterButton btn btn-dark btn-sm" data-reg-status="3">歷史紀錄</button>
+                    <button class="historyButton btn btn-dark btn-sm" data-act-status="1">歷史紀錄</button>
                 </div>
             </div>
         </div>
@@ -132,6 +132,7 @@
                 </th>
                 <th>審核狀態</th>
                 <th>是否取消</th>
+                <th>活動狀態</th>
             </tr>
             </thead>
             <tbody id="actreg">
@@ -187,10 +188,19 @@
     let actTime = "ASC"; // 排序預設
     // let size = 5; //顯示筆數預設
 
+    let actStatus;
+
     //審核狀態篩選
     $(".filterButton").click(function () {
         regStatus = $(this).data("regStatus");
         checkActReg(pageNumber, actTime, regStatus);
+    });
+
+    //歷史紀錄
+    $(".historyButton").click(function () {
+        actStatus = $(this).data("actStatus");
+
+
     });
 
     //時間排序
@@ -262,9 +272,16 @@
                     $("#last").addClass("disabled")
                 }
 
+                let actStatusMap = {
+                    "1": "已結束",
+                    "2": "已取消",
+                    "3": "進行中",
+                    "4": "報名中",
+                }
 
                 actRegs.forEach(function (actReg) {
                     let statusChinese = statusMap[actReg.regStatus];
+                    let actStatusChinese = actStatusMap[actReg.act.actStatus];
 
                     if (actReg.regStatus !== 4) { //4 = 自己取消報名 就不用再顯示給使用者看到
                         actregHTML +=
@@ -281,6 +298,7 @@
                             data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消報名
                             </button>
                         </td>
+                        <td>${actStatusChinese}</td>
                     </tr>`;
 
                         pageCount++;

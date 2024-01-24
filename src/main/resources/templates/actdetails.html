@@ -543,7 +543,6 @@
                             '</div>' +
                             '</div>';
                     }
-
                 });
                 //留言總數
                 $("#commentcount").html("(" + (total ? total : "無") + ")");
@@ -994,7 +993,7 @@
                     case 1:   //1 = 報名未通過
                         addBtn.data("actRegStatus", actReg.regStatus);
                         addBtn.addClass("disabled");
-                        addBtn.text("不可報名");
+                        addBtn.text("報名未通過");
                         break;
 
                     case 2:   //2 = 報名了審核中
@@ -1009,7 +1008,7 @@
                         addBtn.removeClass("btn-outline-danger");
                         addBtn.addClass("btn-danger");
                         addBtn.addClass("disabled");
-                        addBtn.text("已參加");
+                        addBtn.text("已報名成功");
                         break;
 
                     case 4:   //4 = 報名過 自己取消報名

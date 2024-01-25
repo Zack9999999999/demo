@@ -106,20 +106,6 @@ public class ActRegController {
         }
     }
 
-    @PutMapping("/actreg/member")
-    public ResponseEntity<ActRegVO> reviewActReg(@RequestBody ActRegReviewRequest actRegReviewRequest,
-                                                 HttpSession session) {
-
-        //模擬從session取出會員id
-        Integer testMemId = 1;
-        session.setAttribute("memId", testMemId);
-        Integer memId = (Integer) session.getAttribute("memId");
-
-        ActRegVO actReg = actRegService.reviewActReg(actRegReviewRequest);
-
-        return ResponseEntity.status(HttpStatus.OK).body(actReg);
-    }
-
     @PutMapping("/actreg")
     public ResponseEntity<ActRegVO> updateActReg(@RequestBody @Valid ActRegStatus actRegStatus,
                                                  HttpSession session) {
@@ -131,6 +117,20 @@ public class ActRegController {
         actRegStatus.setMemId(memId);
 
         ActRegVO actReg = actRegService.updateActReg(actRegStatus);
+
+        return ResponseEntity.status(HttpStatus.OK).body(actReg);
+    }
+
+    @PutMapping("/actreg/member")
+    public ResponseEntity<ActRegVO> reviewActReg(@RequestBody ActRegReviewRequest actRegReviewRequest,
+                                                 HttpSession session) {
+
+        //模擬從session取出會員id
+        Integer testMemId = 1;
+        session.setAttribute("memId", testMemId);
+        Integer memId = (Integer) session.getAttribute("memId");
+
+        ActRegVO actReg = actRegService.reviewActReg(actRegReviewRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(actReg);
     }

@@ -94,20 +94,21 @@ public class ActRegService implements IActRegService {
     @Transactional
     public ActRegVO updateActReg(ActRegStatus actRegStatus) {
 
-        ActVO act = actRepository.findById(actRegStatus.getActId()).orElse(null);
+//        ActVO act = actRepository.findById(actRegStatus.getActId()).orElse(null);
 
         ActRegVO actReg = actRegRepository.findByAct_ActIdAndMemId(actRegStatus.getActId(), actRegStatus.getMemId());
 
         Integer actRegId = actReg.getActRegId(); //為了解決modelMapper映射問題 先將PK存起來 mapper完後再將PK set回正確的
+        Byte actStatus = actReg.getAct().getActStatus();
         modelMapper.map(actRegStatus, actReg);
         actReg.setActRegId(actRegId); //modelMapper映射會將actId的值連動改到PK-actRegId
+        actReg.getAct().setActStatus(actStatus);
 
         //審核報名者
         switch (actRegStatus.getRegStatus()) {
             case 2:
                 //取消過現在再次報名
                 log.info("再次報名");
-
                 //如果報名人數超過活動人數上限 則不能報名
                 if ((actReg.getAct().getActUpper() - actReg.getAct().getActCount()) - actRegStatus.getRegTotal() < 0) {
                     throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED);

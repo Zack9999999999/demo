@@ -214,6 +214,7 @@
         actReview(pageNumber);
     }
 
+    //所有活動
     $(".filterButton").click(function () {
         let actStatus = $(this).data("actStatus");
         actReview(pageNumber, actStatus);
@@ -528,6 +529,7 @@
                             icon: 'success',
                             title: '已取消！'
                         });
+                        actReview(pageNumber);
                     },
                     error: function (xhr, status, error) {
                         Toast.fire({

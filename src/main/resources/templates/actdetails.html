@@ -105,14 +105,6 @@
 </head>
 
 <body>
-<button id="returnPage" class="position-fixed top-0 start-0 btn btn-outline-primary btn-sm rounded-pill m-2"
-        onclick="javascript:history.go(-1)">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left"
-         viewBox="0 0 16 16">
-        <path fill-rule="evenodd"
-              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-    </svg>
-</button>
 
 <div class="container">
     <header
@@ -246,7 +238,7 @@
         <div class="mt-5 w-100">
             <div class="mt-3">
                 <div style="display: inline">
-                    <span class="fs-3 fw-bolder">留言區<span id="commentcount">(0)</span></span>
+                    <span class="fs-3 fw-bolder">評論區<span id="commentcount">(0)</span></span>
                     <button id="newToOld" class="rounded-pill text-dark bg-light" onclick="newToOld()">新至舊</button>
                     <button id="oldToNew" class="rounded-pill text-dark bg-light" onclick="oldToNew()">舊至新</button>
                 </div>
@@ -396,9 +388,12 @@
 <script th:src="@{/js/googlemap.js}" src="../static/js/googlemap.js"></script>
 
 <script>
+
     //將thymeleaf帶出來的活動狀態改為中文顯示
     let actStatus = $("#actStatus");
+    //活動狀態
     let actStatusData = $("#actStatus").data("actStatus");
+
     switch (actStatusData) {
         case 1:
             actStatus.text("活動結束");
@@ -872,16 +867,16 @@
                 Swal.fire({
                     title: '人數',
                     text: '剩餘名額: ' + actTotal,
-                    input: 'text',
+                    input: 'number',
                     inputPlaceholder: '報名人數',
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return '請輸入人數'
-                        }
-                        if (isNaN(value)) {
-                            return '請輸入數字';
-                        }
-                    },
+                    // inputValidator: (value) => {
+                    //     if (!value) {
+                    //         return '請輸入人數'
+                    //     }
+                    //     if (isNaN(value)) {
+                    //         return '請輸入數字';
+                    //     }
+                    // },
                     showCancelButton: true,
                     confirmButtonText: '送出',
                     cancelButtonText: '取消',
@@ -955,16 +950,8 @@
                 Swal.fire({
                     title: '人數',
                     text: '還可以報名的人數: ' + actTotal,
-                    input: 'text',
+                    input: 'number',
                     inputPlaceholder: '報名人數',
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return '請輸入人數'
-                        }
-                        if (isNaN(value)) {
-                            return '請輸入數字';
-                        }
-                    },
                     showCancelButton: true,
                     confirmButtonText: '送出',
                     cancelButtonText: '取消',
@@ -1019,6 +1006,8 @@
                 switch (regStatus) {
                     case 1:   //1 = 報名未通過
                         addBtn.data("actRegStatus", actReg.regStatus);
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
                         addBtn.addClass("disabled");
                         addBtn.text("報名未通過");
                         break;
@@ -1035,7 +1024,7 @@
                         addBtn.removeClass("btn-outline-danger");
                         addBtn.addClass("btn-danger");
                         addBtn.addClass("disabled");
-                        addBtn.text("已報名成功");
+                        addBtn.text("報名成功");
                         break;
 
                     case 4:   //4 = 報名過 自己取消報名
@@ -1043,6 +1032,27 @@
                         addBtn.removeClass("btn-danger");
                         addBtn.addClass("btn-outline-danger");
                         addBtn.text("報名活動");
+                        break;
+                }
+
+                switch(actStatusData){
+                    case 1:
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
+                        addBtn.addClass("disabled");
+                        addBtn.text("活動已結束");
+                        break;
+                    case 2:
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
+                        addBtn.addClass("disabled");
+                        addBtn.text("活動已取消");
+                        break;
+                    case 3:
+                        addBtn.removeClass("btn-outline-danger");
+                        addBtn.addClass("btn-danger");
+                        addBtn.addClass("disabled");
+                        addBtn.text("活動進行中");
                         break;
                 }
 
@@ -1193,17 +1203,6 @@
             }
         })
     }
-
-    // $("#returnPage").on("hover", () => {
-    //    alert("!!!")
-    // });
-
-    returnPage = document.querySelector("#returnPage");
-    returnPage.addEventListener("mouseover", () => {
-        Toast.fire({
-            title: '這是讓你回上一頁的按鈕！'
-        })
-    })
 
     //Sweetalart2
     const Toast = Swal.mixin({

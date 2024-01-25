@@ -12,12 +12,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
     <style>
 
         main {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         th {
@@ -221,10 +221,10 @@
                                 <td><span class="badge rounded-circle bg-dark">${actFollow.actId}</span></td>
                                 <td><sapn class="fw-bold">${actFollow.act.actName}</sapn></td>
                                 <td>
-                                    <button class="rounded-pill btn btn-info" data-act-id="${actFollow.actId}" onclick="view(this)">查看</button>
+                                    <button class="rounded-pill btn btn-info btn-sm" data-act-id="${actFollow.actId}" onclick="view(this)">查看</button>
                                 </td>
                                 <td>
-                                    <button class="delbtn rounded-pill btn btn-danger" data-act-id="${actFollow.actId}"
+                                    <button class="delbtn rounded-pill btn btn-danger btn-sm" data-act-id="${actFollow.actId}"
                                      onclick="delFollow(this)">取消</button>
                                 </td>
                               </tr>`;

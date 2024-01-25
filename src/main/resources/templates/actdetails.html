@@ -13,9 +13,14 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+
     <style>
         main {
             min-height: calc(100vh - 70px);
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         /* Set the size of the div element that contains the map */
@@ -168,13 +173,16 @@
                              class="bi bi-fire" viewBox="0 0 16 16">
                             <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
                         </svg>
-                        <span class="fst-italic">關注此活動的人數:<span id="actFollowCount"
-                                                                        th:text="${act.actFollowCount}">1</span></span>
+                        <span>關注此活動的人數:<span id="actFollowCount"
+                                                     th:text="${act.actFollowCount}">1</span></span>
                         <div style="margin: 10px">
-                            <p class="fst-italic" style="margin: 0;">人數上限:<span id="actUpper"
-                                                                                    th:text="${act.actUpper}">1</span>
+                            <p style="margin: 0;">人數上限:<span id="actUpper"
+                                                                 th:text="${act.actUpper}">1</span>
                             </p>
-                            <p class="fst-italic">目前參與人數:<span id="actCount" th:text="${act.actCount}">1</span>
+                            <p>目前參與人數:<span id="actCount" th:text="${act.actCount}">1</span>
+                            </p>活動狀態:<span id="actStatus" th:data-act-status="${act.actStatus}"></span>
+                            <p>
+
                             </p>
                         </div>
                     </div>
@@ -388,6 +396,27 @@
 <script th:src="@{/js/googlemap.js}" src="../static/js/googlemap.js"></script>
 
 <script>
+    //將thymeleaf帶出來的活動狀態改為中文顯示
+    let actStatus = $("#actStatus");
+    let actStatusData = $("#actStatus").data("actStatus");
+    switch (actStatusData) {
+        case 1:
+            actStatus.text("活動結束");
+            actStatus.addClass("badge bg-danger text-wrap");
+            break;
+        case 2:
+            actStatus.text("活動取消");
+            actStatus.addClass("badge bg-warning text-wrap");
+            break;
+        case 3:
+            actStatus.text("活動進行中");
+            actStatus.addClass("badge bg-primary text-wrap");
+            break;
+        case 4:
+            actStatus.text("活動報名中");
+            actStatus.addClass("badge bg-success text-wrap");
+            break;
+    }
 
     //檢舉留言框的Modal
     let exampleModal;
@@ -561,7 +590,7 @@
                 //     }
                 // })
 
-                //跟上面一樣 都是判斷是不是自己的留言 做法不同而已
+                //跟上面一樣 都是判斷是不是自己的留言 做法不同
                 $("#comments .userfunction").each(function () {
                     let comId = $(this).children("a").data("comId")
                     // console.log(comId) //留言編號
@@ -571,7 +600,6 @@
                     checkComment(comId, nosee);
 
                 })
-
 
                 //判斷查看更多可不可以按
                 if (total > currentDisplayed) {
@@ -763,7 +791,6 @@
         let comId = $(this).data("comId");
         let updataData = {
             actId: window.location.pathname.split('/')[3],
-            // memId:,
             comContent: input.val()
         }
         $.ajax({

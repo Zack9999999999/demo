@@ -22,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ActRegService implements IActRegService {
@@ -38,13 +39,6 @@ public class ActRegService implements IActRegService {
     //log紀錄
     private final static Logger log = LoggerFactory.getLogger(ActRegService.class);
 
-
-    @Override
-    public Page<ActVO> reviewActRegs(Integer memId, Pageable pageable) {
-
-        return actRepository.findByMemId(memId, pageable);
-    }
-
     @Override
     public Page<ActRegVO> findByActId(Integer actId, Pageable pageable) {
         return actRegRepository.findByAct_ActId(actId, pageable);
@@ -54,9 +48,13 @@ public class ActRegService implements IActRegService {
     public Page<ActRegVO> getActRegs(Integer memId, ActRegQueryParams actRegQueryParams, Pageable pageable) {
 
         if (actRegQueryParams.getRegStatus() != null) {
-            Page<ActRegVO> byMemIdAndRegStatus = actRegRepository.findByMemIdAndRegStatus(memId, actRegQueryParams.getRegStatus(), pageable);
-            return byMemIdAndRegStatus;
+            return actRegRepository.findByMemIdAndRegStatus(memId, actRegQueryParams.getRegStatus(), pageable);
         }
+
+        if (actRegQueryParams.getActStatus() != null) {
+            return actRegRepository.findRegByMemIdAndActStatus(memId, pageable);
+        }
+
         return actRegRepository.findRegByMemId(memId, pageable);
     }
 

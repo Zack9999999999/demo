@@ -311,7 +311,7 @@
                     actReportHTML +=
                         '<tr><td><span class="badge rounded-circle bg-dark">' + actReport.repId + '</span></td>' +
                         '<td><a class="badge rounded-circle bg-primary text-decoration-none" href="/CHA104G3/activity/' + actReport.act.actId + '">' + actReport.act.actId + '</a></td>' +
-                        '<td><a href="">' + actReport.memId + '</a></td>' +
+                        '<td><a class="badge rounded-circle bg-primary text-decoration-none" href="">' + actReport.memId + '</a></td>' +
                         '<td>' + titleChinese + '</td>' +
                         '<td>' + actReport.repContent + '</td>' +
                         '<td>';
@@ -320,7 +320,7 @@
                         actReportHTML += '<button class="showPic rounded-pill btn btn-secondary btn-sm" ' +
                             'data-rep-id="' + actReport.repId + '" disabled>未提供</button>';
                     } else {
-                        actReportHTML += '<button class="showPic rounded-pill btn btn-primary btn-sm" ' +
+                        actReportHTML += '<button class="showPic rounded-pill btn btn-success btn-sm" ' +
                             'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
                             'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
                     }
@@ -334,7 +334,8 @@
                         '<option value="3">未通過</option>' +
                         '</select></td>' +
                         '<td class="color" id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
-                        '<td>' + (actReport.empId ? actReport.empId : "無") + '</td></tr>';
+                        '<td><span class="badge rounded-circle bg-primary">' + (actReport.empId ? actReport.empId : "無") + '</span></td>' +
+                        '</tr>';
 
                     pageCount++;
                 });

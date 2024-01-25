@@ -31,4 +31,7 @@ public interface ActRegRepository extends JpaRepository<ActRegVO, Integer> {
 
     Page<ActRegVO> findByAct_ActId(Integer actId, Pageable pageable);
 
+    @Query("SELECT r FROM ActRegVO r JOIN r.act a WHERE r.memId = :memId AND a.actStatus = 1")
+    Page<ActRegVO> findRegByMemIdAndActStatus(@Param("memId") Integer memId, Pageable pageable);
+
 }

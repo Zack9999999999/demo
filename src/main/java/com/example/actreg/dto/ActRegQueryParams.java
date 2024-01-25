@@ -3,6 +3,7 @@ package com.example.actreg.dto;
 public class ActRegQueryParams {
 
     private Byte regStatus;
+    private Byte actStatus;
     private Integer page;
     private Integer size;
 
@@ -12,6 +13,14 @@ public class ActRegQueryParams {
 
     public void setRegStatus(Byte regStatus) {
         this.regStatus = regStatus;
+    }
+
+    public Byte getActStatus() {
+        return actStatus;
+    }
+
+    public void setActStatus(Byte actStatus) {
+        this.actStatus = actStatus;
     }
 
     public Integer getPage() {

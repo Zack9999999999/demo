@@ -26,21 +26,6 @@ public class ActRegController {
     @Autowired
     private IActRegService actRegService;
 
-    @GetMapping("/actregs")
-    public ResponseEntity<Page<ActVO>> reviewActRegs(
-            @PageableDefault(size = 5) Pageable pageable,
-            HttpSession session
-    ) {
-        //模擬從session取出會員id
-        Integer testMemId = 1;
-        session.setAttribute("memId", testMemId);
-        Integer memId = (Integer) session.getAttribute("memId");
-
-        Page<ActVO> actRegList = actRegService.reviewActRegs(memId, pageable);
-
-        return ResponseEntity.status(HttpStatus.OK).body(actRegList);
-    }
-
     @GetMapping("/actregs/members")
     public ResponseEntity<Page<ActRegVO>> findByActId(@RequestParam Integer actId,
                                                       Pageable pageable) {
@@ -52,6 +37,7 @@ public class ActRegController {
     public ResponseEntity<Page<ActRegVO>> getActRegs(
             HttpSession session,
             @RequestParam(required = false) Byte regStatus,
+            @RequestParam(required = false) Byte actStatus,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "act.actStartTime", direction = Sort.Direction.ASC) Pageable pageable
     ) {
@@ -72,6 +58,7 @@ public class ActRegController {
 
         ActRegQueryParams actRegQueryParams = new ActRegQueryParams();
         actRegQueryParams.setRegStatus(regStatus);
+        actRegQueryParams.setActStatus(actStatus);
 
         Page<ActRegVO> actRegVOList = actRegService.getActRegs(memId, actRegQueryParams, pageable);
 

@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface IActRegService {
 
-    Page<ActVO> reviewActRegs(Integer memId, Pageable pageable);
-
     Page<ActRegVO> findByActId(Integer actId, Pageable pageable);
 
     Page<ActRegVO> getActRegs(Integer memId, ActRegQueryParams actRegQueryParams, Pageable pageable);
@@ -23,6 +21,7 @@ public interface IActRegService {
     ActRegVO reviewActReg(ActRegReviewRequest actRegReviewRequest);
 
     ActRegVO updateActReg(ActRegStatus actRegStatus);
+
 
     List<MemNameAndPicDTO> findMemNameAndPic(Integer actId, Integer isActPart);
 }

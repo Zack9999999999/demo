@@ -12,11 +12,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
     <style>
         main {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         th {
@@ -97,8 +97,17 @@
 
 <main class="main">
 
+
     <div>
-        <h1 class="fw-bold">我的活動</h1>
+        <div>
+            <h1 class="fw-bold">我的活動</h1>
+        </div>
+        <div class="d-md-flex justify-content-md-end mb-1">
+            <div class="btn-group" role="group">
+                <button class="filterButton btn btn-secondary btn-sm" data-act-status="">所有活動</button>
+                <button class="historyButton btn btn-dark btn-sm" data-act-status="1">歷史紀錄</button>
+            </div>
+        </div>
     </div>
 
     <div class="table-responsive">
@@ -108,22 +117,14 @@
                 <th>活動編號</th>
                 <th>活動名稱</th>
                 <th>活動詳情</th>
+                <th>活動開始時間</th>
                 <th>審核報名</th>
                 <th>活動狀態</th>
+                <th>取消活動</th>
             </tr>
             </thead>
             <tbody id="actreg">
-            <tr>
-                <td>1</td>
-                <td>今晚打老虎</td>
-                <td>
-                    <button>查看</button>
-                </td>
-                <td>
-                    <button>查看</button>
-                </td>
-                <td>報名中</td>
-            </tr>
+
             </tbody>
         </table>
     </div>
@@ -213,9 +214,28 @@
         actReview(pageNumber);
     }
 
-    function actReview(pageNumber) {
+    $(".filterButton").click(function () {
+        let actStatus = $(this).data("actStatus");
+        actReview(pageNumber, actStatus);
+
+    });
+    //歷史紀錄
+    $(".historyButton").click(function () {
+        let actStatus = $(this).data("actStatus");
+        actReview(pageNumber, actStatus);
+    });
+
+    //自己舉辦的所有活動
+    function actReview(pageNumber, actStatus) {
+
+        let url = "/acts";
+
+        if (actStatus !== undefined && actStatus !== null) {
+            url += `?actStatus=${actStatus}`;
+        }
+
         $.ajax({
-            url: '/actregs',
+            url: url,
             type: 'GET',
             data: {
                 page: pageNumber - 1
@@ -265,16 +285,42 @@
                             <td><span class="badge rounded-circle bg-dark">${act.actId}</span></td>
                             <td><span class="fw-bold">${act.actName}</span></td>
                             <td>
-                                <button class="rounded-pill btn btn-info" data-act-id="${act.actId}" onclick="view(this)">查看</button>
+                                <button class="rounded-pill btn btn-info btn-sm" data-act-id="${act.actId}" onclick="view(this)">查看</button>
                             </td>
+                            <td>${act.actStartTime}</td>
                             <td>
-                                <button type="button" class="showMem rounded-pill btn btn-warning" data-act-id="${act.actId}"
+                                <button type="button" class="showMem rounded-pill btn btn-warning btn-sm" data-act-id="${act.actId}"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">查看</button>
                             </td>
-                            <td>${actStatusChinese}</td>
+                            <td class="actStatus">${actStatusChinese}</td>
+                            <td data-act-id="${act.actId}">
+                            <button class="delAct rounded-pill btn btn-danger btn-sm" onclick="delAct(this)">取消</button>
+                            </td>
                          </tr>`;
+
                 });
                 $("#actreg").html(actHTML);
+
+                $(".actStatus").each(function () {
+
+                    switch ($(this).text()) {
+                        case "已結束": //1
+                            $(this).addClass("text-danger");
+                            $(this).closest('tr').find($(".delAct")).addClass("disabled");
+                            break;
+                        case "已取消": //2
+                            $(this).addClass("text-warning");
+                            $(this).closest('tr').find($(".delAct")).addClass("disabled");
+                            break;
+                        case "進行中": //3
+                            $(this).addClass("text-primary");
+                            $(this).closest('tr').find($(".delAct")).addClass("disabled");
+                            break;
+                        case "報名中": //4
+                            $(this).addClass("text-success");
+                            break;
+                    }
+                });
 
             }, error: function (xhr, status, error) {
                 alert("!!!!")
@@ -282,6 +328,7 @@
         });
     }
 
+    //活動詳情
     function view(e) {
         let actId = $(e).data("actId");
         window.location.href = `/CHA104G3/activity/${actId}`;
@@ -370,7 +417,6 @@
         let thisBtn = $(this);
         let notBtn = thisBtn.next(".not");
 
-        console.log(notBtn)
         reviewData = {
             actRegId: $(this).data("actRegId"),
             regStatus: 3
@@ -459,6 +505,39 @@
     //上一頁
     function previous() {
         actReview(--pageNumber);
+    }
+
+    //取消活動
+    function delAct(e) {
+        let actId = $(e).closest("td").data("actId");
+        Swal.fire({
+            title: "要取消活動嗎?",
+            width: "300px",
+            showCancelButton: true,
+            confirmButtonText: "確定",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `/acts/${actId}`,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function () {
+                        Toast.fire({
+                            icon: 'success',
+                            title: '已取消！'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        Toast.fire({
+                            title: '失敗！'
+                        });
+
+                    }
+                });
+            }
+        });
     }
 
     //Sweetalart2

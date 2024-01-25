@@ -111,8 +111,7 @@
         <h1 class="fw-bold">活動留言檢舉</h1>
         <div class="d-md-flex justify-content-md-end mb-1">
             <div class="btn-group" role="group">
-                <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有
-                </button>
+                <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有</button>
                 <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>
                 <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>
                 <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>
@@ -293,7 +292,7 @@
                     commentReportHTML +=
                         `<tr>
                             <td><span class="badge rounded-circle bg-dark">${commetreport.repId}</span></td>
-                            <td><a href="">${commetreport.memId}</a></td>
+                            <td><a class="badge rounded-circle bg-primary text-decoration-none" href="">${commetreport.memId}</a></td>
                             <td>${commetreport.comment.comContent}</td>
                             <td>${titleChinese}</td>
                             <td>${commetreport.repContent}</td>
@@ -306,7 +305,7 @@
                                 </select>
                             </td>
                             <td class="color" id="status-${commetreport.repId}">${statusChinese}</td>
-                            <td>${(commetreport.empId ? commetreport.empId : "無")}</td>
+                            <td><span class="badge rounded-circle bg-primary">${(commetreport.empId ? commetreport.empId : "無")}</span></td>
                         </tr>`;
 
                     pageCount++;

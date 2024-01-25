@@ -12,11 +12,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
 
     <style>
         main {
-            font-family: 'Ma Shan Zheng', cursive;
+            font-family: 'Noto Sans TC', sans-serif;
         }
 
         th {
@@ -188,6 +188,7 @@
     let actTime = "ASC"; // 排序預設
     // let size = 5; //顯示筆數預設
 
+    //歷史紀錄
     let actStatus;
 
     //審核狀態篩選
@@ -199,20 +200,19 @@
     //歷史紀錄
     $(".historyButton").click(function () {
         actStatus = $(this).data("actStatus");
-
-
+        checkActReg(pageNumber, actTime, null, actStatus);
     });
 
     //時間排序
     $("#time").change(function () {
         actTime = $("#time").val();
 
-        checkActReg(pageNumber, actTime, regStatus);
+        checkActReg(pageNumber, actTime, regStatus, actStatus);
     });
 
     //分頁
-    function loadPage(pageNumber, actTime, regStatus) {
-        checkActReg(pageNumber, actTime, regStatus);
+    function loadPage(pageNumber, actTime, regStatus, actStatus) {
+        checkActReg(pageNumber, actTime, regStatus, actStatus);
     }
 
     //多顯示5筆
@@ -222,11 +222,15 @@
     // }
 
     //查會員報名的所有活動
-    function checkActReg(pageNumber, actTime, regStatus) {
+    function checkActReg(pageNumber, actTime, regStatus, actStatus) {
         let url = "/actreg";
 
         if (regStatus !== undefined && regStatus !== null) {
-            url = url + '?regStatus=' + regStatus;
+            url = url + `?regStatus=${regStatus}`;
+
+        }
+        if (actStatus !== undefined && actStatus !== null) {
+            url = url + `?actStatus=${actStatus}`;
         }
 
         $.ajax({
@@ -251,7 +255,7 @@
                 let first = actRegsPageable.first;
                 let last = actRegsPageable.last;
 
-                nextPage(totalPages, actTime, regStatus);
+                nextPage(totalPages, actTime, regStatus, actStatus);
 
                 //在哪頁就將那頁的按鈕加顏色
                 $(".number").each(function () {
@@ -289,16 +293,16 @@
                         <td><span class="badge rounded-circle bg-dark">${actReg.act.actId}</span></td>
                         <td><span class="fw-bold">${actReg.act.actName}</span></td>
                         <td>
-                            <button class="rounded-pill btn btn-info" data-act-id="${actReg.act.actId}" onclick="view(this)">查看</button>
+                            <button class="rounded-pill btn btn-info btn-sm" data-act-id="${actReg.act.actId}" onclick="view(this)">查看</button>
                         </td>
                         <td>${actReg.act.actStartTime}</td>
                         <td class="status">${statusChinese}</td>
                         <td>
-                            <button class="delbtn rounded-pill btn btn-danger"
+                            <button class="delbtn rounded-pill btn btn-danger btn-sm"
                             data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消報名
                             </button>
                         </td>
-                        <td>${actStatusChinese}</td>
+                        <td class="actStatus">${actStatusChinese}</td>
                     </tr>`;
 
                         pageCount++;
@@ -333,6 +337,23 @@
                             break;
                     }
                 })
+
+                $(".actStatus").each(function () {
+                    switch ($(this).text()) {
+                        case "已結束":
+                            $(this).addClass("text-danger");
+                            break;
+                        case "已取消":
+                            $(this).addClass("text-warning");
+                            break;
+                        case "進行中":
+                            $(this).addClass("text-primary");
+                            break;
+                        case "報名中":
+                            $(this).addClass("text-success");
+                            break;
+                    }
+                });
             },
             error(xhr, status, error) {
             }
@@ -386,12 +407,12 @@
         });
     }
 
-    function nextPage(totalPages, actTime, regStatus) {
+    function nextPage(totalPages, actTime, regStatus, actStatus) {
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
                 `<li  class="page-item">
-                <a class="number page-link" href="#" onclick="loadPage(${i + 1},'${actTime}',${regStatus}); return false;">${i + 1}</a>
+                <a class="number page-link" href="#" onclick="loadPage(${i + 1},'${actTime}',${regStatus},${actStatus}); return false;">${i + 1}</a>
                 </li>`;
         }
 
@@ -401,13 +422,13 @@
     }
 
     //下一頁
-    function next() {
-        checkActReg(++pageNumber, actTime, regStatus)
+    function next() { //先按歷史紀錄再按報名成功之類的在按下一頁上一頁 會壞掉
+        checkActReg(++pageNumber, actTime, regStatus, actStatus)
     }
 
     //上一頁
-    function previous() {
-        checkActReg(--pageNumber, actTime, regStatus);
+    function previous() { //先按歷史紀錄再按報名成功之類的在按下一頁上一頁 會壞掉
+        checkActReg(--pageNumber, actTime, regStatus, actStatus);
     }
 </script>
 

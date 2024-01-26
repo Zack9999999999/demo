@@ -104,7 +104,6 @@ public class ActRegService implements IActRegService {
         actReg.setActRegId(actRegId); //modelMapper映射會將actId的值連動改到PK-actRegId
         actReg.getAct().setActStatus(actStatus);
 
-        //審核報名者
         switch (actRegStatus.getRegStatus()) {
             case 2:
                 //取消過現在再次報名

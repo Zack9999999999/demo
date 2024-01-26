@@ -79,8 +79,8 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-container">
-                <a th:href="@{/CHA104G3/member/report}">審核活動管理</a>
-                <a th:href="@{/CHA104G3/member/commentreport}">審核留言管理</a>
+                <a th:href="@{/membership/report}">審核活動管理</a>
+                <a th:href="@{/membership/commentreport}">審核留言管理</a>
             </div>
             <hr>
             <button class="dropdown-btn">場地功能管理
@@ -131,7 +131,7 @@
                     </select>
                 </th>
                 <th>審核狀態</th>
-                <th>是否取消</th>
+                <th>取消報名</th>
                 <th>活動狀態</th>
             </tr>
             </thead>
@@ -187,18 +187,20 @@
     let pageNumber = 1; //第幾頁預設(進function會 -1 所以會變0)
     let actTime = "ASC"; // 排序預設
     // let size = 5; //顯示筆數預設
-
     //歷史紀錄
     let actStatus;
 
     //審核狀態篩選
     $(".filterButton").click(function () {
+        pageNumber = 1; //龜0 不然原先在所有然後第二頁 再進狀態篩選會有問題
         regStatus = $(this).data("regStatus");
-        checkActReg(pageNumber, actTime, regStatus);
+        actStatus = null;
+        checkActReg(pageNumber, actTime, regStatus, actStatus);
     });
 
     //歷史紀錄
     $(".historyButton").click(function () {
+        pageNumber = 1; //龜0 不然原先在所有然後第二頁 再進狀態篩選會有問題
         actStatus = $(this).data("actStatus");
         checkActReg(pageNumber, actTime, null, actStatus);
     });
@@ -206,12 +208,15 @@
     //時間排序
     $("#time").change(function () {
         actTime = $("#time").val();
-
+        if (actStatus) {
+            regStatus = null;
+        }
         checkActReg(pageNumber, actTime, regStatus, actStatus);
     });
 
     //分頁
-    function loadPage(pageNumber, actTime, regStatus, actStatus) {
+    function loadPage(newPageNumber, actTime, regStatus, actStatus) {
+        pageNumber = newPageNumber;
         checkActReg(pageNumber, actTime, regStatus, actStatus);
     }
 
@@ -299,7 +304,7 @@
                         <td class="status">${statusChinese}</td>
                         <td>
                             <button class="delbtn rounded-pill btn btn-danger btn-sm"
-                            data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消報名
+                            data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消
                             </button>
                         </td>
                         <td class="actStatus">${actStatusChinese}</td>
@@ -422,13 +427,15 @@
     }
 
     //下一頁
-    function next() { //先按歷史紀錄再按報名成功之類的在按下一頁上一頁 會壞掉
-        checkActReg(++pageNumber, actTime, regStatus, actStatus)
+    function next() {
+        pageNumber++;
+        checkActReg(pageNumber, actTime, regStatus, actStatus)
     }
 
     //上一頁
-    function previous() { //先按歷史紀錄再按報名成功之類的在按下一頁上一頁 會壞掉
-        checkActReg(--pageNumber, actTime, regStatus, actStatus);
+    function previous() {
+        pageNumber--;
+        checkActReg(pageNumber, actTime, regStatus, actStatus);
     }
 </script>
 

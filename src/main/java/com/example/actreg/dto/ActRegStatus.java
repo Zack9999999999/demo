@@ -11,6 +11,8 @@ public class ActRegStatus {
     @NotNull
     private Byte regStatus;
 
+    private String regReason;
+
     public Byte getRegStatus() {
         return regStatus;
     }
@@ -41,5 +43,13 @@ public class ActRegStatus {
 
     public void setActId(Integer actId) {
         this.actId = actId;
+    }
+
+    public String getRegReason() {
+        return regReason;
+    }
+
+    public void setRegReason(String regReason) {
+        this.regReason = regReason;
     }
 }

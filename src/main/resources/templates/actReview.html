@@ -152,9 +152,10 @@
                             </thead>
                             <tbody id="actmember">
                             <tr>
-                                <td>小白痴</td>
+                                <td>1</td>
                                 <td>這邊放連結可以連到會員個人頁面</td>
-                                <td>這邊看要不要報名表增加報名原因欄位</td>
+                                <td>6人</td>
+                                <td>報名原因</td>
                                 <td>狀態</td>
                                 <td>
                                     <button>這邊連update api</button>
@@ -365,7 +366,7 @@
                                 <td>${actMember.memId}</td>
                                 <td><button class="rounded-pill btn btn-info btn-sm" data-mem-id="${actMember.memId}" onclick="member(this)">查看</button></td>
                                 <td>${actMember.regTotal}</td>
-                                <td>這邊看要不要報名表增加報名原因欄位</td>
+                                <td>${actMember.regReason}</td>
                                 <td class="status">${statusChinese}</td>
                                 <td>
                                     <div class="btn-group" role="group">
@@ -374,7 +375,6 @@
                                     </div>
                                 </td>
                             </tr>`;
-
                     }
                 });
                 $("#actmember").html(memberHTML);
@@ -403,7 +403,6 @@
                 });
             },
             error: function () {
-                alert("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             }
         });
     });

@@ -20,7 +20,7 @@ public interface ActRegRepository extends JpaRepository<ActRegVO, Integer> {
 
     @Query(value = "SELECT m.mem_name, m.mem_pic FROM activity_registration r" +
             " JOIN membership m ON r.mem_id = m.mem_id" +
-            " WHERE r.act_id = :actId AND r.is_act_part = :isActPart", nativeQuery = true)
+            " WHERE r.act_id = :actId AND r.is_act_part = :isActPart AND r.reg_status = 3", nativeQuery = true)
     List<Object[]> findMembersAndPicByPart(@Param("actId") Integer actId, @Param("isActPart") Integer isActPart);
 
     // <> = 不等於

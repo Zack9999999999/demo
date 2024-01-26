@@ -108,15 +108,21 @@
 
 <main class="main">
 
-    <div>
+    <div class="w-100">
         <h1 class="fw-bold">活動檢舉</h1>
-        <div class="d-md-flex justify-content-md-end mb-1">
-            <div class="btn-group" role="group">
-                <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有
-                </button>
-                <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>
-                <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>
-                <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>
+        <div class="d-flex justify-content-between mb-1">
+            <div class="input-group input-group-sm w-25 h-75">
+                <label for="memId">會員ID:</label>
+                <input type="text" class="form-control" id="memId">
+                <button class="btn btn-primary btn-sm">查詢</button>
+            </div>
+            <div class="d-flex">
+                <div class="btn-group" role="group">
+                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有</button>
+                    <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>
+                    <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>
+                    <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>
+                </div>
             </div>
         </div>
     </div>
@@ -128,7 +134,11 @@
             <tr>
                 <th scope="col">編號</th>
                 <th scope="col">活動編號</th>
-                <th scope="col">檢舉者ID</th>
+                <th scope="col">
+                    <span class="w-50">檢舉者ID
+                        <input class="w-50 h-25">
+                    </span>
+                </th>
                 <th scope="col">檢舉標題</th>
                 <th scope="col">檢舉原因</th>
                 <th scope="col">檢舉圖片</th>

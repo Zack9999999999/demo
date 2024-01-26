@@ -43,4 +43,7 @@ public class ActRegVO {
     @Column(name = "act_rating")
     private Double actRating;
 
+    @Column(name = "reg_reason")
+    private String regReason;
+
 }

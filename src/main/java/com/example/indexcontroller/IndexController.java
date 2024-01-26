@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/CHA104G3")
+//@RequestMapping("/CHA104G3")
 public class IndexController {
 
     @RequestMapping("")
@@ -12,27 +12,27 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("/member/commentreport")
+    @RequestMapping("/member/commentreport") //要改
     public String commentReport() {
         return "commentreport";
     }
 
-    @RequestMapping("/member/report")
+    @RequestMapping("/member/report") //要改
     public String report() {
         return "report";
     }
 
-    @RequestMapping("/member/actreg")
+    @RequestMapping("/membership/actregistration")
     public String actreg() {
-        return "actReg";
+        return "actregistration";
     }
 
-    @RequestMapping("/member/actfollow")
+    @RequestMapping("/membership/actfollow")
     public String actfollow() {
-        return "actFollow";
+        return "actfollow";
     }
 
-    @RequestMapping("/member/actreview")
+    @RequestMapping("/membership/actreview")
     public String actreview() {
         return "actReview";
     }

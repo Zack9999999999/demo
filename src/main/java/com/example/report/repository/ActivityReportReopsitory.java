@@ -22,4 +22,5 @@ public interface ActivityReportReopsitory extends JpaRepository<ActivityReportVO
     //狀態查詢
     Page<ActivityReportVO> findByRepStatus(Byte repStatus, Pageable pageable);
 
+    Page<ActivityReportVO> findByMemId(Integer memId, Pageable pageable);
 }

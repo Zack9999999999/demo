@@ -114,15 +114,7 @@
             </tr>
             </thead>
             <tbody id="actreg">
-            <tr>
-                <td>1</td>
-                <td>今晚打老虎</td>
-                <td>審核中</td>
-                <td>關注中</td>
-                <td>
-                    <button>取消關注</button>
-                </td>
-            </tr>
+
             </tbody>
         </table>
     </div>
@@ -214,17 +206,17 @@
 
                 actFollows.forEach(function (actFollow) {
 
-                    if (actfollow.folStatus === 2) {
+                    if (actFollow.folStatus === 2) {
                         count++;
 
                         followHTML += `<tr>
-                                <td><span class="badge rounded-circle bg-dark">${actfollow.actId}</span></td>
-                                <td><sapn class="fw-bold">${actfollow.act.actName}</sapn></td>
+                                <td><span class="badge rounded-circle bg-dark">${actFollow.actId}</span></td>
+                                <td><sapn class="fw-bold">${actFollow.act.actName}</sapn></td>
                                 <td>
-                                    <button class="rounded-pill btn btn-info btn-sm" data-act-id="${actfollow.actId}" onclick="view(this)">查看</button>
+                                    <button class="rounded-pill btn btn-info btn-sm" data-act-id="${actFollow.actId}" onclick="view(this)">查看</button>
                                 </td>
                                 <td>
-                                    <button class="delbtn rounded-pill btn btn-danger btn-sm" data-act-id="${actfollow.actId}"
+                                    <button class="delbtn rounded-pill btn btn-danger btn-sm" data-act-id="${actFollow.actId}"
                                      onclick="delFollow(this)">取消</button>
                                 </td>
                               </tr>`;

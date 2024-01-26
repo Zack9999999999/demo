@@ -1,5 +1,6 @@
 package com.example.report.service;
 
+import com.example.report.dto.ActivityReportQueryParams;
 import com.example.report.dto.ActivityReportRequest;
 import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface IActivityReportService {
 
-	Page<ActivityReportVO> getAll(Byte repStatus, Pageable pageable);
+	Page<ActivityReportVO> getAll(ActivityReportQueryParams activityReportQueryParams, Pageable pageable);
 
 	ActivityReportVO findByPrimaryKey(Integer repId);
 

@@ -114,7 +114,7 @@
             <div class="input-group input-group-sm w-25 h-75">
                 <label for="memId">會員ID:</label>
                 <input type="text" class="form-control" id="memId">
-                <button class="btn btn-primary btn-sm">查詢</button>
+                <button class="selectMemId btn btn-primary btn-sm">查詢</button>
             </div>
             <div class="d-flex">
                 <div class="btn-group" role="group">
@@ -134,11 +134,7 @@
             <tr>
                 <th scope="col">編號</th>
                 <th scope="col">活動編號</th>
-                <th scope="col">
-                    <span class="w-50">檢舉者ID
-                        <input class="w-50 h-25">
-                    </span>
-                </th>
+                <th scope="col">檢舉者ID</th>
                 <th scope="col">檢舉標題</th>
                 <th scope="col">檢舉原因</th>
                 <th scope="col">檢舉圖片</th>
@@ -189,7 +185,7 @@
     </div>
 </main>
 
-<!--檢舉框-->
+<!--檢舉圖片框-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -198,11 +194,31 @@
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <img id="pic" src="../static/images/dog.jpg" alt="檢舉圖片">
+                    <img id="pic" src="" alt="檢舉圖片">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 檢舉原因框 -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">檢舉原因</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="repContent">
+
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
@@ -250,11 +266,11 @@
     });
 
     //顯示所有活動檢舉
-    function loadReports(pageNumber, repTime, repStatus) {
+    function loadReports(pageNumber, repTime, repStatus, memId) {
 
         let url = "/activityreport";
 
-        if (repStatus !== undefined && repStatus != null) {
+        if (repStatus !== undefined && repStatus !== null) {
             url = url + '?repStatus=' + repStatus;
         }
 
@@ -319,33 +335,40 @@
                     let statusChinese = statusMap[actReport.repStatus];
 
                     actReportHTML +=
-                        '<tr><td><span class="badge rounded-circle bg-dark">' + actReport.repId + '</span></td>' +
-                        '<td><a class="badge rounded-circle bg-primary text-decoration-none" href="/CHA104G3/activity/' + actReport.act.actId + '">' + actReport.act.actId + '</a></td>' +
-                        '<td><a class="badge rounded-circle bg-primary text-decoration-none" href="">' + actReport.memId + '</a></td>' +
-                        '<td>' + titleChinese + '</td>' +
-                        '<td>' + actReport.repContent + '</td>' +
-                        '<td>';
+                        `<tr>
+                        <td><span class="badge rounded-circle bg-dark">${actReport.repId}</span></td>
+                        <td><a class="badge rounded-circle bg-primary text-decoration-none" href="/CHA104G3/activity/${actReport.act.actId}">${actReport.act.actId}</a></td>
+                        <td><a class="badge rounded-circle bg-secondary text-decoration-none" href="">${actReport.memId}</a></td>
+                        <td>${titleChinese}</td>
+                        <td>
+                            <button type="button" class="rounded-pill btn btn-info btn-sm"
+                              data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                              data-repcontent="${actReport.repContent}" onclick="seeRepContent(this)">
+                              查看
+                            </button>
+                        </td>
+                        <td>`;
 
                     if (actReport.repPic == null) {
-                        actReportHTML += '<button class="showPic rounded-pill btn btn-secondary btn-sm" ' +
-                            'data-rep-id="' + actReport.repId + '" disabled>未提供</button>';
+                        actReportHTML += `<button class="showPic rounded-pill btn btn-secondary btn-sm"
+                            data-rep-id="${actReport.repId}" disabled>未提供</button>`;
                     } else {
-                        actReportHTML += '<button class="showPic rounded-pill btn btn-success btn-sm" ' +
-                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" ' +
-                            'data-rep-id="' + actReport.repId + '">顯示圖片</button>';
+                        actReportHTML += `<button class="showPic rounded-pill btn btn-success btn-sm"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap"
+                            data-rep-id="${actReport.repId}">顯示圖片</button>`;
                     }
                     actReportHTML +=
-                        '</td>' +
-                        '<td>' + actReport.repTime + '</td>' +
-                        '<td>' +
-                        '<select class="changeStatus" data-rep-id="' + actReport.repId + '">' +
-                        '<option value="1">審核中</option>' +
-                        '<option value="2">通過</option>' +
-                        '<option value="3">未通過</option>' +
-                        '</select></td>' +
-                        '<td class="color" id="status-' + actReport.repId + '">' + statusChinese + '</td>' +
-                        '<td><span class="badge rounded-circle bg-primary">' + (actReport.empId ? actReport.empId : "無") + '</span></td>' +
-                        '</tr>';
+                        `</td>
+                        <td>${actReport.repTime}</td>
+                        <td>
+                        <select class="changeStatus" data-rep-id="${actReport.repId}">
+                        <option value="1">審核中</option>
+                        <option value="2">通過</option>
+                        <option value="3">未通過</option>
+                        </select></td>
+                        <td class="color" id="status-${actReport.repId}">${statusChinese}</td>
+                        <td><span class="badge rounded-circle bg-secondary">${(actReport.empId ? actReport.empId : "無")}</span></td>
+                        </tr>`;
 
                     pageCount++;
                 });
@@ -375,6 +398,12 @@
                 )
             }
         });
+    }
+
+    //將檢舉原因放進modal
+    function seeRepContent(e) {
+        let repContent = $(e).data("repcontent");
+        $(".repContent").text(repContent);
     }
 
     //圖片
@@ -474,6 +503,12 @@
     function previous() {
         loadReports(--pageNumber, repTime, repStatus);
     }
+
+    //會員ID查詢
+    $(".selectMemId").click(function () {
+        let memId = parseInt($(".selectMemId").closest("div").find("#memId").val());
+        console.log(memId)
+    });
 
 </script>
 

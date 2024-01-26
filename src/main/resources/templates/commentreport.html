@@ -183,6 +183,46 @@
     </div>
 </main>
 
+<!-- 被檢舉留言框 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">檢舉留言內容</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="comContent">
+
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 檢舉原因框 -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">檢舉原因</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span class="repContent">
+
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
@@ -299,10 +339,22 @@
                     commentReportHTML +=
                         `<tr>
                             <td><span class="badge rounded-circle bg-dark">${commetreport.repId}</span></td>
-                            <td><a class="badge rounded-circle bg-primary text-decoration-none" href="">${commetreport.memId}</a></td>
-                            <td>${commetreport.comment.comContent}</td>
+                            <td><a class="badge rounded-circle bg-secondary text-decoration-none" href="">${commetreport.memId}</a></td>
+                            <td>
+                            <button type="button" class="rounded-pill btn btn-info btn-sm"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            data-comment-comcontent="${commetreport.comment.comContent}" onclick="seeComment(this)">
+                                查看
+                            </button>
+                            </td>
                             <td>${titleChinese}</td>
-                            <td>${commetreport.repContent}</td>
+                            <td>
+                                <button type="button" class="rounded-pill btn btn-info btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                                    data-repcontent="${commetreport.repContent}" onclick="seeRepContent(this)">
+                                    查看
+                                </button>
+                            </td>
                             <td>${commetreport.repTime}</td>
                             <td>
                                 <select class="changeStatus" data-rep-id="${commetreport.repId}">
@@ -312,7 +364,7 @@
                                 </select>
                             </td>
                             <td class="color" id="status-${commetreport.repId}">${statusChinese}</td>
-                            <td><span class="badge rounded-circle bg-primary">${(commetreport.empId ? commetreport.empId : "無")}</span></td>
+                            <td><span class="badge rounded-circle bg-secondary">${(commetreport.empId ? commetreport.empId : "無")}</span></td>
                         </tr>`;
 
                     pageCount++;
@@ -339,6 +391,17 @@
                 window.history.back();
             }
         });
+    }
+
+    //將被檢舉內容放進modal
+    function seeComment(e) {
+        let commentComcontent = $(e).data("commentComcontent");
+        $(".comContent").text(commentComcontent);
+    }
+    //將檢舉原因放進modal
+    function seeRepContent(e){
+        let repContent = $(e).data("repcontent");
+        $(".repContent").text(repContent);
     }
 
     //更新狀態
@@ -392,7 +455,6 @@
             },
             error: function (xhr, status, error) {
                 Swal.fire("更新失敗")
-
             }
 
         });

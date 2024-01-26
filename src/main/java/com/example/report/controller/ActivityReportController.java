@@ -1,6 +1,7 @@
 package com.example.report.controller;
 
 import com.example.report.constant.ReportTitle;
+import com.example.report.dto.ActivityReportQueryParams;
 import com.example.report.dto.ActivityReportRequest;
 import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
@@ -34,6 +35,7 @@ public class ActivityReportController {
     @GetMapping("/activityreport")
     public ResponseEntity<Page<ActivityReportVO>> getAll(
             @RequestParam(required = false) Byte repStatus,
+//            @RequestParam(required = false) Integer memId,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
     ) {
@@ -46,7 +48,11 @@ public class ActivityReportController {
             );
         }
 
-        Page<ActivityReportVO> reportList = activityReportService.getAll(repStatus, pageable);
+        ActivityReportQueryParams activityReportQueryParams = new ActivityReportQueryParams();
+        activityReportQueryParams.setRepStatus(repStatus);
+//        activityReportQueryParams.setMemId(memId);
+
+        Page<ActivityReportVO> reportList = activityReportService.getAll(activityReportQueryParams, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(reportList);
     }

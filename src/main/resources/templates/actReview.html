@@ -121,6 +121,7 @@
                 <th>審核報名</th>
                 <th>活動狀態</th>
                 <th>取消活動</th>
+                <th>修改活動</th>
             </tr>
             </thead>
             <tbody id="actreg">
@@ -298,6 +299,9 @@
                             <td data-act-id="${act.actId}">
                             <button class="delAct rounded-pill btn btn-danger btn-sm" onclick="delAct(this)">取消</button>
                             </td>
+                            <td data-act-id="${act.actId}">
+                            <button class="delAct rounded-pill btn btn-danger btn-sm" onclick="updateAct(this)">修改</button>
+                            </td>
                          </tr>`;
 
                 });
@@ -363,7 +367,7 @@
                         let statusChinese = statusMap[actMember.regStatus];
                         memberHTML +=
                             `<tr>
-                                <td>${actMember.memId}</td>
+                                <td><span class="badge rounded-circle bg-secondary">${actMember.memId}</span></td>
                                 <td><button class="rounded-pill btn btn-info btn-sm" data-mem-id="${actMember.memId}" onclick="member(this)">查看</button></td>
                                 <td>${actMember.regTotal}</td>
                                 <td>${actMember.regReason}</td>

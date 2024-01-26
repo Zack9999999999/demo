@@ -1,6 +1,7 @@
 package com.example.report.service.impl;
 
 import com.example.act.repository.ActRepository;
+import com.example.report.dto.ActivityReportQueryParams;
 import com.example.report.dto.ActivityReportRequest;
 import com.example.report.dto.ReportStatus;
 import com.example.report.model.ActivityReportVO;
@@ -31,11 +32,14 @@ public class ActivityReportService implements IActivityReportService {
     private ModelMapper modelMapper;
 
     @Override
-    public Page<ActivityReportVO> getAll(Byte repStatus, Pageable pageable) {
+    public Page<ActivityReportVO> getAll(ActivityReportQueryParams activityReportQueryParams, Pageable pageable) {
 
-        if (repStatus != null) {
-            return activityReportReopsitory.findByRepStatus(repStatus, pageable);
+        if (activityReportQueryParams.getRepStatus() != null) {
+            return activityReportReopsitory.findByRepStatus(activityReportQueryParams.getRepStatus(), pageable);
         }
+//        if (activityReportQueryParams.getMemId() != null) {
+//            return activityReportReopsitory.findByMemId(activityReportQueryParams.getMemId(), pageable);
+//        }
 
         return activityReportReopsitory.findAll(pageable);
     }

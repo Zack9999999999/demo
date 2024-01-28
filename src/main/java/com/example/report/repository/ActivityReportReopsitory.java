@@ -17,10 +17,13 @@ public interface ActivityReportReopsitory extends JpaRepository<ActivityReportVO
 
     @Query("SELECT a.repPic FROM ActivityReportVO  a WHERE a.repId = :repId")
     byte[] findRepPicByRepId(@Param("repId") Integer repId);
+
     Page<ActivityReportVO> findAll(Pageable pageable);
 
     //狀態查詢
     Page<ActivityReportVO> findByRepStatus(Byte repStatus, Pageable pageable);
 
     Page<ActivityReportVO> findByMemId(Integer memId, Pageable pageable);
+
+    Page<ActivityReportVO> findByRepStatusAndMemId(Byte repStatus, Integer memId, Pageable pageable);
 }

@@ -35,22 +35,22 @@ public class ActivityReportController {
     @GetMapping("/activityreport")
     public ResponseEntity<Page<ActivityReportVO>> getAll(
             @RequestParam(required = false) Byte repStatus,
-//            @RequestParam(required = false) Integer memId,
+            @RequestParam(required = false) Integer memId,
             @RequestParam(required = false) String sortDirection,
-            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         //傳進來是DESC的話替換掉pageable內的Sort
-        if ("DESC".equalsIgnoreCase(sortDirection)) {
+        if ("ASC".equalsIgnoreCase(sortDirection)) {
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.DESC, "repTime")
+                    Sort.by(Sort.Direction.ASC, "repTime")
             );
         }
 
         ActivityReportQueryParams activityReportQueryParams = new ActivityReportQueryParams();
         activityReportQueryParams.setRepStatus(repStatus);
-//        activityReportQueryParams.setMemId(memId);
+        activityReportQueryParams.setMemId(memId);
 
         Page<ActivityReportVO> reportList = activityReportService.getAll(activityReportQueryParams, pageable);
 

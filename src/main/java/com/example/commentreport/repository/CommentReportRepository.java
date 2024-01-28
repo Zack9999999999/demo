@@ -15,6 +15,10 @@ public interface CommentReportRepository extends JpaRepository<CommentReportVO, 
     //依照狀態查詢
     Page<CommentReportVO> findByRepStatus(Byte repStatus, Pageable pageable);
 
+    Page<CommentReportVO> findByMemId(Integer memId, Pageable pageable);
+
     Page<CommentReportVO> findAll(Pageable pageable);
+
+    Page<CommentReportVO> findByRepStatusAndMemId(Byte repStatus, Integer memId, Pageable pageable);
 
 }

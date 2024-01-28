@@ -34,13 +34,16 @@ public class ActivityReportService implements IActivityReportService {
     @Override
     public Page<ActivityReportVO> getAll(ActivityReportQueryParams activityReportQueryParams, Pageable pageable) {
 
-        if (activityReportQueryParams.getRepStatus() != null) {
-            return activityReportReopsitory.findByRepStatus(activityReportQueryParams.getRepStatus(), pageable);
-        }
-//        if (activityReportQueryParams.getMemId() != null) {
-//            return activityReportReopsitory.findByMemId(activityReportQueryParams.getMemId(), pageable);
-//        }
+        if (activityReportQueryParams.getRepStatus() != null && activityReportQueryParams.getMemId() != null) {
+            return activityReportReopsitory.findByRepStatusAndMemId(activityReportQueryParams.getRepStatus(), activityReportQueryParams.getMemId(), pageable);
 
+        } else if (activityReportQueryParams.getRepStatus() != null) {
+            return activityReportReopsitory.findByRepStatus(activityReportQueryParams.getRepStatus(), pageable);
+
+        } else if (activityReportQueryParams.getMemId() != null) {
+            return activityReportReopsitory.findByMemId(activityReportQueryParams.getMemId(), pageable);
+
+        }
         return activityReportReopsitory.findAll(pageable);
     }
 

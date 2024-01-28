@@ -32,20 +32,22 @@ public class CommentReportController {
     @GetMapping("/commentreport")
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             @RequestParam(required = false) Byte repStatus,
+            @RequestParam(required = false) Integer memId,
             @RequestParam(required = false) String sortDirection,
-            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         //傳進來是DESC的話替換掉pageable內的Sort
-        if ("DESC".equalsIgnoreCase(sortDirection)) {
+        if ("ASC".equalsIgnoreCase(sortDirection)) {
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.DESC, "repTime")
+                    Sort.by(Sort.Direction.ASC, "repTime")
             );
         }
 
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
         commentReportQueryParams.setRepStatus(repStatus);
+        commentReportQueryParams.setMemId(memId);
 
         Page<CommentReportVO> commentReportList = commentReportService.getCommentReports(commentReportQueryParams, pageable);
 

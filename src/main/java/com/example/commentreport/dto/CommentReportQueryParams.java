@@ -10,6 +10,8 @@ public class CommentReportQueryParams {
     private Integer page;
     private Integer size;
 
+    private Integer memId;
+
     public CommentReportRepTitle getCommentReportRepTitle() {
         return commentReportRepTitle;
     }
@@ -42,4 +44,11 @@ public class CommentReportQueryParams {
         this.size = size;
     }
 
+    public Integer getMemId() {
+        return memId;
+    }
+
+    public void setMemId(Integer memId) {
+        this.memId = memId;
+    }
 }

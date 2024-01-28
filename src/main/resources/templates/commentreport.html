@@ -113,11 +113,19 @@
             <div class="input-group input-group-sm w-25 h-75">
                 <label for="memId">會員ID:</label>
                 <input type="text" class="form-control" id="memId">
-                <button class="btn btn-primary btn-sm">查詢</button>
+                <button class="selectMemId btn btn-primary btn-sm">查詢</button>
+                <button class="btn btn-danger btn-sm" onclick="refresh()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                        <path fill-rule="evenodd"
+                              d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                    </svg>
+                </button>
             </div>
             <div class="d-flex">
                 <div class="btn-group" role="group">
-                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status="">所有</button>
+                    <button class="filterButton btn btn-secondary btn-sm" data-rep-status=null>所有</button>
                     <button class="filterButton btn btn-warning btn-sm" data-rep-status="1">審核中</button>
                     <button class="filterButton btn btn-danger btn-sm" data-rep-status="3">未通過</button>
                     <button class="filterButton btn btn-success btn-sm" data-rep-status="2">已通過</button>
@@ -138,8 +146,8 @@
                 <th scope="col">檢舉原因</th>
                 <th scope="col">時間
                     <select id="time">
-                        <option value="ASC">舊到新</option>
                         <option value="DESC">新到舊</option>
+                        <option value="ASC">舊到新</option>
                     </select>
                 </th>
                 <th scope="col">審核</th>
@@ -245,31 +253,56 @@
     let repStatus; // 狀態預設
     let repTime = "ASC"; // 排序預設
     let pageNumber = 1; // 第幾頁預設(進function會 -1 所以會變0)
-    let size = 5; //顯示筆數預設
+    let size = 5; //
+    let memId;
 
     //第幾頁
-    function loadPage(pageNumber, repTime, repStatus) {
+    function loadPage(pageNumber, repTime, repStatus, memId) {
 
-        loadCommentReports(pageNumber, repTime, repStatus);
+        loadCommentReports(pageNumber, repTime, repStatus, memId);
     }
 
     //依審核狀態篩選
     $(".filterButton").on("click", function () {
         repStatus = $(this).data("repStatus");
 
-        loadCommentReports(pageNumber, repTime, repStatus);
+        loadCommentReports(pageNumber, repTime, repStatus, memId);
     });
 
     //時間排序
     $("#time").change(function () {
         repTime = $("#time").val();
 
-        loadCommentReports(pageNumber, repTime, repStatus);
+        loadCommentReports(pageNumber, repTime, repStatus, memId);
     });
 
+    //會員ID查詢
+    $(".selectMemId").click(function () {
+        memId = $(".selectMemId").closest("div").find("#memId").val();
+
+        if (!parseInt(memId)) {
+            Toast.fire({
+                icon: 'warning',
+                title: '請輸入數字！'
+            });
+            $(".selectMemId").closest("div").find("#memId").val("");
+            memId = null;
+            return;
+        }
+        loadCommentReports(pageNumber, repTime, repStatus, memId);
+    });
+
+    //清空參數
+    function refresh() {
+        pageNumber = 1;
+        repTime = "ASC";
+        repStatus = null;
+        memId = null;
+        loadCommentReports();
+    }
 
     //顯示所有留言檢舉內容
-    function loadCommentReports(pageNumber, repTime, repStatus) {
+    function loadCommentReports(pageNumber, repTime, repStatus, memId) {
         let url = "/commentreport";
 
         if (repStatus !== undefined && repStatus !== null) {
@@ -281,7 +314,8 @@
             type: 'GET',
             data: {
                 page: pageNumber - 1,
-                sortDirection: repTime
+                sortDirection: repTime,
+                memId: memId
             },
             dataType: 'json',
             success: function (commentReportList) {
@@ -297,7 +331,7 @@
                 let first = commentReportList.first; //當前是第一頁為ture
                 let last = commentReportList.last; // 當前是最後一頁為true
 
-                nextPage(totalPages, repTime, repStatus);
+                nextPage(totalPages, repTime, repStatus, memId);
 
                 //在哪頁就將哪頁按鈕加顏色
                 $(".number").each(function () {
@@ -357,11 +391,10 @@
                             </td>
                             <td>${commetreport.repTime}</td>
                             <td>
-                                <select class="changeStatus" data-rep-id="${commetreport.repId}">
-                                <option value="1">審核中</option>
-                                <option value="2">通過</option>
-                                <option value="3">未通過</option>
-                                </select>
+                                    <div class="btn-group" role="group">
+                                <button class="reviewBtn btn btn-success btn-sm" value="2" data-rep-id="${commetreport.repId}">通過</button>
+                                <button class="reviewBtn btn btn-danger btn-sm" value="3" data-rep-id="${commetreport.repId}">未通過</button>
+                                    </div>
                             </td>
                             <td class="color" id="status-${commetreport.repId}">${statusChinese}</td>
                             <td><span class="badge rounded-circle bg-secondary">${(commetreport.empId ? commetreport.empId : "無")}</span></td>
@@ -379,9 +412,11 @@
                             break;
                         case "通過":
                             $(this).addClass("text-success");
+                            $(this).closest("tr").find(".reviewBtn").remove();
                             break;
                         case "未通過":
                             $(this).addClass("text-danger");
+                            $(this).closest("tr").find(".reviewBtn").remove();
                             break;
                     }
                 })
@@ -398,14 +433,15 @@
         let commentComcontent = $(e).data("commentComcontent");
         $(".comContent").text(commentComcontent);
     }
+
     //將檢舉原因放進modal
-    function seeRepContent(e){
+    function seeRepContent(e) {
         let repContent = $(e).data("repcontent");
         $(".repContent").text(repContent);
     }
 
     //更新狀態
-    $(document).on("change", ".changeStatus", function () {
+    $(document).on("click", ".reviewBtn", function () {
         let statusMap = {
             "1": "審核中",
             "2": "通過",
@@ -420,52 +456,65 @@
         if (newStatus.repStatus === "1") {
             return;
         }
-        $.ajax({
-            url: '/commentreport/' + repId,
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(newStatus),
-            dataType: 'json',
-            success: function (updateCommentReport) {
 
-                let statusChinese = statusMap[updateCommentReport.repStatus]; // 從statusMap取新狀態的中文
-                let status = $("#status-" + repId);
+        Swal.fire({
+            title: "確定嗎?",
+            width: "300px",
+            showCancelButton: true,
+            confirmButtonText: "確定",
+            cancelButtonText: "取消"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/commentreport/' + repId,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(newStatus),
+                    dataType: 'json',
+                    success: function (updateCommentReport) {
 
-                status.text(statusChinese);
+                        let statusChinese = statusMap[updateCommentReport.repStatus]; // 從statusMap取新狀態的中文
+                        let status = $("#status-" + repId);
 
-                switch (status.text()) {
-                    case "審核中":
-                        status.removeClass("text-success");
-                        status.removeClass("text-danger");
-                        status.addClass("text-warning");
-                        break;
-                    case "通過":
-                        status.removeClass("text-warning");
-                        status.removeClass("text-danger");
-                        status.addClass("text-success");
-                        break;
-                    case "未通過":
-                        status.removeClass("text-success");
-                        status.removeClass("text-danger");
-                        status.addClass("text-danger");
-                        break;
-                }
-                Swal.fire("更新成功");
+                        status.text(statusChinese);
 
-            },
-            error: function (xhr, status, error) {
-                Swal.fire("更新失敗")
+                        status.closest("tr").find(".reviewBtn").remove();
+
+                        switch (status.text()) {
+                            case "審核中":
+                                status.removeClass("text-success");
+                                status.removeClass("text-danger");
+                                status.addClass("text-warning");
+                                break;
+                            case "通過":
+                                status.removeClass("text-warning");
+                                status.removeClass("text-danger");
+                                status.addClass("text-success");
+                                break;
+                            case "未通過":
+                                status.removeClass("text-success");
+                                status.removeClass("text-danger");
+                                status.addClass("text-danger");
+                                break;
+                        }
+                        Swal.fire("更新成功");
+
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire("更新失敗")
+                    }
+
+                });
             }
-
         });
     });
 
-    function nextPage(totalPages, repTime, repStatus) {
+    function nextPage(totalPages, repTime, repStatus, memId) {
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
                 `<li  class="page-item">
-                <a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}); return false;">${i + 1}</a>
+                <a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus},${memId}); return false;">${i + 1}</a>
                 </li>`;
         }
 
@@ -485,6 +534,17 @@
         loadCommentReports(--pageNumber, repTime, repStatus);
     }
 
+    //Sweetalart2
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        onOpen: toast => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
 </script>
 </body>
 

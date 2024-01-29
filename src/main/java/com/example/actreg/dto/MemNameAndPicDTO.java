@@ -4,6 +4,8 @@ public class MemNameAndPicDTO {
     private String memName;
     private byte[] memPic;
 
+    private Integer memId;
+
     public String getMemName() {
         return memName;
     }
@@ -18,5 +20,13 @@ public class MemNameAndPicDTO {
 
     public void setMemPic(byte[] memPic) {
         this.memPic = memPic;
+    }
+
+    public Integer getMemId() {
+        return memId;
+    }
+
+    public void setMemId(Integer memId) {
+        this.memId = memId;
     }
 }

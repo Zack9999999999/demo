@@ -137,24 +137,21 @@
     </header>
 </div>
 
-<div class="container">
+<div class="container" style="background-color: #f8f9fa">
     <div class="text-bark text-center py-4">
-        <div class="shadow p-3 mb-5 bg-body rounded">
+        <div class="shadow-sm p-3 mb-5 bg-body rounded">
             <h1 class="fw-bold" id="activityName" th:text="${act.actName}">活動名稱</h1>
-
-            <p>測試從RetailsController model拿會員ID:<span id="memberId" th:text="${memId}"></span></p>
-
         </div>
     </div>
 
     <main class="my-4">
         <div class="row">
             <div class="col-md-8">
-                <section class="h-100 shadow-none p-3 mb-5 bg-light rounded">
+                <section class="h-100 p-3 mb-5 rounded">
                     <div class="w-auto h-100">
-                        <div>
+                        <div class="bg-white">
                             <img th:src="@{/CHA104G3/activity/images/{actId}(actId=${act.actId})}" src=""
-                                 class="w-100 h-50 img-fluid img-thumbnail"
+                                 class="w-100 h-50 img-fluid"
                                  alt="活動照片">
                         </div>
                         <h2 class="fw-bolder">活動內容:</h2>
@@ -164,8 +161,8 @@
             </div>
             <div class="col-md-4" id="right-div">
                 <aside>
-                    <div class="shadow-none p-3 mb-5 bg-light rounded">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    <div class="p-3 mb-5 bg-white rounded">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red"
                              class="bi bi-fire" viewBox="0 0 16 16">
                             <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
                         </svg>
@@ -182,35 +179,35 @@
                             </p>
                         </div>
                     </div>
-                    <div class="shadow-none p-3 mb-5 bg-light rounded">
+                    <div class="p-3 mb-5 bg-white rounded">
                         <h2 class="fw-bolder">活動訊息:</h2>
-                        <p class="fst-italic">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        <p class="fw-bolder">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue"
                                  class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                                 <path fill-rule="evenodd"
                                       d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
                             </svg>
                             主辦人:
+                        </p>
                         <div>
-
-                            <img th:src="'data:image/png;base64,' + ${memPic}"
-                                 class="img-fluid" style="width: 60px; height: auto;">
-                            <p id="memId" class="badge bg-primary text-wrap">
-                                張三</p>
+                            <a class="text-decoration-none" th:href="@{/membership/{memId}(memId=${memId})}">
+                                <img th:src="'data:image/png;base64,' + ${memPic}" class="img-fluid" style="width: 60px; height: auto;">
+                            </a>
+                            <p id="memId" class="badge bg-primary text-wrap" th:text="${act.memName}">張三</p>
                         </div>
 
                         <hr>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="brown"
                              class="bi bi-pin-map" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                   d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z"/>
                             <path fill-rule="evenodd"
                                   d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
                         </svg>
-                        <span class="fst-italic">活動地點:<span id="actLoc"
-                                                                th:text="${act.actLoc}">活動場地</span></span>
+                        <span class="fw-bolder">活動地點:</span>
+                        <span id="actLoc" class="fst-italic" th:text="${act.actLoc}">活動場地</span>
                         <hr>
 
                         <p class="fst-italic">
@@ -220,7 +217,7 @@
                                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
                             </svg>
                             活動開始時間：
-                            <time id="startTime" th:text="${act.actStartTime}">2023-12-01 10:00 AM</time>
+                            <time id="startTime" th:text="${actStartTime}">2023-12-01 10:00 AM</time>
                         </p>
                         <p class="fst-italic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -230,7 +227,7 @@
                                 <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
                             </svg>
                             活動結束時間：
-                            <time id="endTime" th:text="${act.actEndTime}">2023-12-01 4:00 PM</time>
+                            <time id="endTime" th:text="${actEndTime}">2023-12-01 4:00 PM</time>
                         </p>
                         <div id="map"></div>
                     </div>
@@ -246,7 +243,7 @@
                     <button id="newToOld" class="rounded-pill text-dark bg-light" onclick="newToOld()">新至舊</button>
                     <button id="oldToNew" class="rounded-pill text-dark bg-light" onclick="oldToNew()">舊至新</button>
                 </div>
-                <div class="card w-100 shadow-none p-3 mb-2 bg-light rounded" style="border: none;" id="scroll">
+                <div class="card w-100 p-3 mb-2 bg-white rounded" style="border: none;" id="scroll">
                     <div id="comments" class="card-body">
 
                     </div>
@@ -257,14 +254,21 @@
             <form id="commentsform" class="row g-3">
                 <label for="comment" class="visually-hidden">留言</label>
                 <div class="input-group">
-                    <input type="text" class="form-control rounded-pill border border-3 border-dark" id="comment"
+                    <input type="text" class="form-control p-3 shadow-sm rounded-start-5" id="comment"
                            placeholder="輸入您的留言">
-                    <button type="submit" class="rounded-pill border border-3 border-dark">留言</button>
+                    <button type="submit" class="btn btn-success shadow-sm rounded-end-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-send-fill" viewBox="0 0 16 16">
+                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                        </svg>
+                    </button>
                 </div>
             </form>
         </div>
 
-        <div class="container mt-4 bg-light" id="people">
+        <hr class="mt-5 mb-5">
+
+        <div class="container mt-4 bg-white" id="people">
             <div>
                 <h5 class="fw-bolder">參與者:<span id="addPeople">(0)</span></h5>
             </div>
@@ -273,7 +277,7 @@
             </div>
         </div>
 
-        <hr>
+        <hr class="mt-5 mb-5">
 
         <div>
             <h5 class="fw-bolder">推薦活動:</h5>
@@ -588,7 +592,9 @@
                         commentsHTML +=
                             `<div class="usertext">
                                 <div class="mb-3">
-                                    <img src="data:image/png;base64,${comment.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
+                                    <a class="text-decoration-none" href="/membership/${memId}">
+                                        <img src="data:image/png;base64,${comment.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
+                                    </a>
                                     <p class="badge bg-primary text-wrap align-top">${comment.memName}</p>
                                 </div>
                                 <p class="content" style="margin: 0">${comment.comContent}</p>
@@ -674,8 +680,10 @@
                 commentsHTML +=
                     `<div class="usertext">
                         <div class="mb-3">
-                            <img src="data:image/png;base64,${comments.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
-                            <p class="badge bg-primary text-wrap align-top">${comments.memName}</p>
+                            <a class="text-decoration-none" href="/membership/${memId}">
+                                <img src="data:image/png;base64,${comments.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
+                                <p class="badge bg-primary text-wrap align-top">${comments.memName}</p>
+                            </a>
                         </div>
                         <p class="content" style="margin: 0">${comments.comContent}</p>
                         <input class="userinput content none" type="text" placeholder="請輸入內容" value="${comments.comContent}">
@@ -692,7 +700,7 @@
                         </div>
                     </div>`;
 
-                $("#ommentcount").html("(" + ++total + ")");
+                $("#commentcount").html("(" + ++total + ")");
 
                 $("#comments").prepend(commentsHTML);
 
@@ -1236,12 +1244,13 @@
 
                 memNameAndPics.forEach(function (memNameAndPic) {
                     userHTML =
-                        '<div class="col-md-2 mb-3">' +
-                        '<div class="shadow-sm p-3 bg-light rounded text-center">' +
-                        '<img src="data:image/png;base64,' + memNameAndPic.memPic + '" class="pic img-fluid d-block mx-auto" style="width: 60px; height: auto">' +
-                        '<p class="badge bg-primary text-wrap mt-2">' + memNameAndPic.memName + '</p>' +
-                        '</div>' +
-                        '</div>';
+                        `<div class="col-md-2 mb-3">
+                            <div class="p-3 shadow-sm bg-white border border-1 rounded text-center">
+                                <a class="text-decoration-none" href="/membership/${memNameAndPic.memId}"><img src="data:image/png;base64,${memNameAndPic.memPic}" class="pic img-fluid d-block mx-auto" style="width: 60px; height: auto">
+                                </a>
+                                <p class="badge bg-primary text-wrap mt-2">${memNameAndPic.memName}</p>
+                            </div>
+                        </div>`;
 
                     count++; //算參加的會員人數
                     $("#add").append(userHTML);
@@ -1283,7 +1292,16 @@
                                 <img src="data:image/png;base64,${actList.actPic}" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title fw-bold">${actList.actName}</h5>
-                                        <p class="card-text">地點:${actList.actLoc}</p>
+                                        <p class="card-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="brown"
+                                                 class="bi bi-pin-map" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                      d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+                                            </svg>
+                                        地點:${actList.actLoc}
+                                        </p>
                                         <p class="descr card-text">簡介:${actList.actDescr}</p>
                                         <hr>
                                         <small class="card-text">開始時間:${actList.actStartTime}</small><br>

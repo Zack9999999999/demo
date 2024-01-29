@@ -148,7 +148,7 @@ public class ActRegService implements IActRegService {
     @Override
     public List<MemNameAndPicDTO> findMemNameAndPic(Integer actId, Integer isActPart) {
 
-        List<Object[]> membersAndPicByPart = actRegRepository.findMembersAndPicByPart(actId, isActPart);
+        List<Object[]> membersAndPicByPart = actRegRepository.findMembersAndPicAndMemIdByPart(actId, isActPart);
 
         List<MemNameAndPicDTO> dtos = new ArrayList<>();
 
@@ -156,6 +156,7 @@ public class ActRegService implements IActRegService {
             MemNameAndPicDTO memNameAndPicDTO = new MemNameAndPicDTO();
             memNameAndPicDTO.setMemName((String) obj[0]);
             memNameAndPicDTO.setMemPic((byte[]) obj[1]);
+            memNameAndPicDTO.setMemId((Integer) obj[2]);
             dtos.add(memNameAndPicDTO);
         }
         return dtos;

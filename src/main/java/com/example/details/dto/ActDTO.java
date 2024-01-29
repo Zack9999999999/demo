@@ -59,6 +59,8 @@ public class ActDTO {
 
     private byte[] memPic;
 
+    private String memName;
+
     public ActDTO(){
 
     }
@@ -244,5 +246,13 @@ public class ActDTO {
 
     public void setMemPic(byte[] memPic) {
         this.memPic = memPic;
+    }
+
+    public String getMemName() {
+        return memName;
+    }
+
+    public void setMemName(String memName) {
+        this.memName = memName;
     }
 }

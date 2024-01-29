@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.List;
 
@@ -32,6 +33,14 @@ public class RetailsController {
     @GetMapping("/activity/{actId}")
     public String actDetail(@PathVariable Integer actId, Model model, HttpSession session) {
         ActDTO act = retailsService.getDetail(actId);
+
+        //格式化活動開始跟結束日期
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String actStartTime = dateFormat.format(act.getActStartTime());
+        String actEndTime = dateFormat.format(act.getActEndTime());
+        model.addAttribute("actStartTime", actStartTime);
+        model.addAttribute("actEndTime", actEndTime);
+
         model.addAttribute("act", act);
 
         String base64Pic = Base64.getEncoder().encodeToString(act.getMemPic());

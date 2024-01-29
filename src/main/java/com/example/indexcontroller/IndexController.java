@@ -3,6 +3,8 @@ package com.example.indexcontroller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Date;
+
 @Controller
 //@RequestMapping("/CHA104G3")
 public class IndexController {
@@ -12,12 +14,12 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("/member/commentreport") //要改
+    @RequestMapping("/membership/commentreport") //要改
     public String commentReport() {
         return "commentreport";
     }
 
-    @RequestMapping("/member/report") //要改
+    @RequestMapping("/membership/report") //要改
     public String report() {
         return "report";
     }

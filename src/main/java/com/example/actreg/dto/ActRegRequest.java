@@ -19,4 +19,6 @@ public class ActRegRequest {
     private Byte isActPart = 2;
 
     private Double actRating;
+
+    private String regReason;
 }

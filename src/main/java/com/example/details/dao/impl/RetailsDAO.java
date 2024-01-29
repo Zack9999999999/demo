@@ -1,9 +1,11 @@
 package com.example.details.dao.impl;
 
-import com.example.act.model.ActVO;
 import com.example.details.dao.IRetailsDAO;
 import com.example.details.dto.ActDTO;
+import com.example.details.dto.ActRandomDTO;
 import com.example.details.rowmapper.ActRowMapper;
+import com.example.details.rowmapper.ActRandomRowMappers;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class RetailsDAO implements IRetailsDAO {
 
     @Autowired
@@ -35,5 +38,17 @@ public class RetailsDAO implements IRetailsDAO {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<ActRandomDTO> randomFourAct() {
+
+        String sql = "SELECT * FROM activity LIMIT 4";
+
+        Map<String, Object> map = new HashMap<>();
+
+        List<ActRandomDTO> list = namedParameterJdbcTemplate.query(sql, new ActRandomRowMappers());
+
+        return list;
     }
 }

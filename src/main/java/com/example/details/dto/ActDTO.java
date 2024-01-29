@@ -17,7 +17,6 @@ public class ActDTO {
 
     private Integer memId;
 
-
     private String actName;
 
     private Date actStartTime;

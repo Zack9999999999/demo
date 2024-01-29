@@ -1,22 +1,18 @@
 package com.example.act.model;
 
 import com.example.actreg.model.ActRegVO;
-import com.example.commentreport.model.CommentReportVO;
-import com.example.mem.model.MembershipVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 
 @Entity

@@ -2,6 +2,7 @@ package com.example.details.controller;
 
 import com.example.act.model.ActVO;
 import com.example.details.dto.ActDTO;
+import com.example.details.dto.ActRandomDTO;
 import com.example.details.service.IRetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.Base64;
+import java.util.List;
 
 //@RestController
 @Controller
 @RequestMapping("/CHA104G3")
 @Slf4j
 public class RetailsController {
+
     @Autowired
     private IRetailsService retailsService;
-
-    //活動詳情
-//    @GetMapping("/{actId}")
-//    public ResponseEntity<ActVO> getDetail(@PathVariable Integer actId){
-//        ActVO act = retailsService.getDetail(actId);
-//        return ResponseEntity.status(HttpStatus.OK).body(act);
-//    }
 
     @GetMapping("/activity/{actId}")
     public String actDetail(@PathVariable Integer actId, Model model, HttpSession session) {
@@ -61,5 +57,13 @@ public class RetailsController {
         } else {
             return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(actPic);
         }
+    }
+
+    @GetMapping("/activity/random")
+    public ResponseEntity<List<ActRandomDTO>> randomFourAct() {
+        //參數放類別 這樣就只會抓出同類別的活動
+        List<ActRandomDTO> actList = retailsService.randomFourAct();
+
+        return ResponseEntity.status(HttpStatus.OK).body(actList);
     }
 }

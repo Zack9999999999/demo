@@ -273,8 +273,7 @@
 
         <div>
             <h5 class="fw-bolder">推薦活動:</h5>
-
-            <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="random row row-cols-1 row-cols-md-4 g-4">
                 <div class="col">
                     <div class="card h-100">
                         <img src="..." class="card-img-top" alt="...">
@@ -284,37 +283,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="..." class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-
-
         </div>
 
         <div class="p-3 join">
@@ -494,7 +463,8 @@
         checkActReg();
         //搜出參與此活動者
         findMemAndPic();
-
+        //推薦活動
+        showFourAct();
     });
 
     let newToOldBtn = $("#newToOld");
@@ -595,25 +565,25 @@
                 comments.forEach(function (comment) {
                     if (comment.comStatus == 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
                         commentsHTML +=
-                            '<div class="usertext">' +
-                            '<div class="mb-3">' +
-                            '<img src="data:image/png;base64,' + comment.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
-                            '<p class="badge bg-primary text-wrap align-top">' + comment.memName + '</p>' +
-                            '</div>' +
-                            '<p class="content" style="margin: 0">' + comment.comContent + '</p>' +
-                            '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comment.comContent + '">' +
-                            '<hr style="margin: 0">' +
-                            '<div class="d-flex align-items-center mb-3">' +
-                            '<small class="text-muted">' + comment.comTime + '</small>' +
-                            '<div class="userfunction ms-auto" data-mem-id="' + comment.memId + '">' +
-                            '<a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">確認</a>' +
-                            '<a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">編輯</a>' +
-                            '<a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none; display: none;"  data-com-id="' + comment.comId + '">刪除</a>' +
-                            '<a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="' + comment.comId + '"' +
-                            'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
+                            `<div class="usertext">
+                                <div class="mb-3">
+                                    <img src="data:image/png;base64,${comment.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
+                                    <p class="badge bg-primary text-wrap align-top">${comment.memName}</p>
+                                </div>
+                                <p class="content" style="margin: 0">${comment.comContent}</p>
+                                <input class="userinput content none" type="text" placeholder="請輸入內容" value="${comment.comContent}">
+                                <hr style="margin: 0">
+                                <div class="d-flex align-items-center mb-3">
+                                    <small class="text-muted">${comment.comTime}</small>
+                                <div class="userfunction ms-auto" data-mem-id="${comment.memId}">
+                                    <a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">確認</a>
+                                    <a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">編輯</a>
+                                    <a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">刪除</a>
+                                    <a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="${comment.comId}"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>
+                                </div>
+                                </div>
+                            </div>`;
                     }
                 });
                 //留言總數
@@ -681,27 +651,27 @@
 
                 let commentsHTML = "";
                 commentsHTML +=
-                    '<div class="usertext">' +
-                    '<div class="mb-3">' +
-                    '<img src="data:image/png;base64,' + comments.memPic + '" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">' +
-                    '<p class="badge bg-primary text-wrap align-top">' + comments.memName + '</p>' +
-                    '</div>' +
-                    '<p class="content" style="margin: 0">' + comments.comContent + '</p>' +
-                    '<input class="userinput content none" type="text" placeholder="請輸入內容" value="' + comments.comContent + '">' +
-                    '<hr style="margin: 0">' +
-                    '<div class="d-flex align-items-center mb-3">' +
-                    '<small class="text-muted">' + comments.comTime + '</small>' +
-                    '<div class="userfunction ms-auto" data-mem-id="' + comments.memId + '">' +
-                    '<a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="' + comments.comId + '">確認</a>' +
-                    '<a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none;" data-com-id="' + comments.comId + '">編輯</a>' +
-                    '<a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none;" data-com-id="' + comments.comId + '">刪除</a>' +
-                    '<a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="' + comments.comId + '"' +
-                    'data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>'
+                    `<div class="usertext">
+                        <div class="mb-3">
+                            <img src="data:image/png;base64,${comments.memPic}" class="rounded-circle me-2 img-fluid" alt="" style="max-width: 50px; height: auto;">
+                            <p class="badge bg-primary text-wrap align-top">${comments.memName}</p>
+                        </div>
+                        <p class="content" style="margin: 0">${comments.comContent}</p>
+                        <input class="userinput content none" type="text" placeholder="請輸入內容" value="${comments.comContent}">
+                        <hr style="margin: 0">
+                        <div class="d-flex align-items-center mb-3">
+                            <small class="text-muted">${comments.comTime}</small>
+                        <div class="userfunction ms-auto" data-mem-id="${comments.memId}">
+                            <a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="' + comments.comId + '">確認</a>
+                            <a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none;" data-com-id="${comments.comId}">編輯</a>
+                            <a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none;" data-com-id="${comments.comId}">刪除</a>
+                            <a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="${comments.comId}"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">檢舉</a>
+                        </div>
+                        </div>
+                    </div>`;
 
-                $("#commentcount").html("(" + ++total + ")");
+                $("#ommentcount").html("(" + ++total + ")");
 
                 $("#comments").prepend(commentsHTML);
 
@@ -914,45 +884,55 @@
                     text: '剩餘名額: ' + actTotal,
                     input: 'number',
                     inputPlaceholder: '報名人數',
-                    // inputValidator: (value) => {
-                    //     if (!value) {
-                    //         return '請輸入人數'
-                    //     }
-                    //     if (isNaN(value)) {
-                    //         return '請輸入數字';
-                    //     }
-                    // },
+                    inputAttributes: {
+                        min: 1,
+                    },
                     showCancelButton: true,
-                    confirmButtonText: '送出',
+                    confirmButtonText: '下一步',
                     cancelButtonText: '取消',
                 }).then((result) => {
-                    if (result.isConfirmed && result.value) {
+                        if (result.isConfirmed && result.value) {
+                            Swal.fire({
+                                title: '報名原因',
+                                text: '請輸入報名原因',
+                                input: 'textarea',
+                                inputPlaceholder: '原因',
+                                showCancelButton: true,
+                                confirmButtonText: '送出',
+                                cancelButtonText: '取消',
+                            }).then((reasonResult) => {
+                                if (reasonResult.isConfirmed && reasonResult.value) {
 
-                        let numberOfPeople = {
-                            actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
-                            regTotal: result.value
-                        }
-                        $.ajax({
-                            url: '/actreg', //路徑有變動的話要改
-                            type: 'POST',
-                            contentType: 'application/json',
-                            data: JSON.stringify(numberOfPeople),
-                            success: function (actReg) {
-                                Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
+                                    let numberOfPeople = {
+                                        actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
+                                        regTotal: result.value,
+                                        regReason: reasonResult.value
+                                    }
+                                    $.ajax({
+                                        url: '/actreg', //路徑有變動的話要改
+                                        type: 'POST',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify(numberOfPeople),
+                                        success: function (actReg) {
+                                            Swal.fire('報名成功!，您報名的人數：' + actReg.regTotal);
 
-                                //報名完直接在判斷有沒有報名過 用來切換按鈕
-                                checkActReg();
-                            },
-                            error: function (xhr, status, error) {
-                                if (xhr.status === 400) {
-                                    Swal.fire("報名過了");
-                                } else if (xhr.status === 405) {
-                                    Swal.fire("報名人數超過上限，請重新確認");
+                                            //報名完直接在判斷有沒有報名過 用來切換按鈕
+                                            checkActReg();
+                                        },
+                                        error: function (xhr, status, error) {
+                                            if (xhr.status === 400) {
+                                                Swal.fire("報名過了");
+                                            } else if (xhr.status === 405) {
+                                                Swal.fire("報名人數超過上限，請重新確認");
+                                            }
+                                        }
+                                    });
                                 }
-                            }
-                        });
+                            })
+                        }
                     }
-                });
+                )
+                ;
                 break;
             //防止用戶利用F12搞事 報名審核失敗 不可再報名
             case 1:
@@ -994,9 +974,12 @@
             case 4:
                 Swal.fire({
                     title: '人數',
-                    text: '還可以報名的人數: ' + actTotal,
+                    text: '剩餘名額: ' + actTotal,
                     input: 'number',
                     inputPlaceholder: '報名人數',
+                    inputAttributes: {
+                        min: 1,
+                    },
                     showCancelButton: true,
                     confirmButtonText: '下一步',
                     cancelButtonText: '取消',
@@ -1217,7 +1200,6 @@
             actId: window.location.pathname.split('/')[3],
             isActPart: 2 //參加狀態
         }
-
         $.ajax({
             url: "/actreg/members",
             type: "GET",
@@ -1260,6 +1242,63 @@
             error(xhr, status, error) {
             }
         })
+    }
+
+    //隨機推薦4個活動
+    function showFourAct() {
+        $.ajax({
+            url: '/CHA104G3/activity/random',
+            type: 'GET',
+            // data: '',
+            // dataType: '',
+            contentType: 'application/json',
+            success: function (actLists) {
+                let actHTML = "";
+
+                actLists.forEach(function (actList) {
+                    actHTML +=
+                        `<div class="col">
+                            <div class="card h-100 fourAct">
+                                <img src="data:image/png;base64,${actList.actPic}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold">${actList.actName}</h5>
+                                        <p class="card-text">地點:${actList.actLoc}</p>
+                                        <p class="descr card-text">簡介:${actList.actDescr}</p>
+                                        <p class="card-text">開始時間:${actList.actStartTime}</p>
+                                        <p class="card-text">結束時間:${actList.actEndTime}</p>
+                                        <div class="d-flex justify-content-end">
+                                          <button class="btn btn-outline-secondary" data-act-id="${actList.actId}" onclick="seeDetails(this)">詳情</button>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>`;
+                });
+                $(".random").html(actHTML);
+
+                //只顯示10個字，後面的用...替代
+                $(".descr").each(function () {
+                    let text = $(this).text();
+                    if (text.length > 10) {
+                        $(this).text(text.substring(0, 10) + "...");
+                    }
+                })
+            },
+            error() {
+
+            }
+        });
+    }
+
+    $(document).on("mousemove", ".fourAct", function () {
+        $(this).addClass("shadow")
+    })
+    $(document).on("mouseleave", ".fourAct", function () {
+        $(this).removeClass("shadow")
+    })
+
+    function seeDetails(e) {
+        let actId = $(e).data("actId");
+        window.location.href = `/CHA104G3/activity/${actId}`;
     }
 
     //Sweetalart2

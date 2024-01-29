@@ -39,7 +39,7 @@ public class ActRegController {
             @RequestParam(required = false) Byte regStatus,
             @RequestParam(required = false) Byte actStatus,
             @RequestParam(required = false) String sortDirection,
-            @PageableDefault(size = 5, sort = "act.actStartTime", direction = Sort.Direction.ASC) Pageable pageable
+            @PageableDefault(size = 5, sort = "act.actStartTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         //模擬從session取出會員id
@@ -48,11 +48,11 @@ public class ActRegController {
         Integer memId = (Integer) session.getAttribute("memId");
 
         //傳進來是DESC的話替換掉pageable內的Sort
-        if ("DESC".equalsIgnoreCase(sortDirection)) {
+        if ("ASC".equalsIgnoreCase(sortDirection)) {
             pageable = PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize(),
-                    Sort.by(Sort.Direction.DESC, "act.actStartTime")
+                    Sort.by(Sort.Direction.ASC, "act.actStartTime")
             );
         }
 

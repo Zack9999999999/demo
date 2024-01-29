@@ -34,16 +34,27 @@ public class ActivityReportService implements IActivityReportService {
     @Override
     public Page<ActivityReportVO> getAll(ActivityReportQueryParams activityReportQueryParams, Pageable pageable) {
 
-        if (activityReportQueryParams.getRepStatus() != null && activityReportQueryParams.getMemId() != null) {
+        if (activityReportQueryParams.getRepStatus() != null && activityReportQueryParams.getMemId() != null && activityReportQueryParams.getEmpId() == null) {
             return activityReportReopsitory.findByRepStatusAndMemId(activityReportQueryParams.getRepStatus(), activityReportQueryParams.getMemId(), pageable);
+
+        } else if (activityReportQueryParams.getRepStatus() != null && activityReportQueryParams.getEmpId() == null) {
+            return activityReportReopsitory.findByRepStatus(activityReportQueryParams.getRepStatus(), pageable);
+
+        } else if (activityReportQueryParams.getMemId() != null && activityReportQueryParams.getEmpId() == null) {
+            return activityReportReopsitory.findByMemId(activityReportQueryParams.getMemId(), pageable);
+
+        }
+
+        if (activityReportQueryParams.getEmpId() != null && activityReportQueryParams.getRepStatus() != null) {
+            return activityReportReopsitory.findByRepStatusAndEmpId(activityReportQueryParams.getRepStatus(), activityReportQueryParams.getEmpId(), pageable);
 
         } else if (activityReportQueryParams.getRepStatus() != null) {
             return activityReportReopsitory.findByRepStatus(activityReportQueryParams.getRepStatus(), pageable);
 
-        } else if (activityReportQueryParams.getMemId() != null) {
-            return activityReportReopsitory.findByMemId(activityReportQueryParams.getMemId(), pageable);
-
+        } else if (activityReportQueryParams.getEmpId() != null) {
+            return activityReportReopsitory.findByEmpId(activityReportQueryParams.getEmpId(), pageable);
         }
+
         return activityReportReopsitory.findAll(pageable);
     }
 

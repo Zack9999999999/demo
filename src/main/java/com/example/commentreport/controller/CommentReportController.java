@@ -33,6 +33,7 @@ public class CommentReportController {
     public ResponseEntity<Page<CommentReportVO>> getCommentReports(
             @RequestParam(required = false) Byte repStatus,
             @RequestParam(required = false) Integer memId,
+            @RequestParam(required = false) Integer empId,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -48,6 +49,7 @@ public class CommentReportController {
         CommentReportQueryParams commentReportQueryParams = new CommentReportQueryParams();
         commentReportQueryParams.setRepStatus(repStatus);
         commentReportQueryParams.setMemId(memId);
+        commentReportQueryParams.setEmpId(empId);
 
         Page<CommentReportVO> commentReportList = commentReportService.getCommentReports(commentReportQueryParams, pageable);
 

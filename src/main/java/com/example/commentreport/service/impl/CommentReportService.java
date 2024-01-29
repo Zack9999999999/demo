@@ -37,14 +37,24 @@ public class CommentReportService implements ICommentReportService {
             Pageable pageable) {
 
         //狀態查詢
-        if (commentReportQueryParams.getRepStatus() != null && commentReportQueryParams.getMemId() != null) {
+        if (commentReportQueryParams.getRepStatus() != null && commentReportQueryParams.getMemId() != null && commentReportQueryParams.getEmpId() == null) {
             return commentReportRepository.findByRepStatusAndMemId(commentReportQueryParams.getRepStatus(), commentReportQueryParams.getMemId(), pageable);
+
+        } else if (commentReportQueryParams.getRepStatus() != null && commentReportQueryParams.getEmpId() == null) {
+            return commentReportRepository.findByRepStatus(commentReportQueryParams.getRepStatus(), pageable);
+
+        } else if (commentReportQueryParams.getMemId() != null && commentReportQueryParams.getEmpId() == null) {
+            return commentReportRepository.findByMemId(commentReportQueryParams.getMemId(), pageable);
+        }
+
+        if (commentReportQueryParams.getEmpId() != null && commentReportQueryParams.getRepStatus() != null) {
+            return commentReportRepository.findByRepStatusAndEmpId(commentReportQueryParams.getRepStatus(), commentReportQueryParams.getEmpId(), pageable);
 
         } else if (commentReportQueryParams.getRepStatus() != null) {
             return commentReportRepository.findByRepStatus(commentReportQueryParams.getRepStatus(), pageable);
 
-        } else if (commentReportQueryParams.getMemId() != null) {
-            return commentReportRepository.findByMemId(commentReportQueryParams.getMemId(), pageable);
+        } else if (commentReportQueryParams.getEmpId() != null) {
+            return commentReportRepository.findByEmpId(commentReportQueryParams.getEmpId(), pageable);
         }
 
         return commentReportRepository.findAll(pageable);

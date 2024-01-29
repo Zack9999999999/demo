@@ -127,7 +127,7 @@
             <div class="input-group input-group-sm w-25 h-75">
                 <label for="memId">員工ID:</label>
                 <input type="text" class="form-control" id="empId">
-                <button class="selectMemId btn btn-primary btn-sm">查詢</button>
+                <button class="selectEmpId btn btn-primary btn-sm">查詢</button>
                 <button class="btn btn-danger btn-sm" onclick="refreshEmp()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-arrow-repeat" viewBox="0 0 16 16">
@@ -269,24 +269,25 @@
     let pageNumber = 1; // 預設值
     let size = 5; //顯示筆數預設
     let memId;
+    let empId;
 
     //分頁頁數按鈕
-    function loadPage(pageNumber, repTime, repStatus, memId) {
-        loadReports(pageNumber, repTime, repStatus, memId);
+    function loadPage(pageNumber, repTime, repStatus, memId, empId) {
+        loadReports(pageNumber, repTime, repStatus, memId, empId);
     }
 
     //依審核狀態篩選
     $(".filterButton").click(function () {
         repStatus = $(this).data("repStatus");
 
-        loadReports(pageNumber, repTime, repStatus, memId);
+        loadReports(pageNumber, repTime, repStatus, memId, empId);
     });
 
     //時間排序
     $("#time").change(function () {
         repTime = $("#time").val();
 
-        loadReports(pageNumber, repTime, repStatus, memId);
+        loadReports(pageNumber, repTime, repStatus, memId, empId);
     });
 
     //會員ID查詢
@@ -302,8 +303,34 @@
             memId = null;
             return;
         }
-        loadReports(pageNumber, repTime, repStatus, memId);
+        //清掉員工ID的input
+        $(".selectEmpId").closest("div").find("#empId").val("");
+
+        //清掉員工ID
+        empId = null;
+        loadReports(pageNumber, repTime, repStatus, memId, empId);
     });
+
+    //員工ID查詢
+    $(".selectEmpId").click(function () {
+        empId = $(".selectEmpId").closest("div").find("#empId").val();
+
+        if (!parseInt(empId)) {
+            Toast.fire({
+                icon: 'warning',
+                title: '請輸入數字！'
+            });
+            $(".selectEmpId").closest("div").find("#memId").val("");
+            empId = null;
+            return;
+        }
+        //清掉會員ID的input
+        $(".selectMemId").closest("div").find("#memId").val("");
+
+        //清掉會員ID
+        memId = null;
+        loadReports(pageNumber, repTime, repStatus, memId, empId);
+    })
 
     //清空參數
     function refresh() {
@@ -314,8 +341,18 @@
         loadReports();
     }
 
+    //清空參數
+    function refreshEmp() {
+        pageNumber = 1;
+        repTime = "DESC";
+        repStatus = null;
+        memId = null;
+        empId = null;
+        loadReports();
+    }
+
     //顯示所有活動檢舉
-    function loadReports(pageNumber, repTime, repStatus, memId) {
+    function loadReports(pageNumber, repTime, repStatus, memId, empId) {
 
         let url = "/activityreport";
 
@@ -329,7 +366,8 @@
             data: {
                 page: pageNumber - 1,
                 sortDirection: repTime,
-                memId: memId
+                memId: memId,
+                empId: empId
             },
             dataType: 'json',
             success: function (activityReport) {
@@ -346,7 +384,7 @@
                 let last = activityReport.last; // 當前是最後一頁為true
 
                 //分頁元件生成
-                nextPage(totalPages, repTime, repStatus, memId);
+                nextPage(totalPages, repTime, repStatus, memId, empId);
 
                 $(".number").each(function () {
                     if ($(this).text() === (number + 1).toString()) {
@@ -548,11 +586,11 @@
     });
 
     //分頁元件生成
-    function nextPage(totalPages, repTime, repStatus, memId) {
+    function nextPage(totalPages, repTime, repStatus, memId, empId) {
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML += `<li  class="page-item">` +
-                `<a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}, ${memId}); return false;">${i + 1}</a>` +
+                `<a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus}, ${memId},${empId}); return false;">${i + 1}</a>` +
                 `</li>`;
         }
         $(".pagination").html(pageHTML); //插入頁碼
@@ -563,12 +601,12 @@
     //下一頁
     function next() {
         // loadReports(++pageNumber, repTime, repStatus, memId);
-        loadPage(pageNumber + 1, repTime, repStatus, memId)
+        loadPage(pageNumber + 1, repTime, repStatus, memId, empId)
     }
 
     //上一頁
     function previous() {
-        loadPage(pageNumber - 1, repTime, repStatus, memId)
+        loadPage(pageNumber - 1, repTime, repStatus, memId, empId)
     }
 
     //Sweetalart2

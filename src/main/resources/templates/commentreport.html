@@ -123,6 +123,20 @@
                     </svg>
                 </button>
             </div>
+            <div class="input-group input-group-sm w-25 h-75">
+                <label for="memId">員工ID:</label>
+                <input type="text" class="form-control" id="empId">
+                <button class="selectEmpId btn btn-primary btn-sm">查詢</button>
+                <button class="btn btn-danger btn-sm" onclick="refreshEmp()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+                        <path fill-rule="evenodd"
+                              d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                    </svg>
+                </button>
+            </div>
+
             <div class="d-flex">
                 <div class="btn-group" role="group">
                     <button class="filterButton btn btn-secondary btn-sm" data-rep-status=null>所有</button>
@@ -257,23 +271,23 @@
     let memId;
 
     //第幾頁
-    function loadPage(pageNumber, repTime, repStatus, memId) {
+    function loadPage(pageNumber, repTime, repStatus, memId, empId) {
 
-        loadCommentReports(pageNumber, repTime, repStatus, memId);
+        loadCommentReports(pageNumber, repTime, repStatus, memId, empId);
     }
 
     //依審核狀態篩選
     $(".filterButton").on("click", function () {
         repStatus = $(this).data("repStatus");
 
-        loadCommentReports(pageNumber, repTime, repStatus, memId);
+        loadCommentReports(pageNumber, repTime, repStatus, memId, empId);
     });
 
     //時間排序
     $("#time").change(function () {
         repTime = $("#time").val();
 
-        loadCommentReports(pageNumber, repTime, repStatus, memId);
+        loadCommentReports(pageNumber, repTime, repStatus, memId, empId);
     });
 
     //會員ID查詢
@@ -289,8 +303,33 @@
             memId = null;
             return;
         }
-        loadCommentReports(pageNumber, repTime, repStatus, memId);
+        //清掉員工ID的input
+        $(".selectEmpId").closest("div").find("#empId").val("");
+
+        empId = null;
+        loadCommentReports(pageNumber, repTime, repStatus, memId, empId);
     });
+
+    //員工ID查詢
+    $(".selectEmpId").click(function () {
+        empId = $(".selectEmpId").closest("div").find("#empId").val();
+
+        if (!parseInt(empId)) {
+            Toast.fire({
+                icon: 'warning',
+                title: '請輸入數字！'
+            });
+            $(".selectEmpId").closest("div").find("#memId").val("");
+            empId = null;
+            return;
+        }
+        //清掉會員ID的input
+        $(".selectMemId").closest("div").find("#memId").val("");
+
+        //清掉會員ID
+        memId = null;
+        loadCommentReports(pageNumber, repTime, repStatus, memId, empId);
+    })
 
     //清空參數
     function refresh() {
@@ -301,8 +340,18 @@
         loadCommentReports();
     }
 
+    //清空參數
+    function refreshEmp() {
+        pageNumber = 1;
+        repTime = "DESC";
+        repStatus = null;
+        memId = null;
+        empId = null;
+        loadReports();
+    }
+
     //顯示所有留言檢舉內容
-    function loadCommentReports(pageNumber, repTime, repStatus, memId) {
+    function loadCommentReports(pageNumber, repTime, repStatus, memId, empId) {
         let url = "/commentreport";
 
         if (repStatus !== undefined && repStatus !== null) {
@@ -315,7 +364,8 @@
             data: {
                 page: pageNumber - 1,
                 sortDirection: repTime,
-                memId: memId
+                memId: memId,
+                empId:empId
             },
             dataType: 'json',
             success: function (commentReportList) {
@@ -331,7 +381,7 @@
                 let first = commentReportList.first; //當前是第一頁為ture
                 let last = commentReportList.last; // 當前是最後一頁為true
 
-                nextPage(totalPages, repTime, repStatus, memId);
+                nextPage(totalPages, repTime, repStatus, memId, empId);
 
                 //在哪頁就將哪頁按鈕加顏色
                 $(".number").each(function () {
@@ -509,12 +559,12 @@
         });
     });
 
-    function nextPage(totalPages, repTime, repStatus, memId) {
+    function nextPage(totalPages, repTime, repStatus, memId, empId) {
         let pageHTML = "";
         for (let i = 0; i < totalPages; i++) {
             pageHTML +=
                 `<li  class="page-item">
-                <a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus},${memId}); return false;">${i + 1}</a>
+                <a class="number page-link" href="#" onclick="loadPage(${i + 1}, '${repTime}', ${repStatus},${memId},${empId}); return false;">${i + 1}</a>
                 </li>`;
         }
 
@@ -526,12 +576,12 @@
 
     //下一頁
     function next() {
-        loadCommentReports(++pageNumber, repTime, repStatus);
+        loadCommentReports(++pageNumber, repTime, repStatus, memId, empId);
     }
 
     //上一頁
     function previous() {
-        loadCommentReports(--pageNumber, repTime, repStatus);
+        loadCommentReports(--pageNumber, repTime, repStatus, memId, empId);
     }
 
     //Sweetalart2

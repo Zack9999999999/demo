@@ -3,6 +3,7 @@ package com.example.report.dto;
 public class ActivityReportQueryParams {
     Byte repStatus;
     Integer memId;
+    Integer empId;
 
     public Byte getRepStatus() {
         return repStatus;
@@ -18,5 +19,13 @@ public class ActivityReportQueryParams {
 
     public void setMemId(Integer memId) {
         this.memId = memId;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
     }
 }

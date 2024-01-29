@@ -12,6 +12,8 @@ public class CommentReportQueryParams {
 
     private Integer memId;
 
+    private Integer empId;
+
     public CommentReportRepTitle getCommentReportRepTitle() {
         return commentReportRepTitle;
     }
@@ -50,5 +52,13 @@ public class CommentReportQueryParams {
 
     public void setMemId(Integer memId) {
         this.memId = memId;
+    }
+
+    public Integer getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(Integer empId) {
+        this.empId = empId;
     }
 }

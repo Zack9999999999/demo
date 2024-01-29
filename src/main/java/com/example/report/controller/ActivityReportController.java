@@ -36,6 +36,7 @@ public class ActivityReportController {
     public ResponseEntity<Page<ActivityReportVO>> getAll(
             @RequestParam(required = false) Byte repStatus,
             @RequestParam(required = false) Integer memId,
+            @RequestParam(required = false) Integer empId,
             @RequestParam(required = false) String sortDirection,
             @PageableDefault(size = 5, sort = "repTime", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -51,6 +52,7 @@ public class ActivityReportController {
         ActivityReportQueryParams activityReportQueryParams = new ActivityReportQueryParams();
         activityReportQueryParams.setRepStatus(repStatus);
         activityReportQueryParams.setMemId(memId);
+        activityReportQueryParams.setEmpId(empId);
 
         Page<ActivityReportVO> reportList = activityReportService.getAll(activityReportQueryParams, pageable);
 

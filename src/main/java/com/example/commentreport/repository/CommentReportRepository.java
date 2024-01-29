@@ -1,6 +1,7 @@
 package com.example.commentreport.repository;
 
 import com.example.commentreport.model.CommentReportVO;
+import com.example.report.model.ActivityReportVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,5 +21,9 @@ public interface CommentReportRepository extends JpaRepository<CommentReportVO, 
     Page<CommentReportVO> findAll(Pageable pageable);
 
     Page<CommentReportVO> findByRepStatusAndMemId(Byte repStatus, Integer memId, Pageable pageable);
+
+    //員工ID查詢
+    Page<CommentReportVO> findByEmpId(Integer empId, Pageable pageable);
+    Page<CommentReportVO> findByRepStatusAndEmpId(Byte repStatus, Integer empId, Pageable pageable);
 
 }

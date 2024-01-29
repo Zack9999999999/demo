@@ -101,6 +101,10 @@
             outline: none;
         }
 
+        .card.no-border {
+            border: none;
+        }
+
     </style>
 </head>
 
@@ -296,6 +300,17 @@
                         <button type="button" id="follow" class="btn btn-outline-primary btn-lg mx-3"
                                 onclick="follow()">關注
                         </button>
+
+                        <div class="line-it-button" data-lang="zh_Hant" data-type="share-a" data-env="REAL"
+                             data-url="http://localhost:8080/CHA104G3/activity/1" data-color="default"
+                             data-size="small" data-count="true" data-ver="3" style="display: none;">
+                        </div>
+                        <div class="fb-share-button" data-href="http://localhost:8080/CHA104G3/activity/1"
+                             data-layout="" data-size=""><a target="_blank"
+                                                            href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A8080%2FCHA104G3%2Factivity%2F1&amp;src=sdkpreparse"
+                                                            class="fb-xfbml-parse-ignore">分享</a>
+                        </div>
+
                     </div>
                     <button class="btn btn-outline-warning btn-lg" data-bs-toggle="modal"
                             data-bs-target="#actReportModal" data-bs-whatever="@getbootstrap" onclick="actReport()">檢舉活動
@@ -392,6 +407,8 @@
     </div>
 </div>
 
+<div id="fb-root"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
 </script>
@@ -403,6 +420,10 @@
 
 <script th:src="@{/js/googlemap.js}" src="../static/js/googlemap.js"></script>
 
+<script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async"
+        defer="defer"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v19.0"
+        nonce="KyqFoHSy"></script>
 <script>
 
     //將thymeleaf帶出來的活動狀態改為中文顯示
@@ -1257,15 +1278,16 @@
 
                 actLists.forEach(function (actList) {
                     actHTML +=
-                        `<div class="col">
-                            <div class="card h-100 fourAct">
+                        `<div class="col bg-light">
+                            <div class="card no-border h-100 fourAct">
                                 <img src="data:image/png;base64,${actList.actPic}" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title fw-bold">${actList.actName}</h5>
                                         <p class="card-text">地點:${actList.actLoc}</p>
                                         <p class="descr card-text">簡介:${actList.actDescr}</p>
-                                        <p class="card-text">開始時間:${actList.actStartTime}</p>
-                                        <p class="card-text">結束時間:${actList.actEndTime}</p>
+                                        <hr>
+                                        <small class="card-text">開始時間:${actList.actStartTime}</small><br>
+                                        <small class="card-text">結束時間:${actList.actEndTime}</small>
                                         <div class="d-flex justify-content-end">
                                           <button class="btn btn-outline-secondary" data-act-id="${actList.actId}" onclick="seeDetails(this)">詳情</button>
                                         </div>

@@ -9,6 +9,6 @@ import java.util.List;
 public interface IRetailsService {
     ActDTO getDetail(Integer actId);
 
-    List<ActRandomDTO> randomFourAct();
+    List<ActRandomDTO> randomFourAct(Integer actTypeId, Integer actId);
 
 }

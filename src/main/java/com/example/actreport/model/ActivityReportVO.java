@@ -1,8 +1,7 @@
-package com.example.report.model;
+package com.example.actreport.model;
 
 import com.example.act.model.ActVO;
-import com.example.report.constant.ReportTitle;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.actreport.constant.ReportTitle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

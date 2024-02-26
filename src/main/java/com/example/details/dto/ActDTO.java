@@ -61,32 +61,9 @@ public class ActDTO {
 
     private String memName;
 
-    public ActDTO(){
+    private Integer actTypeId;
 
-    }
-
-    public ActDTO(Integer actId, Integer memId, String actName, Date actStartTime, Date actEndTime, String actLoc, String actDescr, Integer actUpper, Integer actCount, Byte actStatus, LocalDateTime actCrTime, LocalDateTime regStartTime, LocalDateTime regEndTime, byte[] actPic, Double actTotRating, Integer actRateCount, Integer actFollowCount, BigDecimal lat, BigDecimal lon, byte[] memPic) {
-        this.actId = actId;
-        this.memId = memId;
-        this.actName = actName;
-        this.actStartTime = actStartTime;
-        this.actEndTime = actEndTime;
-        this.actLoc = actLoc;
-        this.actDescr = actDescr;
-        this.actUpper = actUpper;
-        this.actCount = actCount;
-        this.actStatus = actStatus;
-        this.actCrTime = actCrTime;
-        this.regStartTime = regStartTime;
-        this.regEndTime = regEndTime;
-        this.actPic = actPic;
-        this.actTotRating = actTotRating;
-        this.actRateCount = actRateCount;
-        this.actFollowCount = actFollowCount;
-        this.lat = lat;
-        this.lon = lon;
-        this.memPic = memPic;
-    }
+    private String actTypeName;
 
     public Integer getActId() {
         return actId;
@@ -254,5 +231,21 @@ public class ActDTO {
 
     public void setMemName(String memName) {
         this.memName = memName;
+    }
+
+    public Integer getActTypeId() {
+        return actTypeId;
+    }
+
+    public void setActTypeId(Integer actTypeId) {
+        this.actTypeId = actTypeId;
+    }
+
+    public String getActTypeName() {
+        return actTypeName;
+    }
+
+    public void setActTypeName(String actTypeName) {
+        this.actTypeName = actTypeName;
     }
 }

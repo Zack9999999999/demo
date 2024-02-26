@@ -269,6 +269,7 @@
     let pageNumber = 1; // 第幾頁預設(進function會 -1 所以會變0)
     let size = 5; //
     let memId;
+    let empId;
 
     //第幾頁
     function loadPage(pageNumber, repTime, repStatus, memId, empId) {
@@ -347,7 +348,7 @@
         repStatus = null;
         memId = null;
         empId = null;
-        loadReports();
+        loadCommentReports();
     }
 
     //顯示所有留言檢舉內容
@@ -441,10 +442,10 @@
                             </td>
                             <td>${commetreport.repTime}</td>
                             <td>
-                                    <div class="btn-group" role="group">
-                                <button class="reviewBtn btn btn-success btn-sm" value="2" data-rep-id="${commetreport.repId}">通過</button>
-                                <button class="reviewBtn btn btn-danger btn-sm" value="3" data-rep-id="${commetreport.repId}">未通過</button>
-                                    </div>
+                                <div class="btn-group" role="group">
+                                    <button class="reviewBtn btn btn-success btn-sm" value="2" data-act-id="${commetreport.comment.actId}" data-rep-id="${commetreport.repId}">通過</button>
+                                    <button class="reviewBtn btn btn-danger btn-sm" value="3" data-act-id="${commetreport.comment.actId}" data-rep-id="${commetreport.repId}">未通過</button>
+                                </div>
                             </td>
                             <td class="color" id="status-${commetreport.repId}">${statusChinese}</td>
                             <td><span class="badge rounded-circle bg-secondary">${(commetreport.empId ? commetreport.empId : "無")}</span></td>
@@ -499,8 +500,10 @@
         };
 
         let repId = $(this).data("repId");
+        let actId = $(this).data("actId");
         let newStatus = {
-            repStatus: $(this).val()
+            repStatus: $(this).val(),
+            actId:actId
         };
 
         if (newStatus.repStatus === "1") {
@@ -576,12 +579,12 @@
 
     //下一頁
     function next() {
-        loadCommentReports(++pageNumber, repTime, repStatus, memId, empId);
+        loadCommentReports(pageNumber + 1, repTime, repStatus, memId, empId);
     }
 
     //上一頁
     function previous() {
-        loadCommentReports(--pageNumber, repTime, repStatus, memId, empId);
+        loadCommentReports(pageNumber - 1, repTime, repStatus, memId, empId);
     }
 
     //Sweetalart2

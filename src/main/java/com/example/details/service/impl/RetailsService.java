@@ -8,7 +8,7 @@ import com.example.details.service.IRetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.*;
 
 @Component
 public class RetailsService implements IRetailsService {
@@ -22,10 +22,21 @@ public class RetailsService implements IRetailsService {
     }
 
     @Override
-    public List<ActRandomDTO> randomFourAct() {
+    public List<ActRandomDTO> randomFourAct(Integer actTypeId, Integer actId) {
 
-        //寫radom亂數抓4個活動出來
+        List<ActRandomDTO> actRandomList = retailsDAO.randomFourAct(actTypeId, actId);
+        List<ActRandomDTO> fourRandomList = new ArrayList<>();
 
-        return retailsDAO.randomFourAct();
+        Collections.shuffle(actRandomList);
+
+        for (int i = 0; i < 4; i++) {
+            try {
+                fourRandomList.add(actRandomList.get(i));
+            } catch (IndexOutOfBoundsException e) { //超過索引就不再add 直接return
+                return fourRandomList;
+            }
+        }
+        return fourRandomList;
     }
+
 }

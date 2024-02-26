@@ -1,13 +1,11 @@
-package com.example.report.service;
+package com.example.actreport.service;
 
-import com.example.report.dto.ActivityReportQueryParams;
-import com.example.report.dto.ActivityReportRequest;
-import com.example.report.dto.ReportStatus;
-import com.example.report.model.ActivityReportVO;
+import com.example.actreport.dto.ActivityReportQueryParams;
+import com.example.actreport.dto.ActivityReportRequest;
+import com.example.actreport.dto.ReportStatus;
+import com.example.actreport.model.ActivityReportVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface IActivityReportService {
 

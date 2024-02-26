@@ -1,7 +1,6 @@
-package com.example.report.repository;
+package com.example.actreport.repository;
 
-import com.example.commentreport.model.CommentReportVO;
-import com.example.report.model.ActivityReportVO;
+import com.example.actreport.model.ActivityReportVO;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

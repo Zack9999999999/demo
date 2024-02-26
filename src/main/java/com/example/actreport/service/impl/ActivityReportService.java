@@ -1,14 +1,13 @@
-package com.example.report.service.impl;
+package com.example.actreport.service.impl;
 
 import com.example.act.repository.ActRepository;
-import com.example.report.dto.ActivityReportQueryParams;
-import com.example.report.dto.ActivityReportRequest;
-import com.example.report.dto.ReportStatus;
-import com.example.report.model.ActivityReportVO;
-import com.example.report.repository.ActivityReportReopsitory;
-import com.example.report.service.IActivityReportService;
+import com.example.actreport.dto.ActivityReportQueryParams;
+import com.example.actreport.dto.ActivityReportRequest;
+import com.example.actreport.dto.ReportStatus;
+import com.example.actreport.model.ActivityReportVO;
+import com.example.actreport.repository.ActivityReportReopsitory;
+import com.example.actreport.service.IActivityReportService;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 
 @Component
 @Slf4j

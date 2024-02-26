@@ -1,11 +1,11 @@
-package com.example.report.controller;
+package com.example.actreport.controller;
 
-import com.example.report.constant.ReportTitle;
-import com.example.report.dto.ActivityReportQueryParams;
-import com.example.report.dto.ActivityReportRequest;
-import com.example.report.dto.ReportStatus;
-import com.example.report.model.ActivityReportVO;
-import com.example.report.service.IActivityReportService;
+import com.example.actreport.constant.ReportTitle;
+import com.example.actreport.dto.ActivityReportQueryParams;
+import com.example.actreport.dto.ActivityReportRequest;
+import com.example.actreport.dto.ReportStatus;
+import com.example.actreport.model.ActivityReportVO;
+import com.example.actreport.service.IActivityReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @Slf4j

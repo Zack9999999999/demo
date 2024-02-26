@@ -1,6 +1,6 @@
-package com.example.report.dto;
+package com.example.actreport.dto;
 
-import com.example.report.constant.ReportTitle;
+import com.example.actreport.constant.ReportTitle;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

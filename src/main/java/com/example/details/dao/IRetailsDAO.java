@@ -10,5 +10,5 @@ public interface IRetailsDAO {
 
     ActDTO getDetail(Integer actId);
 
-    List<ActRandomDTO> randomFourAct();
+    List<ActRandomDTO> randomFourAct(Integer actTypeId, Integer actId);
 }

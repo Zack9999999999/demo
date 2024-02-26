@@ -1,4 +1,4 @@
-package com.example.report.dto;
+package com.example.actreport.dto;
 
 public class ActivityReportQueryParams {
     Byte repStatus;

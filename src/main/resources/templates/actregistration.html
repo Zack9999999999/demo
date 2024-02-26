@@ -114,7 +114,7 @@
     <div class="table-responsive">
         <table class="table table-hover shadow-sm">
             <caption id="count">筆</caption>
-            <thead class="thead-inverse">
+            <thead class="thead-inverse table-primary">
             <tr>
                 <th>活動編號</th>
                 <th>活動名稱</th>
@@ -289,21 +289,21 @@
 
                     if (actReg.regStatus !== 4) { //4 = 自己取消報名 就不用再顯示給使用者看到
                         actregHTML +=
-                            `<tr>
-                        <td><span class="badge rounded-circle bg-dark">${actReg.act.actId}</span></td>
-                        <td><span class="fw-bold">${actReg.act.actName}</span></td>
-                        <td>
-                            <button class="rounded-pill btn btn-info btn-sm" data-act-id="${actReg.act.actId}" onclick="view(this)">查看</button>
-                        </td>
-                        <td>${actReg.act.actStartTime}</td>
-                        <td class="status">${statusChinese}</td>
-                        <td>
-                            <button class="delbtn rounded-pill btn btn-danger btn-sm"
-                            data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消
-                            </button>
-                        </td>
-                        <td class="actStatus">${actStatusChinese}</td>
-                    </tr>`;
+                            `<tr class="pb-5 pt-5">
+                                <td><span class="badge rounded-circle bg-dark">${actReg.act.actId}</span></td>
+                                <td><span class="fw-bold">${actReg.act.actName}</span></td>
+                                <td>
+                                    <button class="rounded-pill btn btn-info" data-act-id="${actReg.act.actId}" onclick="view(this)">查看</button>
+                                </td>
+                                <td>${actReg.act.actStartTime}</td>
+                                <td class="status">${statusChinese}</td>
+                                <td>
+                                    <button class="delbtn rounded-pill btn btn-danger"
+                                    data-act-id="${actReg.act.actId}" data-actreg-status="${actReg.regStatus}" onclick="del(this)">取消
+                                    </button>
+                                </td>
+                                <td class="actStatus pb-3">${actStatusChinese}</td>
+                            </tr>`;
 
                         pageCount++;
                     }

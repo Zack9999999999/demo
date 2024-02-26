@@ -1,4 +1,4 @@
-package com.example.report.constant;
+package com.example.actreport.constant;
 
 public enum ReportTitle {
 

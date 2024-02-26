@@ -3,6 +3,8 @@ package com.example.commentreport.service.impl;
 import com.example.comment.model.CommentVO;
 import com.example.comment.model.CommentVOForComRep;
 import com.example.comment.repository.CommentRepository;
+import com.example.comment.service.ICommentService;
+import com.example.comment.service.impl.CommentService;
 import com.example.commentreport.dto.CommentReportQueryParams;
 import com.example.commentreport.dto.CommentReportRequest;
 import com.example.commentreport.dto.CommentReportStatus;
@@ -14,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,10 @@ public class CommentReportService implements ICommentReportService {
     private CommentReportRepository commentReportRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private RedisTemplate<String, CommentVO> redisTemplate;
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Page<CommentReportVO> getCommentReports(
@@ -96,6 +103,11 @@ public class CommentReportService implements ICommentReportService {
                     break;
                 case 2:
                     commentReport.get().getComment().setComStatus((byte) 2); //2=不會顯示留言
+
+//                  檢舉審核成功清掉redis 把舊資料清掉
+                    String redisKey = commentService.buildRedisKey(commentReportStatus.getActId());
+                    redisTemplate.delete(redisKey);
+
                     break;
                 case 3:
                     commentReport.get().getComment().setComStatus((byte) 1);

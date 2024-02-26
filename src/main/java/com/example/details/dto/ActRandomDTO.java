@@ -6,7 +6,7 @@ public class ActRandomDTO {
 
     private Integer actId;
 
-    private Integer memId;
+//    private Integer memId;
 
     private String actName;
 
@@ -18,7 +18,7 @@ public class ActRandomDTO {
 
     private String actDescr;
 
-    private Integer actUpper;
+//    private Integer actUpper;
 
     private byte[] actPic;
 
@@ -28,14 +28,6 @@ public class ActRandomDTO {
 
     public void setActId(Integer actId) {
         this.actId = actId;
-    }
-
-    public Integer getMemId() {
-        return memId;
-    }
-
-    public void setMemId(Integer memId) {
-        this.memId = memId;
     }
 
     public String getActName() {
@@ -76,14 +68,6 @@ public class ActRandomDTO {
 
     public void setActDescr(String actDescr) {
         this.actDescr = actDescr;
-    }
-
-    public Integer getActUpper() {
-        return actUpper;
-    }
-
-    public void setActUpper(Integer actUpper) {
-        this.actUpper = actUpper;
     }
 
     public byte[] getActPic() {

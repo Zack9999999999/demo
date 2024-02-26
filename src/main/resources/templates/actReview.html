@@ -112,7 +112,7 @@
 
     <div class="table-responsive">
         <table class="table table-hover shadow-sm">
-            <thead class="thead-inverse">
+            <thead class="thead-inverse table-primary">
             <tr>
                 <th>活動編號</th>
                 <th>活動名稱</th>
@@ -288,19 +288,19 @@
                             <td><span class="badge rounded-circle bg-dark">${act.actId}</span></td>
                             <td><span class="fw-bold">${act.actName}</span></td>
                             <td>
-                                <button class="rounded-pill btn btn-info btn-sm" data-act-id="${act.actId}" onclick="view(this)">查看</button>
+                                <button class="rounded-pill btn btn-info" data-act-id="${act.actId}" onclick="view(this)">查看</button>
                             </td>
                             <td>${act.actStartTime}</td>
                             <td>
-                                <button type="button" class="showMem rounded-pill btn btn-warning btn-sm" data-act-id="${act.actId}"
+                                <button type="button" class="showMem rounded-pill btn btn-warning" data-act-id="${act.actId}"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal">查看</button>
                             </td>
                             <td class="actStatus">${actStatusChinese}</td>
                             <td data-act-id="${act.actId}">
-                            <button class="delAct rounded-pill btn btn-danger btn-sm" onclick="delAct(this)">取消</button>
+                            <button class="delAct rounded-pill btn btn-danger" onclick="delAct(this)">取消</button>
                             </td>
-                            <td data-act-id="${act.actId}">
-                            <button class="delAct rounded-pill btn btn-danger btn-sm" onclick="updateAct(this)">修改</button>
+                            <td class="actStatus pb-3" data-act-id="${act.actId}">
+                            <button class="delAct rounded-pill btn btn-danger" onclick="updateAct(this)">修改</button>
                             </td>
                          </tr>`;
 

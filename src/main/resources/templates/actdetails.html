@@ -151,11 +151,20 @@
                     <div class="w-auto h-100">
                         <div class="bg-white">
                             <img th:src="@{/CHA104G3/activity/images/{actId}(actId=${act.actId})}" src=""
-                                 class="w-100 h-50 img-fluid"
+                                 class="w-100 img-fluid"
                                  alt="活動照片">
                         </div>
                         <h2 class="fw-bolder">活動內容:</h2>
                         <span id="actDescr" class="fw-normal" th:text="${act.actDescr}">活動內容</span>
+
+                        <div class="row">
+                            <div class="col align-self-end">
+                                <button class="actType btn btn-dark btn-sm"
+                                        th:text="${act.actTypeName}"
+                                        th:data-act-type-id="${act.actTypeId}">
+                                </button><!-- 位置在調整  -->
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -166,16 +175,17 @@
                              class="bi bi-fire" viewBox="0 0 16 16">
                             <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/>
                         </svg>
-                        <span>關注此活動的人數:<span id="actFollowCount"
-                                                     th:text="${act.actFollowCount}">1</span></span>
+                        <span>關注此活動的人數:<span id="actFollowCount" th:text="${act.actFollowCount}">1</span></span>
                         <div style="margin: 10px">
-                            <p style="margin: 0;">人數上限:<span id="actUpper"
-                                                                 th:text="${act.actUpper}">1</span>
+                            <p style="margin: 0;">
+                                人數上限:
+                                <span id="actUpper" th:text="${act.actUpper}">1</span>
                             </p>
-                            <p>目前參與人數:<span id="actCount" th:text="${act.actCount}">1</span>
-                            </p>活動狀態:<span id="actStatus" th:data-act-status="${act.actStatus}"></span>
-                            <p>
-
+                            <p>目前參與人數:
+                                <span id="actCount" th:text="${act.actCount}">1</span>
+                            </p>
+                            <p>活動狀態:
+                                <span id="actStatus" th:data-act-status="${act.actStatus}"></span>
                             </p>
                         </div>
                     </div>
@@ -192,7 +202,8 @@
                         </p>
                         <div>
                             <a class="text-decoration-none" th:href="@{/membership/{memId}(memId=${memId})}">
-                                <img th:src="'data:image/png;base64,' + ${memPic}" class="img-fluid" style="width: 60px; height: auto;">
+                                <img th:src="'data:image/png;base64,' + ${memPic}" class="img-fluid"
+                                     style="width: 60px; height: auto;">
                             </a>
                             <p id="memId" class="badge bg-primary text-wrap" th:text="${act.memName}">張三</p>
                         </div>
@@ -209,7 +220,6 @@
                         <span class="fw-bolder">活動地點:</span>
                         <span id="actLoc" class="fst-italic" th:text="${act.actLoc}">活動場地</span>
                         <hr>
-
                         <p class="fst-italic">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="bi bi-clock" viewBox="0 0 16 16">
@@ -251,19 +261,21 @@
                 </div>
             </div>
 
-            <form id="commentsform" class="row g-3">
-                <label for="comment" class="visually-hidden">留言</label>
-                <div class="input-group">
-                    <input type="text" class="form-control p-3 shadow-sm rounded-start-5" id="comment"
-                           placeholder="輸入您的留言">
-                    <button type="submit" class="btn btn-success shadow-sm rounded-end-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-send-fill" viewBox="0 0 16 16">
-                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
-                        </svg>
-                    </button>
-                </div>
-            </form>
+            <div class="user" th:if="${user != null}" th:data-user="${user}">
+                <form id="commentsform" class="row g-3">
+                    <label for="comment" class="visually-hidden">留言</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control p-3 shadow-sm rounded-start-5" id="comment"
+                               placeholder="輸入您的留言">
+                        <button type="submit" class="btn btn-success shadow-sm rounded-end-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-send-fill" viewBox="0 0 16 16">
+                                <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <hr class="mt-5 mb-5">
@@ -281,7 +293,7 @@
 
         <div>
             <h5 class="fw-bolder">推薦活動:</h5>
-            <div class="random row row-cols-1 row-cols-md-4 g-4">
+            <div class="random row row-cols-1 row-cols-md-4 g-4 mb-5">
                 <div class="col">
                     <div class="card h-100">
                         <img src="..." class="card-img-top" alt="...">
@@ -294,9 +306,9 @@
             </div>
         </div>
 
-        <div class="p-3 join">
+        <div class="join">
             <div class="text-bark">
-                <div class="d-flex justify-content-between shadow p-4 bg-body rounded">
+                <div class="d-flex justify-content-between p-4 bg-body rounded shadow-sm">
                     <div>
                         <button type="button" id="addAct" class="btn btn-outline-danger btn-lg mx-3" onclick="signup()">
                             報名活動
@@ -411,7 +423,7 @@
     </div>
 </div>
 
-<div id="fb-root"></div>
+<!--<div id="fb-root"></div>-->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
@@ -422,7 +434,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
-<script th:src="@{/js/googlemap.js}" src="../static/js/googlemap.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjHlN8i2-4cw4QDuaPgyctq7OX1n6c6ls&callback=initMap" async
+        defer></script>
 
 <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async"
         defer="defer"></script>
@@ -454,6 +467,10 @@
             break;
     }
 
+    //判斷有沒有登入過 沒有的話為null 用在顯示所有留言那邊
+    const user = $(".user").data("user");
+    console.log(user)
+
     //檢舉留言框的Modal
     let exampleModal;
     //檢舉活動框的Model
@@ -477,7 +494,7 @@
     let total = 0;
 
     //!!!!!!!!!從RetailsController的model取得到的 測試取得會員ID用
-    let MyMemId = $("#memberId").text();
+    // let MyMemId = $("#memberId").text();
 
     $(function () {
         //進入活動詳情頁面後要先跑一遍顯示所有留言
@@ -490,6 +507,8 @@
         findMemAndPic();
         //推薦活動
         showFourAct();
+        //google map
+        showAddressOnMap();
     });
 
     let newToOldBtn = $("#newToOld");
@@ -588,7 +607,7 @@
                 let limit = page.limit;
 
                 comments.forEach(function (comment) {
-                    if (comment.comStatus == 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
+                    if (comment.comStatus === 1) { //被檢舉成功的不顯示 後端撈出來之前已經有先判斷了 多寫的
                         commentsHTML +=
                             `<div class="usertext">
                                 <div class="mb-3">
@@ -602,13 +621,13 @@
                                 <hr style="margin: 0">
                                 <div class="d-flex align-items-center mb-3">
                                     <small class="text-muted">${comment.comTime}</small>
-                                <div class="userfunction ms-auto" data-mem-id="${comment.memId}">
-                                    <a href="#" class="ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">確認</a>
-                                    <a href="#" class="nosee update badge rounded-pill bg-danger" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">編輯</a>
-                                    <a href="#" class="nosee delete badge rounded-pill bg-warning" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">刪除</a>
-                                    <a href="#" class="report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="${comment.comId}"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>
-                                </div>
+                                        <div class="userfunction ms-auto" data-mem-id="${comment.memId}">
+                                            <a href="#" class="login ok badge rounded-pill bg-success" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">確認</a>
+                                            <a href="#" class="login nosee update badge rounded-pill bg-danger" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">編輯</a>
+                                            <a href="#" class="login nosee delete badge rounded-pill bg-warning" style="text-decoration:none; display: none;"  data-com-id="${comment.comId}">刪除</a>
+                                            <a href="#" class="login report badge rounded-pill bg-dark ms-2" style="text-decoration:none;" data-com-id="${comment.comId}"
+                                            data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" >檢舉</a>
+                                        </div>
                                 </div>
                             </div>`;
                     }
@@ -617,6 +636,10 @@
                 $("#commentcount").html("(" + (total ? total : "無") + ")");
 
                 $("#comments").html(commentsHTML);
+
+                if (user === undefined) {
+                    $(".login").remove();
+                }
 
                 // //each所有的.userfunction來抓memId做判斷
                 // $("#comments .userfunction").each(function () {
@@ -1276,11 +1299,16 @@
 
     //隨機推薦4個活動
     function showFourAct() {
+        let actTypeId = $(".actType").data("actTypeId");
+
         $.ajax({
             url: '/CHA104G3/activity/random',
             type: 'GET',
-            // data: '',
-            // dataType: '',
+            data: {
+                actTypeId: actTypeId,
+                actId: window.location.pathname.split('/')[3], //路徑有變動的話要改
+            },
+            dataType: 'json',
             contentType: 'application/json',
             success: function (actLists) {
                 let actHTML = "";
@@ -1289,7 +1317,7 @@
                     actHTML +=
                         `<div class="col bg-light">
                             <div class="card no-border h-100 fourAct">
-                                <img src="data:image/png;base64,${actList.actPic}" class="card-img-top" alt="...">
+                                <img src="data:image/png;base64,${actList.actPic}" class="card-img-top h-50" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title fw-bold">${actList.actName}</h5>
                                         <p class="card-text">
@@ -1329,6 +1357,7 @@
         });
     }
 
+    //推薦活動滑鼠效果
     $(document).on("mousemove", ".fourAct", function () {
         $(this).addClass("shadow")
     })
@@ -1336,6 +1365,7 @@
         $(this).removeClass("shadow")
     })
 
+    //活動詳情
     function seeDetails(e) {
         let actId = $(e).data("actId");
         window.location.href = `/CHA104G3/activity/${actId}`;
@@ -1352,6 +1382,64 @@
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     });
+
+    //以下為google map -------------------------------------------------------------------------------
+    function showAddressOnMap() {
+        let actLoc = $("#actLoc").text();
+
+        getCoordinates(actLoc, function (coords) {
+            if (coords) {
+                console.log(coords.lat);
+                console.log(coords.lng);
+                initMap(coords.lat, coords.lng);
+            } else {
+                $("#map").hide(); //無法定位就隱藏google map
+            }
+        });
+    }
+
+    function getCoordinates(actLoc, callback) {
+        $.ajax({
+            url: 'https://maps.googleapis.com/maps/api/geocode/json',
+            data: {
+                address: actLoc,
+                key: 'AIzaSyBjHlN8i2-4cw4QDuaPgyctq7OX1n6c6ls' // 替换为您的 API 密钥
+            },
+            success: function (data) {
+                if (data.status === 'OK') {
+                    callback(data.results[0].geometry.location); // 返回坐标
+                } else {
+                    callback(null);
+                }
+            },
+            error: function () {
+                callback(null);
+            }
+        })
+    }
+
+    let map;
+    let marker;
+
+    function initMap(lat, lng) {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: lat,
+                lng: lng
+            },
+            zoom: 15,
+            gestureHandling: "none",
+            disableDefaultUI: true
+        });
+        marker = new google.maps.Marker({
+            position: {
+                lat: lat,
+                lng: lng
+            },
+            map: map
+        });
+    }
+
 </script>
 </body>
 </html>

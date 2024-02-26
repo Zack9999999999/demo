@@ -32,6 +32,8 @@ public class ActRowMapper implements RowMapper {
         actDTO.setLon(rs.getBigDecimal("lon"));
         actDTO.setMemPic(rs.getBytes("mem_pic"));
         actDTO.setMemName(rs.getString("mem_name"));
+        actDTO.setActTypeId(rs.getInt("act_type_id"));
+        actDTO.setActTypeName(rs.getString("act_type_name"));
 
         return actDTO;
     }

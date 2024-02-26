@@ -26,7 +26,7 @@ public class ActVO implements Serializable {
     @Column(name = "act_id")
     private Integer actId;
 
-        @Column(name = "mem_id",nullable = false)
+    @Column(name = "mem_id",nullable = false)
     private Integer memId;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
@@ -89,6 +89,9 @@ public class ActVO implements Serializable {
 
     @Column(name = "lon")
     private BigDecimal lon;
+
+    @Column(name = "act_type_id")
+    private Integer actTypeId;
 
     @OneToMany(mappedBy = "act", cascade = CascadeType.ALL)
     @JsonIgnore

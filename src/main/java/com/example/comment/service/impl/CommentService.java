@@ -116,7 +116,7 @@ public class CommentService implements ICommentService {
     }
 
     //建構RedisKey
-    private String buildRedisKey(Integer actId) {
+    public String buildRedisKey(Integer actId) {
         return new StringBuilder()
                 .append("comment")
                 .append(":")

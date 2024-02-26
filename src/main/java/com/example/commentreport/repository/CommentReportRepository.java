@@ -1,7 +1,6 @@
 package com.example.commentreport.repository;
 
 import com.example.commentreport.model.CommentReportVO;
-import com.example.report.model.ActivityReportVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
